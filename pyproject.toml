@@ -6,7 +6,6 @@ authors = ["Ewen Le Bihan <hey@ewen.works>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-tensorflow = "^2.4.1"
 
 [tool.poetry.dev-dependencies]
 
