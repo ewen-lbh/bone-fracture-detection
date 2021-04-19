@@ -1,8 +1,10 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[bookmarks]{hyperref}
-\usepackage[margin=1in, a4paper]{geometry}
+\usepackage[margin=0.7in, a4paper]{geometry}
 \usepackage{amsmath, amssymb}
+\usepackage[french]{babel}
+
 
 \title{Assistance automatisée au contrôle d'imagerie médicale}
 \author{Ewen Le Bihan \textless hey@ewen.works\textgreater}
@@ -12,10 +14,57 @@
 \maketitle
 
 \section{Motivations pour le choix du sujet}
+
+L'intelligence artificielle, et plus précisémment le \emph{machine learning} sont des champs de recherche
+qui ont beaucoup de nouvelles avancées ces dernières années.
+
+Les applications à la médecine de ces nouvelles méthodes d'approche de problèmes sont nombreuses.
+
+Il me semblait intéréssant d'aborder ce sujet, et de comparer des approches plus traditionnelles à des approches
+incorporant des réseaux neuronaux pour juger de leur efficacité.
+
 \section{Ancrage au thème de l'année}
+
+Le thème de cette année -- ``Santé et prévention'' -- englobe les thèmes médicaux, ce qui ancre bien notre sujet
+au thème. 
+
 \section{Bibliographie}
+
+\begin{itemize}
+	\item \url{https://neptune.ai/blog/image-processing-in-python-algorithms-tools-and-methods-you-should-know}
+\end{itemize}
+
 \section{Déroulé opérationnel}
+
+\emph{Du plus ancien au plus récent} 
+
+\subsection{Travail effectué}
+
+
+\begin{enumerate}
+\item Installation d'un bibliothèque pour lire des fichiers DICOM: problèmes de compilation avec \emph{hdf5}, bibliothèque utilisée par \emph{pydicom} 
+\item Utilisation d'une application standalone pour convertir les dicom en png: je me rend compte que le seul dataset disponible gratuitement et librement
+  n'est pas intéréssant.
+\item Recherche d'images de radios sur internet, directement (google images)
+\item 
+\end{enumerate}
+
+\subsection{Avant la fin de l'année scolaire}
+
+\begin{enumerate}
+	\item Mettre au point un programme de reconaissance de fractures à partir d'images radiologiques
+\end{enumerate}
+
+\subsection{Pendant l'été}
+
+\begin{enumerate}
+	\item 
+\end{enumerate}
+
+\subsection{En deuxième année}
+
 \section{Collaboration}
 
+J'effectue mon TIPE en collaboration avec Jérémy Laroche. 
 
 \end{document}
