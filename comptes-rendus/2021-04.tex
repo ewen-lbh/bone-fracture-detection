@@ -5,7 +5,6 @@
 \usepackage{amsmath, amssymb}
 \usepackage[french]{babel}
 
-
 \title{Assistance automatisée au contrôle d'imagerie médicale}
 \author{Ewen Le Bihan \textless hey@ewen.works\textgreater}
 \date{24 Avril 2021}
@@ -21,32 +20,42 @@ qui ont beaucoup de nouvelles avancées ces dernières années.
 Les applications à la médecine de ces nouvelles méthodes d'approche de problèmes sont nombreuses.
 
 Il me semblait intéréssant d'aborder ce sujet, et de comparer des approches plus traditionnelles à des approches
-incorporant des réseaux neuronaux pour juger de leur efficacité.
+incorporant des réseaux neuronaux afin de juger de leur efficacité.
 
 \section{Ancrage au thème de l'année}
 
 Le thème de cette année -- ``Santé et prévention'' -- englobe les thèmes médicaux, ce qui ancre bien notre sujet
-au thème. 
+au thème. En ce moment plus que jamais, l'attention des médecins est très demandée, ce qui pousse certains à travailler au-delà de leurs limites.
+
+L'assistance au contrôle de radiographies pourrait aider à prendre les bonnes décisions dans des moments critiques.
 
 \section{Bibliographie}
 
 \begin{itemize}
-	\item \url{https://neptune.ai/blog/image-processing-in-python-algorithms-tools-and-methods-you-should-know}
+	\item Bases en traitement d'image avec python \\ {\small \url{https://neptune.ai/blog/image-processing-in-python-algorithms-tools-and-methods-you-should-know}} \\[0.1pt]
+	\item Documentation de \emph{pydicom} -- librarie Python permettant la manipulation de fichiers DICOM \\ \url{https://pydicom.github.io/pydicom/stable/}\\[0.1pt]
+	\item Banque d'images au format DICOM de tomodensitométries d'os \\ \url{http://isbweb.org/data/vsj/}\\[0.1pt]
+	\item Images radiologiques d'os fracturés {\footnotesize (\url{https://duckduckgo.com/?q=broken+bone+radio&iar=images})}
+		\begin{itemize}
+			\item \url{https://images.radiopaedia.org/images/5848770/fd408943f11320ae39d8631a0b0588.png}
+			\item \url{https://i2.wp.com/coreem.net/content/uploads/2017/01/Chauffer-Fracture-Radiopaedia-2.jpg}
+			\item \url{https://i.pinimg.com/originals/1d/56/81/1d5681852465ecafe357be3cfb3d5ebe.jpg}
+		\end{itemize} %\\[0.1pt]
 \end{itemize}
 
 \section{Déroulé opérationnel}
 
-\emph{Du plus ancien au plus récent} 
+\emph{Par ordre chronologique croissant} 
 
 \subsection{Travail effectué}
 
 
 \begin{enumerate}
 \item Installation d'un bibliothèque pour lire des fichiers DICOM: problèmes de compilation avec \emph{hdf5}, bibliothèque utilisée par \emph{pydicom} 
-\item Utilisation d'une application standalone pour convertir les dicom en png: je me rend compte que le seul dataset disponible gratuitement et librement
-  n'est pas intéréssant.
+\item Utilisation d'une application standalone afin de convertir les dicom en png: je me rend compte que le seul dataset\footnote{\url{http://isweb.org/data/vsj/}} disponible gratuitement et librement que j'ai trouvé
+  n'est pas à priori intéréssant.
 \item Recherche d'images de radios sur internet, directement (google images)
-\item 
+\item Lecture d'articles pour apprendre les bases du traitement d'images en Python
 \end{enumerate}
 
 \subsection{Avant la fin de l'année scolaire}
@@ -58,13 +67,17 @@ au thème.
 \subsection{Pendant l'été}
 
 \begin{enumerate}
-	\item 
+	\item Se documenter sur les différents types de réseaux neuronaux adaptés au traitement d'images et les comprendre
+	\item Implémenter un ou plusieurs réseaux neuronaux effectuant les même tâches que le programme classique
 \end{enumerate}
 
 \subsection{En deuxième année}
-
+\begin{enumerate}
+	\item Comparer et interpréter les différences en performances entre les deux approches
+\end{enumerate}
 \section{Collaboration}
 
 J'effectue mon TIPE en collaboration avec Jérémy Laroche. 
+Tandis que j'étudie le traitement d'images, il s'intéresse à l'extraction d'informations de signaux.
 
 \end{document}
