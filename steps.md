@@ -1,0 +1,2 @@
+- premiere passe pour récup la forme la plus grande
+- deuxième passe pour détecter présence d'un "trait"
