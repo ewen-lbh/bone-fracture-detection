@@ -7,3 +7,4 @@ Ordre: du plus ancien au plus récent.
   n'est pas intéréssant.
 - Recherche d'images de radios sur internet, directement (google images)
 - Edge detection avec `cv2.Canny`, le meilleur résultat semble être avec les paramètres `high=130, low=90`, mais il reste des artéfacts dus à la porosité du matériau de l'os.
+- autocrop par edge detection
