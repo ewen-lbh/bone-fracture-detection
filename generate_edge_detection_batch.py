@@ -13,11 +13,12 @@ from rich.progress import Progress
 # _, low, high, = sys.argv
 
 
-batchesdir = Path("edge-detection/batches")
+batchesdir = Path("edge-detection/batches/dry")
 def detect_edges(filename: Path,  low: int, high: int, σ: int=3):
     σ, low, high = map(int, (σ, low, high))
 
-    image = cv2.imread(str(filename), 0)
+    image = cv2.imread(str(filename))
+    # blurred = cv2.blur(image, (3, 3))
     edges = cv2.Canny(image, low, high, apertureSize=σ, L2gradient=True)
     return image, edges
 
@@ -50,6 +51,6 @@ with Progress() as progress_bar:
             plt.subplot(133)
             plt.title(f"Original image")
             plt.imshow(cv2.imread(str(infile), 0))
-            out_filename = f"edge-detection/batches/{low*high:0{len(str(int(sys.argv[2])**2))}d} low={low:03d} high={high:03d}.png"
+            out_filename = f"edge-detection/batches/dry/{low*high:0{len(str(int(sys.argv[2])**2))}d} low={low:03d} high={high:03d}.png"
             plt.savefig(out_filename)
             progress_bar.update(task, advance=1, description=f"did [yellow]low[/]=[cyan bold]{low:03d}[/] [yellow]high[/]=[cyan bold]{high:03d}[/]")
