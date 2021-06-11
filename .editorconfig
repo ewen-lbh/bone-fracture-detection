@@ -1,0 +1,12 @@
+root = true
+
+[*]
+indent_size = 4
+indent_style = space
+
+[*.yaml]
+indent_style = space
+indent_size = 2
+
+[poetry.lock]
+indent_style = space

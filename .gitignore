@@ -1,3 +1,5 @@
 
 edge-detection/batches
 venv
+.vscode/.ropeproject/config.py
+.vscode/.ropeproject/objectdb

@@ -1,0 +1,18 @@
+[MASTER]
+load-plugins = pylint.extensions.docparams, pylint.extensions.docstyle, pylint.extensions.mccabe
+
+[BASIC]
+accept-no-param-doc = no
+accept-no-raise-doc = no
+accept-no-return-doc = no
+accept-no-yields-doc = no
+default-docstring-type = numpy
+
+[FORMAT]
+max-line-length = 88
+
+[MESSAGES CONTROL]
+disable = C0330, C0326, C0199, C0411, non-ascii-name
+
+[TYPECHECK]
+ignored-modules = cv2
