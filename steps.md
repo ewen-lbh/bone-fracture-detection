@@ -1,2 +1,3 @@
 - premiere passe pour récup la forme la plus grande
 - deuxième passe pour détecter présence d'un "trait"
+- avec crop pour pas avoir de cartilage: via-blur + low=41, high=21
