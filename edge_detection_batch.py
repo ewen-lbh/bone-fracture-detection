@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Usage:
-    edge_detection_batch.py TARGET START STOP STEP [options] 
+    edge_detection_batch.py TARGET START STOP STEP [options]
 
 Options:
     --blur              Whether to pre-process with blur

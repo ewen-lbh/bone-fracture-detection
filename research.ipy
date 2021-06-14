@@ -1,0 +1,47 @@
+# coding: utf-8
+from edge_detection_batch import detect_edges
+i = detect_edges(Path('./datasets/various/coude_clair_2.png'), 40, 120, use_blur=True)
+from pathlib import Path
+i = detect_edges(Path('./datasets/various/coude_clair_2.png'), 40, 120, use_blur=True)
+i
+vectorize(i)
+from potrace import Bitmap
+Bitmap(i)
+i
+edges, orig = i
+Bitmap(edges)
+edges
+edges = edges[0]
+edges
+edges, orig = i
+edges_bw = []
+edges_bw = [ row for row in [ r for (r, g, b) in cell for cell in row ] ] 
+for row in edges:
+    row_bw = []
+    for (r, g, b) in row:
+        row_bw.append(r)
+    edges_bw.append(row_bw)
+    
+edges_bw
+np.array(edges_bw)
+import nupmy as np
+import numpy as np
+np.array(edges_bw)
+np.array(edges_bw).dim
+np.array(edges_bw).size
+np.array(edges_bw).shae
+np.array(edges_bw).shape
+get_ipython().run_line_magic('ls', '')
+Bitmap(np.array(edges_bw))
+np.array
+edges_bw
+i[1]
+i[1][0]
+Bitmap(i[1])
+Bitmap(i[1])
+i[1]
+list(i[1])
+get_ipython().run_line_magic('ls', '')
+Bitmap(np.array(i[1]))
+Bitmap(np.array(i[1][:5]))
+get_ipython().run_line_magic('save', '1-41 research.ipy')

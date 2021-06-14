@@ -1,3 +1,6 @@
 - premiere passe pour récup la forme la plus grande
 - deuxième passe pour détecter présence d'un "trait"
 - avec crop pour pas avoir de cartilage: via-blur + low=41, high=21
+- faire un outils avec tkinter pour blackout les parties cartilageuses qui partent pas au recadrage
+- peut-être éliminer les groupes de pixels seuls avec <= 10 pixels (ie artéfacts)
+- détection: après vectorisation (ou pas), droites de pixels avec un angle trop horizontal vers le centre => fracture
