@@ -454,6 +454,34 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "skimage"
+version = "0.0"
+description = "Dummy package that points to scikit-image"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "svgpathtools"
+version = "1.4.1"
+description = "A collection of tools for manipulating and analyzing SVG Path objects and Bezier curves."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = "*"
+svgwrite = "*"
+
+[[package]]
+name = "svgwrite"
+version = "1.4.1"
+description = "A Python library to create SVG drawings."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "tifffile"
 version = "2021.4.8"
 description = "Read and write TIFF files"
@@ -500,7 +528,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "0c91351abb5abc92109cb5bd1aac6fe9e142cf46c740a9719f4b0fba127c9b62"
+content-hash = "6000809a746da661486a25d9a9d4e398d1dc8dc8830e4a89e9b92ba4b64921ed"
 
 [metadata.files]
 appdirs = [
@@ -868,6 +896,17 @@ scipy = [
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+skimage = [
+    {file = "skimage-0.0.tar.gz", hash = "sha256:6c96a11d9deea68489c9b80b38fad1dcdab582c36d4fa093b99b24a3b30c38ec"},
+]
+svgpathtools = [
+    {file = "svgpathtools-1.4.1-py2.py3-none-any.whl", hash = "sha256:6bc0082099ae1d64ae9649e837ccb10ae302520114da60eabf7360e5e46a12ed"},
+    {file = "svgpathtools-1.4.1.tar.gz", hash = "sha256:7aaba07923ad85b6628301e92e5e72fd0d0a5057620e1423509b3a0b609b7485"},
+]
+svgwrite = [
+    {file = "svgwrite-1.4.1-py3-none-any.whl", hash = "sha256:4b21652a1d9c543a6bf4f9f2a54146b214519b7540ca60cb99968ad09ef631d0"},
+    {file = "svgwrite-1.4.1.zip", hash = "sha256:e220a4bf189e7e214a55e8a11421d152b5b6fb1dd660c86a8b6b61fe8cc2ac48"},
 ]
 tifffile = [
     {file = "tifffile-2021.4.8-py3-none-any.whl", hash = "sha256:1cfc55f5b728e200142580a7bf108b72775c4097d007b4111876559fa1fb7432"},

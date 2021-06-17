@@ -12,6 +12,7 @@ numpy = "^1.20.2"
 matplotlib = "^3.4.1"
 pypotrace = "^0.3"
 docopt = "^0.6.2"
+svgpathtools = "^1.4.1"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.4b2", allow-prereleases = true}
