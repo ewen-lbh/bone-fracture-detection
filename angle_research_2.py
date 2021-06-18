@@ -27,8 +27,14 @@ def display_lines(image: np.ndarray, lines: list[tuple[int, int, float]], save: 
     """
     plt.imshow(image, cmap="gray")
     for x, y, slope in lines:
+        try:
+            print(f"at {x} {y}: {image[int(x), int(y)]}")
+        except IndexError:
+            continue
         plt.axline((x, y), slope=slope)
-        plt.scatter(x, y)
+        plt.scatter(x, y, c="red")
+    plt.xlim(right=len(image[:, 0]))
+    plt.ylim(0, len(image[0]))
 
     if save:
         plt.savefig(str(save))
