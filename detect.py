@@ -1,4 +1,4 @@
-from angle_research_2 import display_lines, get_lines
+from angle_research_2 import display_lines, get_lines, get_lines_probabilistic
 from pathlib import Path
 from svgpathtools import svg2paths
 from edge_detection_batch import detect_edges
@@ -29,9 +29,11 @@ def center_of(image: np.ndarray) -> np.ndarray:
     return image
 
 def save_figure(image: Path):
-    _, edges = detect_edges(image, low=40, high=120)
-    lines = get_lines(center_of(edges))
-    display_lines(center_of(edges), lines, save=Path("line-detection") / image.name)
+    original, edges = detect_edges(image, low=40, high=120, blur=3)
+    lines = get_lines_probabilistic(center_of(edges), gap=5, length=20)
+    _, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+    ax[0].imshow(original)
+    display_lines(ax[1], center_of(edges), lines, save=Path("line-detection") / image.name)
 
 with Progress() as bar:
     files = list(Path("datasets/various").glob("*.png"))
