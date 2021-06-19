@@ -19,19 +19,23 @@ def get_lines(edges: np.ndarray) -> Iterable[tuple[int, int, float]]:
         yield (x0, y0, np.tan(angle + np.pi/2))
 
 
-def get_lines_probabilistic(edges: np.ndarray, length:int=5, gap:int=3) -> Iterable[tuple[int, int, float]]:
-    for begining, end in probabilistic_hough_line(edges, threshold=10, line_length=length, line_gap=gap):
-        x0, y0 = begining
-        x1, y1 = end
+def get_lines_probabilistic(edges: np.ndarray, length:int=5, gap:int=3) -> Iterable[tuple[tuple[int, int],tuple[int, int], float]]:
+    """
+    Return value:
+    list of (start point, end point, angle with the vertical projection in radians)
+    """
+    for beginning, end in probabilistic_hough_line(edges, threshold=10, line_length=length, line_gap=gap):
+        # TODO: factor out (beginning|end)[...] into {x,y}{0, 1}
+        angle = np.arccos(abs(end[1] - beginning[1])/np.sqrt((end[0] - beginning[0])**2 + (end[1] - beginning[1])**2))
 
-        yield begining, end
+        yield beginning, end, angle
 
 def display_lines(ax, image: np.ndarray, lines: list[tuple[int, int, float]], save: Optional[pathlib.Path] = None):
     """
     Display lines on top of image with matplotlib
     """
     plt.imshow(image, cmap="gray")
-    for beginning, end in lines:
+    for beginning, end, angle in lines:
         try:
             # print(f"at {x} {y}: {image[int(x), int(y)]}")
             pass
@@ -40,7 +44,6 @@ def display_lines(ax, image: np.ndarray, lines: list[tuple[int, int, float]], sa
     
         ax.plot([beginning[0], end[0]], [beginning[1], end[1]], color="blue")
         ax.plot([beginning[0], beginning[0]], [beginning[1], end[1]], color="red")
-        angle = np.arccos(abs(end[1] - beginning[1])/np.sqrt((end[0] - beginning[0])**2 + (end[1] - beginning[1])**2))
         ax.text(*beginning, f"{int(angle/(2*np.pi)*180) - 90}°", color="white")
 
     ax.set_xlim(0, image.shape[1])

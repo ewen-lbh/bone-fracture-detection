@@ -14,11 +14,11 @@ def vectorize(image):
     image = np.array([ [ 0 if r == 0 else 1 for r in row ] for row in image ])
     return Bitmap(image).trace()
 
-def is_broken(edges: list[list[float]]) -> bool:
-    center = edges[len(edges[0]) // 6: -len(edges[0]) // 6 ]
-    for curve in vectorize(center):
-        for segment in curve.segments:
-            pass
+def is_broken(angles: list[float], threshold: float = 55) -> bool:
+    """
+    If min(|angle| for angle in angles) ≤ threshold, then return True
+    """
+    return min(abs(angle) for angle in angles) <= threshold
 
 
 def is_white(pixel: float) -> bool:
@@ -31,9 +31,12 @@ def center_of(image: np.ndarray) -> np.ndarray:
 def save_figure(image: Path):
     original, edges = detect_edges(image, low=40, high=120, blur=3)
     lines = get_lines_probabilistic(center_of(edges), gap=5, length=20)
+    broken = is_broken([ angle for _, _, angle in lines ])
+    plt.title(f"Detected as {'broken' if broken else 'healthy'}")
     _, ax = plt.subplots(1, 2, sharex=True, sharey=True)
     ax[0].imshow(original)
     display_lines(ax[1], center_of(edges), lines, save=Path("line-detection") / image.name)
+    print(f"{str(image)}: Detected as {'broken' if broken else 'healthy'}")
 
 with Progress() as bar:
     files = list(Path("datasets/various").glob("*.png"))
