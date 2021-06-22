@@ -1,6 +1,9 @@
-- premiere passe pour récup la forme la plus grande
-- deuxième passe pour détecter présence d'un "trait"
-- avec crop pour pas avoir de cartilage: via-blur + low=41, high=21
-- faire un outils avec tkinter pour blackout les parties cartilageuses qui partent pas au recadrage
-- peut-être éliminer les groupes de pixels seuls avec <= 10 pixels (ie artéfacts)
-- détection: après vectorisation (ou pas), droites de pixels avec un angle trop horizontal vers le centre => fracture
+- [x] premiere passe pour récup la forme la plus grande
+- [x] deuxième passe pour détecter présence d'un "trait"
+- [x] avec crop pour pas avoir de cartilage: via-blur + low=41, high=21
+- [x] faire un outils avec tkinter pour blackout les parties cartilageuses qui partent pas au recadrage
+- [x] peut-être éliminer les groupes de pixels seuls avec <= 10 pixels (ie artéfacts)
+- [x] détection: après vectorisation (ou pas), droites de pixels avec un angle trop horizontal vers le centre => fracture
+- [ ] détection orientation de l'image pour corriger les côtés pas droits de l'os
+- on prend pas juste le centre pour plus tard que l'algo dépende pas d'un crop manuel -> IA/ML plus simple (ou requise?) pour détecter cartilage?
+- [ ] ajustement des thresholds en fonction du contraste calculé de l'image
