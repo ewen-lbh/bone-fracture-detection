@@ -14,19 +14,10 @@ import matplotlib.pyplot as plt
 import cv2
 from pathlib import Path
 from rich.progress import Progress
-
+from detect import contrast_of, detect_edges
 
 # _, low, high, = sys.argv
 
-
-def detect_edges(filename: Path, low: int, high: int, σ: int = 3, blur: int = 0):
-    σ, low, high = map(int, (σ, low, high))
-
-    image = cv2.imread(str(filename))
-    if blur:
-        image = cv2.blur(image, (blur, blur))
-    edges = cv2.Canny(image, low, high, apertureSize=σ, L2gradient=True)
-    return image, edges
 
 
 def display_edges(
@@ -82,6 +73,7 @@ def do_batch(
                 for low in low_values:
                     plt.suptitle(
                         f"Seuils: haut: {high}, bas: {low}. σ: {σ}.\nPré-traitements: {'Flou: %d' % blur if blur else 'Aucun'}"
+                        f"\n Contraste: {contrast_of(image)}"
                     )
 
                     plt.subplot(1, 2, 1)

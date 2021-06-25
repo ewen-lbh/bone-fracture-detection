@@ -1,1 +1,7 @@
-coude_clair_2: {hi: 40, lo: 120, blur: true, sig: 3}
+coude_clair_2: 
+  hi: 40
+  lo: 120
+  blur: 3
+  sig: 3
+  contrast: 33.039
+

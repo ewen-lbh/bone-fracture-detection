@@ -1,7 +1,6 @@
-from angle_research_2 import display_lines, get_lines, get_lines_probabilistic
+from angles import display_lines, get_lines, get_lines_probabilistic
 from pathlib import Path
 from svgpathtools import svg2paths
-from edge_detection_batch import detect_edges
 from potrace import Bitmap
 import cv2
 import potrace
@@ -38,6 +37,16 @@ def contrast_of(image: Path) -> float:
 def brightness_of(image: Path) -> float:
     return cv2.cvtColor(cv2.imread(str(image)), cv2.COLOR_BGR2HSV).value()
 
+def detect_edges(filename: Path, low: int, high: int, σ: int = 3, blur: int = 0):
+    σ, low, high = map(int, (σ, low, high))
+
+    image = cv2.imread(str(filename))
+    if blur:
+        image = cv2.blur(image, (blur, blur))
+    edges = cv2.Canny(image, low, high, apertureSize=σ, L2gradient=True)
+    return image, edges
+
+
 def save_figure(image: Path):
     print(f"contrast is {contrast_of(image)}")
     original, edges = detect_edges(image, low=40, high=120, blur=3)
@@ -49,14 +58,15 @@ def save_figure(image: Path):
     display_lines(ax[1], center_of(edges), lines, save=Path("line-detection") / image.name)
     print(f"{str(image)}: Detected as {'broken' if broken else 'healthy'}")
 
-with Progress() as bar:
-    files = list(Path("datasets/various").glob("*.png"))
-    task = bar.add_task("[blue]Processing", total=len(files))
-    for testfile in files:
-        save_figure(testfile)
-        bar.advance(task)
-# cv2.imwrite("datasets/various/coude_clair_2_edges.png", center)
-# # convert -resize 500% -filter gaussian -blur 0x4 -modulate 180 coude_clair_2.png coude_clair_2_edges.bmp
-# # potrace --svg coude_clair_2_edges.bmp
-# paths, _ = svg2paths("datasets/various/coude_clair_2_edges.svg")
-# print(paths)
+if __name__ == "__main__":
+    with Progress() as bar:
+        files = list(Path("datasets/various").glob("*.png"))
+        task = bar.add_task("[blue]Processing", total=len(files))
+        for testfile in files:
+            save_figure(testfile)
+            bar.advance(task)
+    # cv2.imwrite("datasets/various/coude_clair_2_edges.png", center)
+    # # convert -resize 500% -filter gaussian -blur 0x4 -modulate 180 coude_clair_2.png coude_clair_2_edges.bmp
+    # # potrace --svg coude_clair_2_edges.bmp
+    # paths, _ = svg2paths("datasets/various/coude_clair_2_edges.svg")
+    # print(paths)
