@@ -13,16 +13,14 @@ def vectorize(image):
     image = np.array([ [ 0 if r == 0 else 1 for r in row ] for row in image ])
     return Bitmap(image).trace()
 
-def retprint(a):
-    print(a)
-    return a
-
-def is_broken(angles: list[float], ε: float = 20) -> bool:
+def is_broken(angles: list[float], ε: float = 10) -> bool:
     """
-    If the maximum offset with a vertical angle (90° or 270°) is less than ε for all angles, the bone is not broken
+    If the maximum offset with a vertical angle is less than ε for all angles, the bone is not broken
     """
-    print([ a/2*np.pi*180 for a in angles])
-    return retprint(max(abs(a - (90 if 0 < a < 180 else 270)) for a in angles)) < ε
+    tau = 2*np.pi
+    deg = lambda rad: rad/tau*180
+    print(list(map(deg, angles)))
+    return max(map(deg, angles)) >= ε
 
 def is_white(pixel: float) -> bool:
     return pixel > 0.75
