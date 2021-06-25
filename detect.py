@@ -65,8 +65,3 @@ if __name__ == "__main__":
         for testfile in files:
             save_figure(testfile)
             bar.advance(task)
-    # cv2.imwrite("datasets/various/coude_clair_2_edges.png", center)
-    # # convert -resize 500% -filter gaussian -blur 0x4 -modulate 180 coude_clair_2.png coude_clair_2_edges.bmp
-    # # potrace --svg coude_clair_2_edges.bmp
-    # paths, _ = svg2paths("datasets/various/coude_clair_2_edges.svg")
-    # print(paths)
