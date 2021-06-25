@@ -62,6 +62,7 @@ def display_lines(
             # })
             ax.plot([beginning[0], end[0]], [beginning[1], end[1]], color="red")
             ax.plot([beginning[0], beginning[0]], [beginning[1], end[1]], color="blue")
+            ax.text(*midway(beginning, end), f"{int(angle*180/tau)}°", color="white")
             counter+=1
     else:
         for *point, angle in lines:
