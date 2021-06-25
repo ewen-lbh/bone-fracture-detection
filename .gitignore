@@ -4,3 +4,10 @@ venv
 .vscode/.ropeproject/config.py
 .vscode/.ropeproject/objectdb
 __pycache__
+_minted-angles
+.~lock.*.*#
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*.aux
