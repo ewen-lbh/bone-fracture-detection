@@ -1,6 +1,7 @@
 import pathlib
 from typing import Iterable, Optional
 import numpy as np
+tau = 2*np.pi
 
 from skimage.transform import hough_line, hough_line_peaks, probabilistic_hough_line
 
@@ -29,7 +30,6 @@ def get_lines_probabilistic(
     for beginning, end in probabilistic_hough_line(
         edges, threshold=10, line_length=length, line_gap=gap
     ):
-        # TODO: factor out (beginning|end)[...] into {x,y}{0, 1}
         x0, y0 = beginning
         x1, y1 = end
         # CAH
@@ -43,15 +43,30 @@ def display_lines(
     image: np.ndarray,
     lines: list[tuple[int, int, float]],
     save: Optional[pathlib.Path] = None,
+    probabilistic: bool = True,
 ):
     """
     Display lines on top of image with matplotlib
     """
     plt.imshow(image, cmap="gray")
-    for beginning, end, angle in lines:
-        ax.plot([beginning[0], end[0]], [beginning[1], end[1]], color="blue")
-        ax.plot([beginning[0], beginning[0]], [beginning[1], end[1]], color="red")
-        ax.text(*beginning, f"{int(angle/(2*np.pi)*180) - 90}°", color="white")
+    midway = lambda p1, p2: ((p1[0] + p2[0])/2, (p1[1] + p2[1])/2)
+    if probabilistic:
+        counter = 0
+        # for beginning, end, angle in lines[5:6]:
+        for beginning, end, angle in lines:
+            # print({
+            #     "i": counter,
+            #     "begin": beginning,
+            #     "end": end,
+            #     "angle": angle / tau * 180,
+            # })
+            ax.plot([beginning[0], end[0]], [beginning[1], end[1]], color="red")
+            ax.plot([beginning[0], beginning[0]], [beginning[1], end[1]], color="blue")
+            counter+=1
+    else:
+        for *point, angle in lines:
+            ax.axline(point, slope=angle)
+            ax.scatter(*point)
 
     ax.set_xlim(0, image.shape[1])
     ax.set_ylim(image.shape[0], 0)
