@@ -3,4 +3,12 @@
 - https://pythonhosted.org/pypotrace/ref.html
 - https://discourse.mcneel.com/t/how-to-trace-a-line-drawing-image-to-be-a-real-line-vector-drawing-instead-of-a-outline-image/99934
 - https://stackoverflow.com/questions/56673283/how-to-measure-the-angle-between-2-lines-in-a-same-image-using-python-opencv
+# TODO expliquer dans les slides les transformées de hough in a nutshell
 - https://en.wikipedia.org/wiki/Hough_transform
+# pourrait servir pour montrer que ce que j'ai fait sert pas à rien (?????)
+- https://castcoverz.com/how-to-know-if-a-bone-is-broken-in-children/
+
+- images:
+  - https://coastalurgentcarethibodaux.com/wp-content/uploads/2018/06/signs-of-a-broken-bone.jpeg
+  - https://i.stack.imgur.com/YkxJx.jpg
+  - épaule_clair: https://www.startradiology.com/uploads/images/english-class-fracture-general-principles-fig3-stress-fracture-pathological-fracture-blanco.jpg
