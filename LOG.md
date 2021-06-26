@@ -9,3 +9,7 @@ Ordre: du plus ancien au plus récent.
 - autocrop par edge detection
 - essai en floutant l'image pour compenser la porosité
 - à faire: générer des batchs avec une meilleure résoution, et tester avec différentes intensités de blur
+
+## Avantages
+- marche sur des petites images
+- peut être utilisé dans les camions pompiers/ar des particuliers pour rapidement prendre une décision avec un petit objet
