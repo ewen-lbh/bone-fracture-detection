@@ -7,4 +7,6 @@
 - [ ] détection orientation de l'image pour corriger les côtés pas droits de l'os
 - on prend pas juste le centre pour plus tard que l'algo dépende pas d'un crop manuel -> IA/ML plus simple (ou requise?) pour détecter cartilage?
 - [ ] ajustement des thresholds en fonction du contraste calculé de l'image
+  - [ ] autre méthode: principe de vote, on teste plusieurs valeurs de thresholds et on prend la majorité (mouais)
+  - [x] autre méthode: on augmente le contraste 
 - [ ] résolution des _noms_ de fractures (voir `nom-fractures-fémur.png`)
