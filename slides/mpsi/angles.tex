@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[tikz,convert={outfile=\jobname.svg}]{standalone}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{minted}
@@ -16,11 +16,4 @@
     \draw (\sx+0.25, \ey+0.25) -- (\sx+0.25, \ey);
 \end{tikzpicture}
 
-\newpage
-\begin{align*}
-    \cos \theta &= \frac{\text{\color{blue}{adjacent}}}{\text{\color{red}{hypothénuse}}} \\
-                &= \frac{| y_1-y_0|}{\sqrt{(x_1-x_0)^2 + (y_1-y_0)^2} } \\
-    \text{ie}\quad \theta &= \arccos \left( \frac{| y_1-y_0|}{\sqrt{(x_1-x_0)^2 + (y_1-y_0)^2} } \right)   \\
-    \text{ie}\quad \text{\texttheta } &= \text{\mint{python}|arccos(abs(y1 - y0) / sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)))|}
-\end{align*}
 \end{document}
