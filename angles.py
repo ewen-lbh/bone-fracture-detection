@@ -42,7 +42,6 @@ def display_lines(
     ax,
     image: np.ndarray,
     lines: list[tuple[int, int, float]],
-    save: Optional[pathlib.Path] = None,
     probabilistic: bool = True,
 ):
     """
@@ -71,8 +70,3 @@ def display_lines(
 
     ax.set_xlim(0, image.shape[1])
     ax.set_ylim(image.shape[0], 0)
-
-    if save:
-        plt.savefig(str(save))
-    else:
-        plt.show()
