@@ -5,3 +5,23 @@ coude_clair_2:
   sig: 3
   contrast: 33.039
 
+coude_clair_4:
+  hi: 60
+  lo: 20
+  blur: 3
+  sig: 3
+  contrast: 27.761
+
+healthy_1:
+  hi: 40
+  lo: 55
+  blur: 3
+  sig: 3
+  contrast: 41.408
+
+main_clair:
+  hi: 100
+  lo: 40
+  blur: 3
+  sig: 3
+  contrast: 33.667
