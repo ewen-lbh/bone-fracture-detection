@@ -1,4 +1,5 @@
 \documentclass[tikz,convert={outfile=\jobname.svg}]{standalone}
+
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{minted}
@@ -14,6 +15,7 @@
     \draw[red] (\sx, \sy) -- (\ex, \ey) node[right,midway]{$y = mx+p$};
     \draw (\sx+0.25, \ey) -- (\sx+0.25, \ey+0.25);
     \draw (\sx+0.25, \ey+0.25) -- (\sx+0.25, \ey);
+    \draw (\sx, \sy+7) arc (90:59:7) node[above,midway]{$\theta$};
 \end{tikzpicture}
 
 \end{document}
