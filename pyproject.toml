@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "tipe"
+name = "bone-fracture-detection"
 version = "0.1.0"
 description = ""
 authors = ["Ewen Le Bihan <hey@ewen.works>"]
