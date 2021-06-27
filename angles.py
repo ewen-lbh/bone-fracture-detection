@@ -41,7 +41,7 @@ def get_lines_probabilistic(
 def display_lines(
     ax,
     image: np.ndarray,
-    lines: list[tuple[int, int, float]],
+    lines: list[tuple[tuple[int, int], tuple[int, int], float]],
     probabilistic: bool = True,
 ):
     """
@@ -52,16 +52,10 @@ def display_lines(
     if probabilistic:
         counter = 0
         # for beginning, end, angle in lines[5:6]:
-        for beginning, end, angle in lines:
-            # print({
-            #     "i": counter,
-            #     "begin": beginning,
-            #     "end": end,
-            #     "angle": angle / tau * 180,
-            # })
-            ax.plot([beginning[0], end[0]], [beginning[1], end[1]], color="red")
-            ax.plot([beginning[0], beginning[0]], [beginning[1], end[1]], color="blue")
-            ax.text(*midway(beginning, end), f"{int(angle*180/tau)}°", color="white")
+        for (x0, y0), (x1, y1), angle in lines:
+            ax.plot([x0, x1], [y0, y1], color="red")
+            ax.plot([x0, x0], [y0, y1], color="blue")
+            ax.text(*midway((x0, y0), (x1, y1)), f"{int(angle*180/tau)}°", color="white")
             counter+=1
     else:
         for *point, angle in lines:
