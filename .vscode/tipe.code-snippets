@@ -1,0 +1,17 @@
+{
+    "Optimal values entry": {
+        "prefix": "optvals",
+        "scope": "yaml",
+        "body": [
+            "$1:",
+            "\thi: $2",
+            "\tlo: $3",
+            "\tblur: ${4:3}",
+            "\tsig: 3",
+            "\tcontrast: $5",
+            "\tbright: $6",
+            "",
+            "$0"
+        ]
+    }
+}

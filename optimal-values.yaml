@@ -30,9 +30,42 @@ main_clair:
   contrast: 33.667
   bright: 104
 
-# coude_subtil:
-  # hi: 50
-  # lo: 40
-  # blur: 6
-  # sig: 3
-  # contrast: 26.085
+coude_subtil:
+  hi: 50
+  lo: 40
+  blur: 6
+  sig: 3
+  contrast: 26.085
+  bright: 124.650
+
+coude_clair_5:
+  hi: 40
+  lo: 60
+  blur: 3
+  sig: 3
+  contrast: 29.331
+  bright: 120.335
+
+épaule_clair:
+  hi: 40
+  lo: 100
+  blur: 3
+  sig: 3
+  contrast: 26.704
+  bright: 157.706
+
+jambe_clair:
+  hi: 140
+  lo: 80
+  blur: 3
+  sig: 3
+  contrast: 18.105
+  bright: 97.325
+
+jambe_clair_coloré:
+  hi: 80
+  lo: 120
+  blur: 6
+  sig: 3
+  contrast: 27.143
+  bright: 117.512
