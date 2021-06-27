@@ -41,17 +41,24 @@
 
 ## seuils(image)
 
-_TODO: différentes images au même seuil_
-
 - selon image, seuil optimal différent
 
 ## seuils(lumi, cont)?
 
 - est-ce que on peut déduire seuils depuis prop de l'image?
 
-## _TODO: slide avec les graphes décorrelés :/_
+## slide avec les graphes décorrelés
 
-##
+- sur quelques images testées, pas _encore_ de correl. évidente
+
+## autres approches
+
+- statistique: une solution serait d'utiliser différents seuils sur même image, et de prendre le résultat majoritaire
+- heuristique:
+  - par ex, nombre segments détectés / proportion de pixels blancs
+  <!-- - (autres auxquelles j'ai pas encore pensé) -->
+
+## détection segments
 
 ## vectorisation
 
