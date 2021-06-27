@@ -29,7 +29,7 @@
 ## Détection des bords
 
 - avec cv2.Canny
-- _TODO? principe de fonctionnement de Canny?_
+<!-- - _TODO? principe de fonctionnement de Canny?_ -->
 
 ## Détection des bords: pb de texture
 
@@ -74,7 +74,7 @@
 
 ## trasnformée de hough
 
-- _TODO: principe des transformées de hough?_
+<!-- - _TODO: principe des transformées de hough?_ -->
 - deux approches
   - classique:
     - droites
@@ -122,8 +122,4 @@
 
 ## nom fracture (θ, ...)
 
-- lignes fractures en bij avec angle & point de départ, et donc transitivement en bij avec nom de fracture
-
-## github
-
-- repo publique dispo ici
+- lignes fractures <=> angle & point de départ
