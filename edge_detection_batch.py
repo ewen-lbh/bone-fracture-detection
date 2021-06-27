@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import cv2
 from pathlib import Path
 from rich.progress import Progress
-from detect import contrast_of, detect_edges
+from detect import brightness_of, contrast_of, detect_edges
 
 # _, low, high, = sys.argv
 
@@ -29,9 +29,9 @@ def display_edges(
     σ: int = 3,
     blur: int = 0,
 ):
-    _, edges = detect_edges(filename, low, high, σ=σ, blur=blur)
+    _, edges = detect_edges(cv2.imread(str(filename)), low, high, σ=σ, blur=blur)
     plt.subplot(1, 2, fig_idx)
-    plt.title(title)
+    # plt.title(title)
     plt.imshow(edges, cmap="gray")
 
 
@@ -47,7 +47,7 @@ def batch_output_filename(target: Path, low: int, high: int, blur:int=0) -> Path
 
 
 def do_batch(
-    image: Union[tuple[Path, Path], Path],
+    target: Union[tuple[Path, Path], Path],
     blur_values: Iterable[int],
     high_values: Iterable[int],
     low_values: Iterable[int],
@@ -59,10 +59,12 @@ def do_batch(
     - use_blur: whether to preprocess the image with blur
     - σ: sets aperture size.
     """
-    if isinstance(image, tuple):
-        broken, baseline = image
+    if isinstance(target, tuple):
+        broken, baseline = target
     else:
-        broken, baseline = image, None
+        broken, baseline = target, None
+
+    image = cv2.imread(str(target))
     with Progress() as progress_bar:
         task = progress_bar.add_task(
             "[blue]Processing...", total=len(list(high_values)) * len(list(low_values) * len(list(blur_values)))
@@ -73,11 +75,11 @@ def do_batch(
                 for low in low_values:
                     plt.suptitle(
                         f"Seuils: haut: {high}, bas: {low}. σ: {σ}.\nPré-traitements: {'Flou: %d' % blur if blur else 'Aucun'}"
-                        f"\n Contraste: {contrast_of(image)}"
+                        f"\nContraste: {contrast_of(image)}"
+                        f"\nLuminosité {brightness_of(image)}"
                     )
 
                     plt.subplot(1, 2, 1)
-                    plt.title("Image originale (cassé)")
                     plt.imshow(cv2.imread(str(broken), 0))
 
                     display_edges(2, "Cassé", broken, low, high, σ=σ, blur=blur)
@@ -109,7 +111,7 @@ if __name__ == "__main__":
 
     do_batch(
         # image=(target, target.parent / f"{target.with_suffix('').name}_baseline.png"),
-        image=target,
+        target=target,
         high_values=threshold_values,
         low_values=threshold_values,
         blur_values=list(map(int, opts['--blur'])),
