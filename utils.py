@@ -11,3 +11,7 @@ def flatten_2D(o: Iterable):
         for item in row:
             flat.append(item)
     return flat
+
+# needed to remove pylint(cell-var-from-loop), see https://stackoverflow.com/a/67928238/9943464
+def access(o, key):
+    return o.get(key)

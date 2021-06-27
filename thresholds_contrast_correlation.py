@@ -1,4 +1,5 @@
 from os import access
+from functools import partial
 from pathlib import Path
 import matplotlib.pyplot as plt
 import yaml
@@ -18,7 +19,7 @@ attr = lambda name: list(map((lambda o: o.get(name, 0)), data_as_list))
 fig, axes = plt.subplots(1, 2)
 
 for current_axis, varying in enumerate(("contrast", "bright")):
-    data_as_list.sort(key=lambda o: o.get(varying, 0))
+    data_as_list.sort(key=partial(access, key=varying))
     axes[current_axis].set_title(f"Varying {varying}")
     axes[current_axis].plot(attr(varying), attr("hi"), label="hi", color="red")
     axes[current_axis].plot(attr(varying), attr("lo"), label="lo", color="skyblue")
