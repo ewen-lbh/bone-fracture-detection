@@ -1,6 +1,6 @@
 ## Titre
 
-- projet
+- détection fracture osseuse à partir d'imagerie médicale
 
 ## Pk
 
@@ -56,13 +56,13 @@
 - statistique: une solution serait d'utiliser différents seuils sur même image, et de prendre le résultat majoritaire
 - heuristique:
   - par ex, nombre segments détectés / proportion de pixels blancs
+      - artéfacts donne segments trops petits pour être considéré comme tel
   <!-- - (autres auxquelles j'ai pas encore pensé) -->
 
 ## détection segments
 
 ## vectorisation
 
-- d'abord tenté
 - avec potrace
 - donne fichiers SVG => stocke image comme instructions de dessins vectoriel
 
