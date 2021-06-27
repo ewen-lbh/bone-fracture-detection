@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import yaml
 
 data = yaml.load(Path("optimal-values.yaml").read_text())
-data_as_list = [ {"name": k, **v} for k,v in data.items() ]
+# exclude blur!=6, we'll treat them separately
+data_as_list = [ {"name": k, **v} for k,v in data.items() if v["blur"] == 3 ]
 
 attr = lambda name: list(map((lambda o: o.get(name, 0)), data_as_list))
 
