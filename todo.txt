@@ -1,0 +1,6 @@
+parler du scanner portatif dans l' +intro
+dire les grandes lignes de comment cv2.Canny fonctionne
++intro : présenter "images normales vs. DICOM" de manière positive: j'ai _choisi_ des images parce que c'est pas des situations parfaites
+dans la +comparaison entre ML et non-ML: avantages/désavantages
+dans l' +explication_approche_statistique : montrer avec des images
++ML pour le choix des seuils? permet une +transition_classique_vers_ML
