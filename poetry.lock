@@ -344,17 +344,6 @@ version = "2.4.7"
 
 [[package]]
 category = "main"
-description = "potrace Python bindings"
-name = "pypotrace"
-optional = false
-python-versions = "*"
-version = "0.3"
-
-[package.dependencies]
-numpy = "*"
-
-[[package]]
-category = "main"
 description = "Extensions to the standard Python datetime module"
 name = "python-dateutil"
 optional = false
@@ -526,7 +515,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "f5240782861ea888d186eb6f84c2553c6262bc3e442dbf872e21adcb794a6891"
+content-hash = "df859da1f94b5297cc5c8906a5f51ab9a1b0c2de813fc22ca393462ab1e53e1f"
 lock-version = "1.1"
 python-versions = "^3.9,<3.10"
 
@@ -773,10 +762,6 @@ pygments = [
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
     {file = "pyparsing-2.4.7.tar.gz", hash = "sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"},
-]
-pypotrace = [
-    {file = "pypotrace-0.3-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:ed7d2ab2f6721876cbc181f9c567b0bc409ef0a7c8db68d52de963399450ae0b"},
-    {file = "pypotrace-0.3.tar.gz", hash = "sha256:b019b30a1f45c83e399af479d17405ed26de9b4c1dcb74676dfa00ec30effff7"},
 ]
 python-dateutil = [
     {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
