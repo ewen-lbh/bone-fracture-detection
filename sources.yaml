@@ -10,6 +10,10 @@
 # régler le problème de corrélation seuils / propriétés image
 - https://dataanalysis.substack.com/p/correlation-analysis-101-in-python
 
+- datasets:
+  - https://worksheets.codalab.org/bundles/0xbc017e36be2746628cc1a0c64bbf031a
+  - https://stanfordmlgroup.github.io/competitions/mura/ # ↑ depuis ←
+
 - radiologie portative: https://www.echographes.fr/produit/appareil-de-radiologie-portable-konted-ktx21/ # 6.59 k€... oof
 
 - images:
