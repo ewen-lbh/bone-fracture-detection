@@ -14,9 +14,7 @@ Fractures ouvertes.(appelée aussi fracture simple) Ce sont les fractures dans l
 Les os longs peuvent être divisés anatomiquement en trois parties principales : la diaphyse, l’épiphyse et la métaphyse.
 
 - La diaphyse est la plus longue partie de l’os. Elle correspond à sa partie **médiane**.
-
 - Les épiphyses sont les deux **extrémités**, plus denses, dans lesquelles on trouve les parties articulaires de l’os. Une grande quantité de ligaments et de tendons renforçant l’articulation se situe dans les épiphyses. 
-
 - _(Les métaphyses sont des petites zones rectangulaires situées entre les épiphyses et la diaphyse. Sur les métaphyses se trouve le cartilage de croissance qui disparaît à l’âge adulte.)_ (sûrement pas présent dans le dataset puisque c'est seulement présent chez l'enfant)
 
 De ce fait, les factures peuvent être, selon leur localisation :
@@ -45,3 +43,4 @@ Au vu de la grande élasticité de leurs os, on dénombre deux types spécifique
 - Avec déplacement latéral :les deux zones correspondantes à la ligne de fracture ne restent pas accolées. Un fragment ou les deux ont été latéralement déplacés.
 - Avec chevauchement :l'un des fragments reste sur l’autre et produit un raccourcissement de l'os touché.
 - Engrenées : l’un des fragments est encastré dans l’autre.
+
