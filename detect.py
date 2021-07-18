@@ -1,10 +1,8 @@
+from detect_tilt import image_tilt
 from typing import Optional
-from angles import display_lines, get_lines, get_lines_probabilistic
+from angles import display_lines, get_lines_probabilistic
 from pathlib import Path
-from svgpathtools import svg2paths
-from potrace import Bitmap
 import cv2
-import potrace
 import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
@@ -70,7 +68,7 @@ def save_figure(image_path: Path, save: Optional[Path] = None):
         return
     broken = is_broken([ angle for _, _, angle in lines ])
     fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
-    fig.suptitle(f"Détecté comme {'cassé' if broken else 'sain'}\nContraste: {contrast_of(image)}\nLuminosité: {brightness_of(image)}")
+    fig.suptitle(f"Détecté comme {'cassé' if broken else 'sain'}\ncont: {contrast_of(image)} lum: {brightness_of(image)}\n tilt: {image_tilt(lines)/(2*np.pi)*180}°")
     ax[0].imshow(original)
     # ax[1].imshow(edges)
     display_lines(ax[1], center_of(edges), lines)
