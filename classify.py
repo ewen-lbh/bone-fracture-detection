@@ -3,7 +3,7 @@ from enum import Enum
 Point = tuple[int, int]
 Segment = tuple[Point, Point, float]
 
-class FractureType(Enum, str):
+class FractureType(str, Enum):
     TRANSVERSALE = "transversale"
     OBLIQUE = "oblique"
     LONGITUDINALE = "longitudinale"
