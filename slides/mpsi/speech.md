@@ -17,14 +17,9 @@
 - avec ML
   - si nécéssaire
 
-## DICOM
+## Sets de données
 
-- difficle de trouver des bonnes banques
-- celle que j'ai trouvé ct pas ce que je cherchais
-
-## Images normales
-
-- sur internet
+- sur internet, car plus d'imperfections => convient mieux pour conditions & qualité de scans non idéales
 
 ## Détection des bords
 
@@ -113,6 +108,8 @@
     - il pensera que c'est cassé à cause de l'inclinaison
 
 ## inclinaison: fixed
+
+
 
 ## id typ fracture
 
