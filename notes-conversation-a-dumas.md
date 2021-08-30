@@ -13,6 +13,7 @@
 - fractures articulaire ou non => trait de fracture va jusqu'au cartilage?
   => conséquences différentes
   -> traitement différent  e.g. plus d'arthrose
+  **Détection jusqu'au cartilage => radio pas suffisant**
 
 - fracture de plusieurs os? "plurifocale"
 
@@ -21,11 +22,11 @@
   - rapports articulaires => les os sont bien l'un en face de l'autre?
     -> luxé? : les deux pièces sont plus l'une en face de l'autre "déboité"
   => pour voir petites fractures
-  => difficile / invisible sur radio => poignet scaphoïde
+  => difficile / **invisible sur radio** => poignet scaphoïde
 	-> scanner => voxels, tranches 
 
-- radios tj dans 2 plans ortho (face et profile)
-  - si c coude on rajoute ¾
+- **radios tj dans 2 plans ortho (face et profile)**
+  - **si c coude on rajoute ¾**
 
 - os long (bras, av.bras, cuisse jambe, umérus, fémur,...) =>
   - articulation sus/sous-jacente car dès fois ça continue
@@ -33,11 +34,11 @@
 
 - pour les enfants => cartilage de conj pas loin de l'articulation permet à l'os de grandir
   => si elle atteint et ou (au dessus/ou dessus)
-  -> classification Harris/Salter
+  -> [classification Harris/Salter](https://www.nucleotype.com/salter-harris-fractures/)
 
 - écueils:
   - fracture pas visible à la radio
-  - piège du diagnostic différentiel => images qui 
+  - piège du diagnostic différentiel => images qui on l'air normales pour une personne mais pas pour une autre
     - os accessoires:
       -> variantes anatomiques (on est pas tous pareils)
          on peut croire que c'est un os accessoire arraché en deux
@@ -47,10 +48,14 @@
 
 - angle d'incidence du rayons X en fonction de ce qu'on cherche
   - pas une radio d'épaule, pleins de profils différents
-  -> critère de qualité: pas flou, bons angles d'incidence, centré
+  -> **critère de qualité: pas flou, bons angles d'incidence, centré**
+
+## Responsabilité
 
 - responsabilité de la radio => il faudra le refaire surement 
 - responsabilité partagée radiologue/urgentiste
+
+
 
 - dose dépt de corpulence ~> obligation de mettre la dose
   -> ratio bénéfice/risque -> radio "on est pas à une radio près" bcp moins grave que scanner
