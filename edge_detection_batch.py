@@ -19,7 +19,6 @@ from detect import brightness_of, contrast_of, detect_edges
 # _, low, high, = sys.argv
 
 
-
 def display_edges(
     fig_idx: int,
     title: str,
@@ -35,15 +34,12 @@ def display_edges(
     plt.imshow(edges, cmap="gray")
 
 
-def batch_output_filename(target: Path, low: int, high: int, blur:int=0) -> Path:
+def batch_output_filename(target: Path, low: int, high: int, blur: int = 0) -> Path:
     directory = (
         Path(__file__).parent / "edge-detection/batches" / target.with_suffix("")
     )
     directory.mkdir(parents=True, exist_ok=True)
-    return (
-        directory
-        / f"blur={blur}-{low*high:04d}-low={low:03d}-high={high:03d}.png"
-    )
+    return directory / f"blur={blur}-{low*high:04d}-low={low:03d}-high={high:03d}.png"
 
 
 def do_batch(
@@ -67,7 +63,9 @@ def do_batch(
     image = cv2.imread(str(target))
     with Progress() as progress_bar:
         task = progress_bar.add_task(
-            "[blue]Processing...", total=len(list(high_values)) * len(list(low_values) * len(list(blur_values)))
+            "[blue]Processing...",
+            total=len(list(high_values))
+            * len(list(low_values) * len(list(blur_values))),
         )
 
         for blur in blur_values:
@@ -84,9 +82,7 @@ def do_batch(
 
                     display_edges(2, "Cassé", broken, low, high, σ=σ, blur=blur)
                     if baseline:
-                        display_edges(
-                            3, "Sain", baseline, low, high, σ=σ, blur=blur
-                        )
+                        display_edges(3, "Sain", baseline, low, high, σ=σ, blur=blur)
 
                     plt.savefig(
                         batch_output_filename(broken, low=low, high=high, blur=blur)
@@ -95,9 +91,7 @@ def do_batch(
                         task,
                         advance=1,
                         description=Path(
-                            batch_output_filename(
-                                broken, low=low, high=high, blur=blur
-                            )
+                            batch_output_filename(broken, low=low, high=high, blur=blur)
                         ).name,
                     )
 
@@ -114,6 +108,6 @@ if __name__ == "__main__":
         target=target,
         high_values=threshold_values,
         low_values=threshold_values,
-        blur_values=list(map(int, opts['--blur'])),
+        blur_values=list(map(int, opts["--blur"])),
         σ=int(opts["--aperture"]),
     )

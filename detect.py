@@ -8,35 +8,43 @@ import matplotlib.pyplot as plt
 from utils import *
 from rich.progress import Progress
 
+
 def vectorize(image):
     # convert cells of 3-valued lists (RGB) to a single value (greyscale)
-    image = np.array([ [ 0 if r == 0 else 1 for r in row ] for row in image ])
+    image = np.array([[0 if r == 0 else 1 for r in row] for row in image])
     return Bitmap(image).trace()
+
 
 def is_broken(angles: list[float], ε: float = 10) -> bool:
     """
     If the maximum offset with a vertical angle is less than ε for all angles, the bone is not broken
     """
-    tau = 2*np.pi
-    deg = lambda rad: rad/tau*180
+    tau = 2 * np.pi
+    deg = lambda rad: rad / tau * 180
     print("[" + " ".join(f"{int(deg(angle))}°" for angle in angles) + "]")
     return max(map(deg, angles)) >= ε
 
+
 def is_white(pixel: float) -> bool:
     return pixel > 0.75
+
 
 def center_of(image: np.ndarray) -> np.ndarray:
     # return image[:, len(image[0])//4: -len(image[0])//4]
     return image
 
+
 def contrast_of(image: np.ndarray) -> float:
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY).std()
 
+
 def boost_contrast(image: np.ndarray) -> np.ndarray:
-    return 4*image
+    return 4 * image
+
 
 def brightness_of(image: np.ndarray) -> float:
     return mean(flatten_2D(cv2.cvtColor(image, cv2.COLOR_BGR2HSV)[:, :, 2]))
+
 
 def detect_edges(image: np.ndarray, low: int, high: int, σ: int = 3, blur: int = 0):
     σ, low, high = map(int, (σ, low, high))
@@ -63,12 +71,14 @@ def save_figure(image_path: Path, save: Optional[Path] = None):
     print(f"contrast is {contrast_of(image)}")
     original, edges = detect_edges(image, low=40, high=120, blur=3)
     lines = list(get_lines_probabilistic(center_of(edges), gap=5, length=20))
-    if not lines: 
+    if not lines:
         print(f"error: no lines detected for {image}")
         return
-    broken = is_broken([ angle for _, _, angle in lines ])
+    broken = is_broken([angle for _, _, angle in lines])
     fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
-    fig.suptitle(f"Détecté comme {'cassé' if broken else 'sain'}\ncont: {contrast_of(image)} lum: {brightness_of(image)}\n tilt: {image_tilt(lines)/(2*np.pi)*180}°")
+    fig.suptitle(
+        f"Détecté comme {'cassé' if broken else 'sain'}\ncont: {contrast_of(image)} lum: {brightness_of(image)}\n tilt: {image_tilt(lines)/(2*np.pi)*180}°"
+    )
     ax[0].imshow(original)
     # ax[1].imshow(edges)
     display_lines(ax[1], center_of(edges), lines)
@@ -78,7 +88,11 @@ def save_figure(image_path: Path, save: Optional[Path] = None):
     else:
         plt.show()
 
-    print(f"{str(image_path)}: Detected as {'broken' if broken else 'healthy'}", end="\n\n")
+    print(
+        f"{str(image_path)}: Detected as {'broken' if broken else 'healthy'}",
+        end="\n\n",
+    )
+
 
 if __name__ == "__main__":
     with Progress() as bar:

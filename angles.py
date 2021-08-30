@@ -1,7 +1,8 @@
 import pathlib
 from typing import Iterable, Optional
 import numpy as np
-tau = 2*np.pi
+
+tau = 2 * np.pi
 
 from skimage.transform import hough_line, hough_line_peaks, probabilistic_hough_line
 
@@ -48,15 +49,17 @@ def display_lines(
     Display lines on top of image with matplotlib
     """
     plt.imshow(image, cmap="gray")
-    midway = lambda p1, p2: ((p1[0] + p2[0])/2, (p1[1] + p2[1])/2)
+    midway = lambda p1, p2: ((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2)
     if probabilistic:
         counter = 0
         # for beginning, end, angle in lines[5:6]:
         for (x0, y0), (x1, y1), angle in lines:
             ax.plot([x0, x1], [y0, y1], color="red")
             ax.plot([x0, x0], [y0, y1], color="blue")
-            ax.text(*midway((x0, y0), (x1, y1)), f"{int(angle*180/tau)}°", color="white")
-            counter+=1
+            ax.text(
+                *midway((x0, y0), (x1, y1)), f"{int(angle*180/tau)}°", color="white"
+            )
+            counter += 1
     else:
         for *point, angle in lines:
             ax.axline(point, slope=angle)

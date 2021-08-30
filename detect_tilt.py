@@ -8,7 +8,9 @@ from classify import Segment
 tau = 2 * pi
 
 
-def image_tilt(segments: list[Segment], ε: float = 2 / 180 * tau, max_tilt: float = 15 / 180 * tau) -> float:
+def image_tilt(
+    segments: list[Segment], ε: float = 2 / 180 * tau, max_tilt: float = 15 / 180 * tau
+) -> float:
     """
     Returns the angle (in radians) the image is tilted at
 
