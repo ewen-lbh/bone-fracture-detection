@@ -5,6 +5,7 @@ Scrapes for radio images from encyclopaedia.org
 from typing import Iterable
 import requests
 from bs4 import BeautifulSoup
+from time import sleep
 from pathlib import Path
 from rich import print
 from rich.live import Live
@@ -12,6 +13,8 @@ from rich.table import Table
 import subprocess
 import json
 from slugify import slugify
+from helium import start_firefox
+import helium
 
 results_table = Table("title", "image", "broken certainty (%)")
 
@@ -80,6 +83,19 @@ def scrape() -> list[tuple[str, bool]]:
 
 if __name__ == "__main__":
     for case in json.loads((Path(__file__).parent  / "results" / "encyclopaedia.json").read_text()):
-        subprocess.run(["wget", case["image"]["url"], "-O", 
-            Path(__file__).parent.parent / "datasets" / "encyclopaedia" / (slugify(f"{case['title']}--{case['image']['id']}") + ".jpeg")
-        ])
+        print(f"- [cyan]Downloading {case['image']['url']}")
+        start_firefox(case["image"]["url"])
+        # TODO: add in sources.yaml, cite using citation from download page
+        helium.click("Accept all & visit the site")
+        helium.click("Accept")
+        helium.scroll_down(1_000)
+        helium.click("Download")
+        sleep(2)
+        # todo get coordinates of save as radiobutton
+        subprocess.run(["xdotool", "mousemove", "1246", "586"])
+        subprocess.run(["xdotool", "click", "1"])
+        subprocess.run(["xdotool", "mousemove", "1603", "685"])
+        subprocess.run(["xdotool", "click", "1"])
+        sleep(1)
+        helium.kill_browser()
+        subprocess.run(f"echo '{json.dumps(case)}' >> {Path(__file__).parent / 'results' / 'encyclopaedia-downloaded.jsonl'}", shell=True)

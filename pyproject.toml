@@ -16,6 +16,7 @@ PyYAML = "^5.4.1"
 keras = "^2.6.0"
 beautifulsoup4 = "^4.9.3"
 python-slugify = "^5.0.2"
+helium = "^3.0.7"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.4b2", allow-prereleases = true}
