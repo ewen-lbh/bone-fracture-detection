@@ -8,7 +8,6 @@ Segment = tuple[Point, Point, float]
 class Scale(int, Enum):
     """
     A scale to be used to classify fractures and give a treatment suggestion.
-
     """
 
     @property
@@ -97,20 +96,25 @@ class Garden(Scale):
 
 class Salter(Scale):
     """
-    Classification des dégats au cartilage de conj.
+    Classification des dégats au cartilage de conj. (physis)
     Important pour les enfants (affecte la croissance si endommagé).
     Voir https://www.nucleotype.com/salter-harris-fractures/
     """
 
-    SLIPPED = 1
-    ABOVE_PHYSIS = 2
-    LOWER_PHYSIS = 3
-    THROUGH_PHYSIS = 4
-    ERASURE_OF_PHYSIS = 5
+    STRAIGHT_ACROSS = 1 # fracture au-dessus du cartilage, horizontale
+    ABOVE = 2 # fracture au dessus du cartilage, une partie non-horizontale
+    LOWER = 3 # fracture qui descend à travers le cartilage
+    THROUGH = 4 # fracture qui monte dans l'os _et_ descend à travers le cartilage
+    ERASURE = 5 # absence du cartilage (la fracture l'a supprimé)
 
     @property
     def stable(self) -> bool:
         return self.value() <= 2
+    
+    def compute(self, fracture: Fracture) -> "Salter":
+        # a type II example: https://radiopaedia.org/cases/salter-harris-fracture-1?lang=us
+        # see other examples: https://radiopaedia.org/search?lang=us&modality=X-ray&page=1&q=salter-harris&scope=cases#collapse-by-diagnostic-certainties
+        pass
 
 
 class Fémur(Scale):
