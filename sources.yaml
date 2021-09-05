@@ -11,7 +11,9 @@
 - https://dataanalysis.substack.com/p/correlation-analysis-101-in-python
 
 - datasets:
-  - https://stanfordmlgroup.github.io/competitions/mura/
+  - mura: 
+     - https://stanfordmlgroup.github.io/competitions/mura/
+     - https://arxiv.org/abs/1712.06957
 
 - radiologie portative: https://www.echographes.fr/produit/appareil-de-radiologie-portable-konted-ktx21/ # 6.59 k€... oof
 
@@ -24,3 +26,7 @@
 - classification: 
   - https://radiopaedia.org/articles/garden-classification-of-hip-fractures # petite mine d'or
   - SALTER: https://www.nucleotype.com/salter-harris-fractures/
+
+- machine learning sur MURA: https://github.com/ag-piyush/Bone-Fracture-Detection--MURA
+- documentation:
+    keras: https://keras.io/examples/vision/3D_image_classification/#loading-data-and-preprocessing
