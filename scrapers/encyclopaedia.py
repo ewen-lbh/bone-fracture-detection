@@ -83,6 +83,14 @@ def scrape() -> list[tuple[str, bool]]:
 
 if __name__ == "__main__":
     for case in json.loads((Path(__file__).parent  / "results" / "encyclopaedia.json").read_text()):
+        already_downloaded = False
+        for case_json in (Path(__file__).parent / "results" / "encyclopaedia-downloaded.jsonl").read_text().splitlines():
+            if json.loads(case_json)['image']['url'] == case['image']['url']:
+                already_downloaded = True
+                break
+        if already_downloaded:
+            print(f"- [magenta]Skipped {case['image']['url']}")
+            continue
         print(f"- [cyan]Downloading {case['image']['url']}")
         start_firefox(case["image"]["url"])
         # TODO: add in sources.yaml, cite using citation from download page
