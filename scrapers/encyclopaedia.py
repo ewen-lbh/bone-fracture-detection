@@ -18,32 +18,45 @@ import helium
 
 results_table = Table("title", "image", "broken certainty (%)")
 
+
 def total_pages() -> int:
     """
     Return index of last page
     """
-    page = BeautifulSoup(requests.get("https://radiopaedia.org/encyclopaedia/cases/trauma?lang=us&modality=X-ray").text, features="lxml")
+    page = BeautifulSoup(
+        requests.get(
+            "https://radiopaedia.org/encyclopaedia/cases/trauma?lang=us&modality=X-ray"
+        ).text,
+        features="lxml",
+    )
     navigation_links = page.select_one("[role=navigation]").select("a")
     points_to_page = lambda link: int(link["href"].split("&page=")[1])
 
-
     return max(map(points_to_page, navigation_links))
-
 
 
 def from_page(n: int) -> Iterable[tuple[str, str, float]]:
     """
     Return list of (title, image URL, broken with certainty (0.0 to 1.0))
     """
-    page = BeautifulSoup(requests.get(f"https://radiopaedia.org/encyclopaedia/cases/trauma?lang=us&modality=X-ray&page={n}").text, features="lxml")
+    page = BeautifulSoup(
+        requests.get(
+            f"https://radiopaedia.org/encyclopaedia/cases/trauma?lang=us&modality=X-ray&page={n}"
+        ).text,
+        features="lxml",
+    )
 
     image_id = lambda image_url: image_url.split("/")[4]
-    fullsize_image_url = lambda image_id: f"https://radiopaedia.org/images/{image_id}/download?lang=us"
+    fullsize_image_url = (
+        lambda image_id: f"https://radiopaedia.org/images/{image_id}/download?lang=us"
+    )
 
     for case in page.select("a.search-result-case"):
 
         title = case.select_one("h4").text
-        image_url = fullsize_image_url(image_id(case.select_one("img.media-object")["src"]))
+        image_url = fullsize_image_url(
+            image_id(case.select_one("img.media-object")["src"])
+        )
         certainty = {
             "Diagnosis certain": 1.0,
             "Diagnosis almost certain": 0.8,
@@ -55,37 +68,46 @@ def from_page(n: int) -> Iterable[tuple[str, str, float]]:
         yield title, image_url, certainty
 
 
-
-
 def scrape() -> list[tuple[str, bool]]:
     results = []
     with Live(results_table):
-        for n in range(1, total_pages()+1):
+        for n in range(1, total_pages() + 1):
             try:
                 results += from_page(n)
             except Exception as e:
-                (Path(__file__).parent / "results/encyclopaedia.json").write_text(json.dumps([
-                    {
-                        "image": {
-                            "url": case[1],
-                            "id": int(case[1].split("/")[4]),
-                        },
-                        "title": case[0],
-                        "certainty": case[2],
-                    } for case in results
-                ]))
+                (Path(__file__).parent / "results/encyclopaedia.json").write_text(
+                    json.dumps(
+                        [
+                            {
+                                "image": {
+                                    "url": case[1],
+                                    "id": int(case[1].split("/")[4]),
+                                },
+                                "title": case[0],
+                                "certainty": case[2],
+                            }
+                            for case in results
+                        ]
+                    )
+                )
                 print("[green]early save written[/]")
                 raise e
             results.sort(key=lambda case: case[0])
-    
+
     return results
 
 
 if __name__ == "__main__":
-    for case in json.loads((Path(__file__).parent  / "results" / "encyclopaedia.json").read_text()):
+    for case in json.loads(
+        (Path(__file__).parent / "results" / "encyclopaedia.json").read_text()
+    ):
         already_downloaded = False
-        for case_json in (Path(__file__).parent / "results" / "encyclopaedia-downloaded.jsonl").read_text().splitlines():
-            if json.loads(case_json)['image']['url'] == case['image']['url']:
+        for case_json in (
+            (Path(__file__).parent / "results" / "encyclopaedia-downloaded.jsonl")
+            .read_text()
+            .splitlines()
+        ):
+            if json.loads(case_json)["image"]["url"] == case["image"]["url"]:
                 already_downloaded = True
                 break
         if already_downloaded:
@@ -106,4 +128,8 @@ if __name__ == "__main__":
         subprocess.run(["xdotool", "click", "1"])
         sleep(1)
         helium.kill_browser()
-        subprocess.run(f"echo '{json.dumps(case)}' >> {Path(__file__).parent / 'results' / 'encyclopaedia-downloaded.jsonl'}", shell=True)
+        case_json = json.dumps(case).replace("'", "\\'")
+        subprocess.run(
+            f"echo '{case_json}' >> {Path(__file__).parent / 'results' / 'encyclopaedia-downloaded.jsonl'}",
+            shell=True,
+        )

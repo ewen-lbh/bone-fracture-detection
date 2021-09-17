@@ -1,7 +1,8 @@
+import sys
+from pathlib import Path
+
 import cv2
 import numpy as np
-from pathlib import Path
-import sys
 
 img = cv2.imread(sys.argv[1])
 blurred = cv2.blur(img, (3, 3))

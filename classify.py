@@ -101,16 +101,16 @@ class Salter(Scale):
     Voir https://www.nucleotype.com/salter-harris-fractures/
     """
 
-    STRAIGHT_ACROSS = 1 # fracture au-dessus du cartilage, horizontale
-    ABOVE = 2 # fracture au dessus du cartilage, une partie non-horizontale
-    LOWER = 3 # fracture qui descend à travers le cartilage
-    THROUGH = 4 # fracture qui monte dans l'os _et_ descend à travers le cartilage
-    ERASURE = 5 # absence du cartilage (la fracture l'a supprimé)
+    STRAIGHT_ACROSS = 1  # fracture au-dessus du cartilage, horizontale
+    ABOVE = 2  # fracture au dessus du cartilage, une partie non-horizontale
+    LOWER = 3  # fracture qui descend à travers le cartilage
+    THROUGH = 4  # fracture qui monte dans l'os _et_ descend à travers le cartilage
+    ERASURE = 5  # absence du cartilage (la fracture l'a supprimé)
 
     @property
     def stable(self) -> bool:
         return self.value() <= 2
-    
+
     def compute(self, fracture: Fracture) -> "Salter":
         # a type II example: https://radiopaedia.org/cases/salter-harris-fracture-1?lang=us
         # see other examples: https://radiopaedia.org/search?lang=us&modality=X-ray&page=1&q=salter-harris&scope=cases#collapse-by-diagnostic-certainties

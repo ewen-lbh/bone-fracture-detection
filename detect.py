@@ -1,12 +1,14 @@
-from detect_tilt import image_tilt
-from typing import Optional
-from angles import display_lines, get_lines_probabilistic
 from pathlib import Path
+from typing import Optional
+
 import cv2
-import numpy as np
 import matplotlib.pyplot as plt
-from utils import *
+import numpy as np
 from rich.progress import Progress
+
+from angles import display_lines, get_lines_probabilistic
+from detect_tilt import image_tilt
+from utils import *
 
 
 def vectorize(image):

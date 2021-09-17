@@ -1,6 +1,7 @@
-from os import access
 from functools import partial
+from os import access
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 import yaml
 

@@ -8,12 +8,14 @@ Options:
                         Multiple values to test different settings.
     --aperture=σ        σ (apertureSize) to use [default: 3]
 """
-from docopt import docopt
-from typing import Iterable, Union
-import matplotlib.pyplot as plt
-import cv2
 from pathlib import Path
+from typing import Iterable, Union
+
+import cv2
+import matplotlib.pyplot as plt
+from docopt import docopt
 from rich.progress import Progress
+
 from detect import brightness_of, contrast_of, detect_edges
 
 # _, low, high, = sys.argv

@@ -1,12 +1,12 @@
 import pathlib
 from typing import Iterable, Optional
+
 import numpy as np
 
 tau = 2 * np.pi
 
-from skimage.transform import hough_line, hough_line_peaks, probabilistic_hough_line
-
 import matplotlib.pyplot as plt
+from skimage.transform import hough_line, hough_line_peaks, probabilistic_hough_line
 
 
 def get_lines(edges: np.ndarray) -> Iterable[tuple[int, int, float]]:

@@ -2,8 +2,9 @@
 Corrects tilted images
 """
 from numpy import pi
-from utils import mean
+
 from classify import Segment
+from utils import mean
 
 tau = 2 * pi
 
