@@ -17,6 +17,7 @@ _minted-angles
 
 
 datasets/MURA-v1.1/
+datasets/*-sorted/
 datasets/verse19/
 
 datasets/MURA-v1.1.zip

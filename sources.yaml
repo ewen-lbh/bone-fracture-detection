@@ -29,4 +29,6 @@
 
 - machine learning sur MURA: https://github.com/ag-piyush/Bone-Fracture-Detection--MURA
 - documentation:
-    keras: https://keras.io/examples/vision/3D_image_classification/#loading-data-and-preprocessing
+    keras: 
+    - https://keras.io/examples/vision/3D_image_classification/#loading-data-and-preprocessing
+    - https://keras.io/examples/vision/image_classification_from_scratch/
