@@ -1,0 +1,96 @@
+\documentclass[a4paper]{article}
+\usepackage[a4paper, total={6.5in, 9.5in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[bookmarks, hidelinks, unicode]{hyperref}
+\usepackage{amsmath}
+\usepackage{xfrac}
+\usepackage{biblatex}
+\usepackage{csquotes}
+\addbibresource{../sources.bib}
+\title{Détection et classification de fractures osseuses}
+\author{Ewen Le Bihan}
+\date{2021-12-20}
+
+\newcommand\wordcount[1]{
+    \immediate\write18{texcount -sub=section \jobname.tex  | grep "Section" | sed -e 's/+.*//' | sed -n \thesection p > 'count.txt'}
+($\sfrac{\input{count.txt}}{#1}$ mots)}
+
+\begin{document}
+\maketitle
+
+\noindent
+\begin{description}
+    \item[Professeurs encadrants du candidat]  \hfill
+        \begin{itemize}
+            \item M. Chireux
+            \item M. Lauront
+        \end{itemize}
+    \item[Liste des membres] \hfill
+        \begin{itemize}
+            \item LAROCHE Jérémy
+            \item LE BIHAN Ewen
+        \end{itemize}
+\end{description}
+
+\section{Ancrage au thème}
+
+
+
+\wordcount{50}
+
+\section{Motivation du choix}
+
+\wordcount{50}
+
+
+\section{Positionnements thématiques}
+
+\begin{itemize}
+    \item \emph{INFORMATIQUE (Traitement d'images)}
+    \item \emph{INFORMATIQUE (Aprentissage automatique)}
+    \item \emph{MATHÉMATIQUES (Trigonométrie)} 
+\end{itemize}
+
+\section{Mots-clés}
+
+\begin{table}[h]
+    \centering
+    \label{tab:keywords}
+    \begin{tabular}{l|l}
+    Français & English \\\hline
+    Fracture osseuse & Bone fracture \\
+    Détection des bords & Edge detection \\
+    Vectorisation & Vectorisation \\
+    Réseau neuronal & Neural network \\
+    Réseau neuronal convolutif & Convolutional neural network 
+    \end{tabular}
+\end{table}
+
+\section{Bibliographie commentée}
+
+La détection automatisée de fractures osseuses et --- plus généralement --- de maladies est devenue 
+envisageable ces derniers temps. L'université américaine de Stanford a organisé en 2018 une compétition visant à
+encourager la création d'algorithmes de détections de fractures à partir d'images de scanners\cite{mura-competition}.
+Ils ont mis à disposition une large base de données d'exemples pour permettre aux réseaux neuronaux programmés par
+les candidats de s'entraîner\cite{mura-paper}.
+
+
+
+
+
+\wordcount{650}
+
+\section{Problématique retenue}
+
+\wordcount{50}
+
+\section{Objectifs du TIPE}
+
+\wordcount{100}
+
+\section{Liste de références bibliographiques}
+
+\printbibliography
+\end{document}
