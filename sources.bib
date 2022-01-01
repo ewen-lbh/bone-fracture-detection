@@ -5,7 +5,7 @@
     author={Luper Rouch},
     title={PyPotrace Documentation},
     url={https://pythonhosted.org/pypotrace/ref.html},
-    addendum={(consulté 20/12/2021)},
+    urldate={2021-12-20},
     keywords={documentation},
 }
 - https://discourse.mcneel.com/t/how-to-trace-a-line-drawing-image-to-be-a-real-line-vector-drawing-instead-of-a-outline-image/99934
@@ -27,7 +27,8 @@
     year={2018},
     eprint={1712.06957},
     archivePrefix={arXiv},
-    primaryClass={physics.med-ph}
+    primaryClass={physics.med-ph},
+    urldate={2021-12-20},
 }
 @online{mura-competition,
     author={Pranav Rajpurkar and Jeremy Irvin and Aarti Bagul and Daisy Ding and Tony Duan and Hershel Mehta and Brandon Yang and Kaylie Zhu and Dillon Laird and Robyn L. Ball and Curtis Langlotz and Katie Shpanskaya and Matthew P. Lungren and Andrew Y. Ng},
@@ -35,6 +36,7 @@
     title={MURA: Bone X-Ray Deep Learning Competition},
     year={2018},
     url={https://stanfordmlgroup.github.io/competitions/mura},
+    urldate={2021-12-20},
 }
 
 
@@ -49,10 +51,10 @@
 - classification: 
   - 
 @online{garden,
-    author={Dr Matt Adams},
+    author={Matt Adams},
     title={Garden classification of hip fractures},
     url={https://radiopaedia.org/articles/garden-classification-of-hip-fractures},
-    addendum={(consulté le 20/12/2021)},
+    urldate={2021-12-20},
     keywords={classification},
 }
   - SALTER: https://www.nucleotype.com/salter-harris-fractures/
@@ -61,7 +63,7 @@
     author={Medzcool},
     title={Salter Harris Fracture Classification},
     url={https://www.nucleotype.com/salter-harris-fractures},
-    addendum={(consulté le 20/12/2021)},
+    urldate={2021-12-20},
     keywords={classification},
 }
 
@@ -70,10 +72,96 @@
     author={Piyush Agarwal},
     title={Bone fracture detection using DenseNet on MURA dataset [sic]},
     url={https://github.com/ag-piyush/Bone-Fracture-Detection---MURA},
-    addendum={(consulté 20/12/2021)},
+    urldate={2021-12-20},
     keywords={repository},
 }
 - documentation:
     keras: 
     - https://keras.io/examples/vision/3D_image_classification/#loading-data-and-preprocessing
     - https://keras.io/examples/vision/image_classification_from_scratch/
+
+
+
+
+@article{garden-paper,
+	title = {Classification and {Surgical} {Approaches} to {Hip} {Fractures} for {Nonsurgeons}},
+	volume = {30},
+	issn = {07490690},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S0749069014000056},
+	doi = {10.1016/j.cger.2014.01.004},
+	language = {en},
+	number = {2},
+	urldate = {2021-12-30},
+	journal = {Clinics in Geriatric Medicine},
+	author = {Mears, Simon C.},
+	month = may,
+	year = {2014},
+	pages = {229--241},
+}
+
+@article{garden-stability,
+	title = {{STABILITY} {AND} {UNION} {IN} {SUBCAPITAL} {FRACTURES} {OF} {THE} {FEMUR}},
+	volume = {46},
+	issn = {0301-620X},
+	language = {eng},
+	journal = {The Journal of Bone and Joint Surgery. British Volume},
+	author = {Garden, R. S.},
+	month = nov,
+	year = {1964},
+	pmid = {14251448},
+	keywords = {Biophysical Phenomena, Biophysics, Bone Transplantation, Femoral Neck Fractures, Fracture Fixation, Fractures, Ununited, Humans, Orthopedic Equipment, Osteotomy, Radiography, BIOPHYSICS, BONE TRANSPLANTATION, FEMORAL NECK FRACTURES, FRACTURE FIXATION, FRACTURES, UNUNITED, ORTHOPEDIC EQUIPMENT, OSTEOTOMY, RADIOGRAPHY},
+	pages = {630--647},
+    urldate={2021-12-20},
+}
+
+
+
+@article{detect-hip,
+	title = {Detecting hip fractures with radiologist-level performance using deep neural networks},
+	url = {http://arxiv.org/abs/1711.06504},
+	abstract = {We developed an automated deep learning system to detect hip fractures from frontal pelvic x-rays, an important and common radiological task. Our system was trained on a decade of clinical x-rays ({\textasciitilde}53,000 studies) and can be applied to clinical data, automatically excluding inappropriate and technically unsatisfactory studies. We demonstrate diagnostic performance equivalent to a human radiologist and an area under the ROC curve of 0.994. Translated to clinical practice, such a system has the potential to increase the efficiency of diagnosis, reduce the need for expensive additional testing, expand access to expert level medical image interpretation, and improve overall patient outcomes.},
+	urldate = {2021-12-30},
+	journal = {arXiv:1711.06504 [cs, stat]},
+	author = {Gale, William and Oakden-Rayner, Luke and Carneiro, Gustavo and Bradley, Andrew P. and Palmer, Lyle J.},
+	month = nov,
+	year = {2017},
+	note = {arXiv: 1711.06504},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Statistics - Machine Learning},
+}
+
+@article{hough-transform,
+  title={Use of the Hough transformation to detect lines and curves in pictures},
+  author={Richard O. Duda and Peter E. Hart},
+  journal={Commun. ACM},
+  year={1972},
+  volume={15},
+  pages={11-15},
+  url={https://dl.acm.org/doi/10.1145/361237.361242},
+  urldate={2021-12-30},
+}
+
+@patent{hough-transform-patent,
+    title={Method and means for recognizing complex patterns},
+    author={Paul V C Hough},
+    url={https://patents.google.com/patent/US3069654A/en},
+    urldate={2021-12-30},
+    year={1962},
+    month=dec,
+}
+
+@article{canny,
+	title = {A computational approach to edge detection},
+	volume = {8},
+	issn = {0162-8828},
+	abstract = {This paper describes a computational approach to edge detection. The success of the approach depends on the definition of a comprehensive set of goals for the computation of edge points. These goals must be precise enough to delimit the desired behavior of the detector while making minimal assumptions about the form of the solution. We define detection and localization criteria for a class of edges, and present mathematical forms for these criteria as functionals on the operator impulse response. A third criterion is then added to ensure that the detector has only one response to a single edge. We use the criteria in numerical optimization to derive detectors for several common image features, including step edges. On specializing the analysis to step edges, we find that there is a natural uncertainty principle between detection and localization performance, which are the two main goals. With this principle we derive a single operator shape which is optimal at any scale. The optimal detector has a simple approximate implementation in which edges are marked at maxima in gradient magnitude of a Gaussian-smoothed image. We extend this simple detector using operators of several widths to cope with different signal-to-noise ratios in the image. We present a general method, called feature synthesis, for the fine-to-coarse integration of information from operators at different scales. Finally we show that step edge detector performance improves considerably as the operator point spread function is extended along the edge.},
+	language = {eng},
+	number = {6},
+	journal = {IEEE transactions on pattern analysis and machine intelligence},
+	author = {Canny, John F.},
+	month = jun,
+	year = {1986},
+	pmid = {21869365},
+	pages = {679--698},
+    urldate = {2022-01-01},
+}
+
