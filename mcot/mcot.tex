@@ -1,0 +1,159 @@
+\documentclass[a4paper]{article}
+\usepackage[a4paper, total={6.5in, 9.5in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[bookmarks, hidelinks, unicode]{hyperref}
+\usepackage{amsmath}
+\usepackage{xfrac}
+\usepackage{biblatex}
+\usepackage{csquotes}
+\addbibresource{../sources.bib}
+\title{Détection et classification de fractures osseuses}
+\author{Ewen Le Bihan}
+\date{2021-12-20}
+
+\newcommand\wordcount[1]{
+    \immediate\write18{texcount -sub=section \jobname.tex  | grep "Section" | sed -e 's/+.*//' | sed -n \thesection p > 'count.txt'}
+    \begin{center}
+        ($\sfrac{\input{count.txt}}{#1}$ mots)
+    \end{center}
+}
+
+\begin{document}
+\maketitle
+
+\noindent
+\begin{description}
+    \item[Professeurs encadrants du candidat]  \hfill
+        \begin{itemize}
+            \item M. Chireux
+            \item M. Lauront
+        \end{itemize}
+\end{description}
+
+\section{Ancrage au thème}
+
+Les fractures osseuses constituent une catégorie de blessure assez commune mais potentiellement grave, avec des conséquences
+parfois permanente sur la suite de la vie du patient.
+
+Le sujet s'ancre donc dans le thème de la santé.
+
+\wordcount{50}
+
+\section{Motivation du choix}
+
+Il convient de s'intérésser à l'automatisation du processus de détection et de classification de telles blessures,
+afin de fluidifier l'orientation au service hospitalier approprié en fournissant un premier diagnostic sans intervention
+professionnelle.
+
+\wordcount{50}
+
+
+\section{Positionnements thématiques}
+
+\begin{itemize}
+    \item \emph{INFORMATIQUE (Traitement d'images)}
+    \item \emph{INFORMATIQUE (Aprentissage automatique)}
+    \item \emph{MATHÉMATIQUES (Trigonométrie)} 
+\end{itemize}
+
+\section{Mots-clés}
+
+\begin{table}[h]
+    \centering
+    \label{tab:keywords}
+    \begin{tabular}{l|l}
+    Français & English \\\hline
+    Fracture osseuse & Bone fracture \\
+    Détection des bords & Edge detection \\
+    Réseau neuronal & Neural network \\
+    Réseau neuronal convolutif & Convolutional neural network  \\
+    Vectorisation & Vectorisation \\
+    \end{tabular}
+\end{table}
+
+\section{Bibliographie commentée}
+
+\paragraph{}
+
+La détection automatisée de fractures osseuses et --- plus généralement --- de maladies est devenue envisageable ces
+derniers temps. En effet, l'université américaine de Stanford a organisé en 2018 une compétition visant à encourager la
+création d'algorithmes de détections de fractures à partir d'images de scanners (images musculo-squelettiques).
+%\cite{mura-competition}.  Ils ont mis à disposition une large base de données d'exemples pour permettre aux réseaux
+%neuronaux programmés par les candidats de s'entraîner.  Les résultats de cette compétition montre qu'il est possible de
+%dépasser les capacités d'un être humain avec une dizaine d'années d'expérience avec un réseau
+%neuronal\cite{mura-competition}.
+
+Une année plutôt, William Gale et. al. mettent à profit le même principe de réseaux neuronaux afin de détecter des
+fractures du bassin\cite{detect-hip}.  Ils ont utilisés trois réseaux neuronaux convolutifs (\emph{CNN}) consécutifs
+pour réduire le nombre d'image et la taille de celles-ci, en ne sélectionnant que les régions où une fracture est
+possible, puis un dernier réseau pour effectuer la détection. Les résultats montre une amélioration de la précision du
+réseau par rapport à des essais antérieurs
+
+\paragraph{}
+
+Les deux examples d'utilisation d'apprentissage automatique dans le cadre de la reconaissance de fractures mentionnés
+précédemment partagent un point commun: le nombre d'images radiographiques nécéssaire à l'entraînement de tels réseaux
+est assez conséquente: MURA\cite{mura-competition} est un set de 40~561 images tirées de 14~863 études, et
+\cite{detect-hip} emploie 53~278 images -- l'entièreté des images de bassins capturées par l'Hôpital \emph{Royal
+Adelaide} de 2005 à 2015.
+
+
+Chacune de ces images, pour pouvoir être utile à l'apprentissage, doit être étiquettée: << y'a-t-il présence de fracture
+dans cette image ? >>. De plus, la question de la diversité et de l'inclusivité du set de données collecté 
+(<< Représente-t-il correctement et justement la population globale ? >>) peut s'avérer complexe$^\text{[citation needed]}$.
+
+De plus, ces réseaux, avec autant d'images, ne peuvent avec fiabilité répondre qu'à la question de \emph{présence} d'une
+fracture, la question d'une \emph{classification} quelconque demanderait donc une taille de set d'entraînement bien plus
+grande et difficilement atteignable.
+
+Et, de surcroît, il existe des centaines de classifications différentes -- certaines avec une visée parfois très précise.  Par
+exemple, 
+
+\begin{itemize}
+    \item la classification Garden\cite{garden-paper} ne concerne que les fractures du bassin.
+    %\cite{garden-stability}.
+    \item La classification SALTER\cite{salter} catégorise les fractures chez l'enfant en
+    fonction de l'atteinte au cartilage de croissance, ce qui a un effet conséquent: dans le type le plus grave,
+    c'est-à-dire l'effacement du cartilage par écrasement, le patient pourrait avoir une différence de longueur entre
+    ses deux jambes.
+\end{itemize}
+
+\paragraph{}
+
+Mais l'apprentissage automatique n'est pas la seule potentielle solution à ce problème: des techniques d'analyse d'image
+plus classiques pourraient fonctionner.  Il s'agira alors -- du moins dans un premier temps -- d'identifier et
+d'analyser le (ou les) \emph{trait(s) de fracture}.
+
+La détection de motifs géométriques dans une image en noir et blanc est un problème étudié depuis assez longtemps.  Un
+algorithme populaire est celui de la transformée de Hough, d'abord brevetée en 1962 par Paul
+Hough\cite{hough-transform-patent} en puis généralisée à la détection de lignes et courbes en 1972 par Richard Duda et
+Peter Hart\cite{hough-transform}.
+
+Cependant, la détection de lignes dans une image est plus simple quand l'image est bien contrastée, et ne
+présente que les bords, et non -- par exemple -- des << lignes >> dues à la porosité du tissu osseux sur des images
+radiographiques. En 1986, John F. Canny met au point un algorithme de détection des bords\cite{canny}, qui permet
+de passer d'une image source à une image noir et blanc, ou les pixels blancs font partie de bords et les pixels noirs non.
+
+
+\wordcount{650}
+
+\section{Problématique retenue}
+
+
+
+\wordcount{50}
+
+\section{Objectifs du TIPE}
+Je me propose:
+\begin{itemize}
+    \item D'explorer la détection et classification sans apprentissage automatique, mais avec des techniques d'analyse d'image plus classiques,
+    \item D'utiliser un ou plusieurs réseaux neuronaux afin d'effectuer la même tâche
+    \item De comparer les deux approches
+\end{itemize}
+
+\wordcount{100}
+
+\printbibliography
+\end{document}

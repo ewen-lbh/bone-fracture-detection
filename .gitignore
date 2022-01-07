@@ -12,6 +12,10 @@ _minted-angles
 *.synctex.gz
 *.aux
 *.out
+*.bbl
+*.bcf
+*.blg
+*.run.xml
 
 .SRCINFO
 
@@ -21,3 +25,6 @@ datasets/*-sorted/
 datasets/verse19/
 
 datasets/MURA-v1.1.zip
+
+mcot/count.txt
+mcot/exemples/

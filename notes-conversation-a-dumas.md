@@ -32,7 +32,7 @@
   - articulation sus/sous-jacente car dès fois ça continue
   => modifie l'endroit
 
-- pour les enfants => cartilage de conj pas loin de l'articulation permet à l'os de grandir
+- pour les enfants => cartilage de conjuguaison pas loin de l'articulation permet à l'os de grandir
   => si elle atteint et ou (au dessus/ou dessus)
   -> [classification Harris/Salter](https://www.nucleotype.com/salter-harris-fractures/)
 
@@ -63,7 +63,7 @@
   -> vol paris-NY
   -> scanner abdominal ≈ 4ans irr naturelle sur le sol Français pas breton
 
-=== bdd ===
+## bdd 
 
 système PAX archivage
 - dji, siemens, toshiba, ...
