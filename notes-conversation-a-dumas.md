@@ -69,3 +69,10 @@ système PAX archivage
 - dji, siemens, toshiba, ...
 thesaurus -> par mot clé
 appeler fournisseur de machines de radio
+
+
+
+slides avec 10 au lieu de 3 images seuils
+
+finir sur fracture communitive
+
