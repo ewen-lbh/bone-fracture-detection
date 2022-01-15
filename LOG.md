@@ -15,3 +15,7 @@ Ordre: du plus ancien au plus récent.
 - peut être utilisé dans les camions pompiers/ar des particuliers pour rapidement prendre une décision avec un petit objet
 
 - idée d'entrainer un réseau avec du reinforcement learning pour choisir les thresholds de détection de bords, avec pour critère de bon choix une luminosité d'image de sortie (i.e. celle ne contenant que les bords) de 15±2
+
+- premier essai en suivant https://keras.io/examples/rl/actor_critic_cartpole/, mais avec
+ma propre classe d'environnement pour répondre à mon besoin. Le problème est que je ne sais pas trop ce que "state" est sensé représenter, je donne le tensor de l'image des bords mais 
+ça n'a pas l'air d'être ce qui est attendu (problème de dimensions lors de l'appel dans lequel j'appelle `np.squeeze`.)

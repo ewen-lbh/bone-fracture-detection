@@ -58,12 +58,12 @@ def brightness_of(image: Union[NDArray[Any, Any, 3], NDArray[Any, Any]]) -> floa
 
 
 def detect_edges(
-    image: NDArray[Any, Any, 3], low: int, high: int, σ: int = 3, blur: int = 0
+    image: NDArray[Any, Any, 3], low: int, high: int, σ: int = 3, blur: int = 0, boost_contrast: bool = False
 ) -> tuple[NDArray[Any, Any, 3], NDArray[Any, Any]]:
     σ, low, high = map(int, (σ, low, high))
     contrast_was_boosted = False
 
-    if contrast_of(image) < 20:
+    if contrast_of(image) < 20 and boost_contrast:
         image *= 4
         contrast_was_boosted = True
     # elif contrast_of(image) < 25:
