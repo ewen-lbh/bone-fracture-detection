@@ -1,5 +1,6 @@
 from pathlib import Path
-from typing import Optional
+import json
+from typing import Any, Optional, TypeVar
 
 import cv2
 import matplotlib.pyplot as plt
@@ -8,6 +9,7 @@ from rich.progress import Progress
 
 from angles import display_lines, get_lines_probabilistic
 from detect_tilt import image_tilt
+from nptyping import NDArray
 from utils import *
 
 
@@ -44,11 +46,20 @@ def boost_contrast(image: np.ndarray) -> np.ndarray:
     return 4 * image
 
 
-def brightness_of(image: np.ndarray) -> float:
-    return mean(flatten_2D(cv2.cvtColor(image, cv2.COLOR_BGR2HSV)[:, :, 2]))
+def grayscale_of(image: NDArray[Any, Any, 3]) -> NDArray[Any, Any]:
+    return cv2.cvtColor(image, cv2.COLOR_BGR2HSV)[:, :, 2]
 
 
-def detect_edges(image: np.ndarray, low: int, high: int, σ: int = 3, blur: int = 0):
+def brightness_of(image: Union[NDArray[Any, Any, 3], NDArray[Any, Any]]) -> float:
+    # RGB
+    if len(image.shape) == 3:
+        image = grayscale_of(image)
+    return mean(flatten_2D(image))
+
+
+def detect_edges(
+    image: NDArray[Any, Any, 3], low: int, high: int, σ: int = 3, blur: int = 0
+) -> tuple[NDArray[Any, Any, 3], NDArray[Any, Any]]:
     σ, low, high = map(int, (σ, low, high))
     contrast_was_boosted = False
 
@@ -79,7 +90,10 @@ def save_figure(image_path: Path, save: Optional[Path] = None):
     broken = is_broken([angle for _, _, angle in lines])
     fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
     fig.suptitle(
-        f"Détecté comme {'cassé' if broken else 'sain'}\ncont: {contrast_of(image)} lum: {brightness_of(image)}\n tilt: {image_tilt(lines)/(2*np.pi)*180}°"
+        f"Détecté comme {'cassé' if broken else 'sain'}\n"
+        f"cont: {contrast_of(image)} lum: {brightness_of(image)}\n"
+        # f"tilt: {image_tilt(lines)/(2*np.pi)*180}° #segments: {len(lines)}\n"
+        f"outlum: {brightness_of(center_of(edges))} lumratio: {brightness_of(center_of(edges))/brightness_of(image)}"
     )
     ax[0].imshow(original)
     # ax[1].imshow(edges)
@@ -91,7 +105,7 @@ def save_figure(image_path: Path, save: Optional[Path] = None):
         plt.show()
 
     print(
-        f"{str(image_path)}: Detected as {'broken' if broken else 'healthy'}",
+        f'{image_path}: Detected as {"broken" if broken else "healthy"}',
         end="\n\n",
     )
 

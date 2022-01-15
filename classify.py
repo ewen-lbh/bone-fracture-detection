@@ -36,17 +36,17 @@ LONG_BONES_NAMES = {"umérus", "fémur"}
 
 
 class Fracture(NamedTuple):
-    _bones: set[str]
-    _segments: list[Segment]
+    bones_: set[str]
+    segments_: list[Segment]
     patient: Patient
 
     @property
     def bones(self) -> set[str]:
-        return {b.lower().strip() for b in self._bones}
+        return {b.lower().strip() for b in self.bones_}
 
     @property
     def largest_angle(self) -> float:
-        return max(angle for _, _, angle in self._segments)
+        return max(angle for _, _, angle in self.segments_)
 
     @property
     def applicable_scales(self) -> set[Scale]:
