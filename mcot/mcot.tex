@@ -9,12 +9,12 @@
 \usepackage{xfrac}
 \usepackage{biblatex}
 \usepackage{csquotes}
+\usepackage{setspace}
 \addbibresource{../sources.bib}
 \title{Détection et classification de fractures osseuses}
+\setlength{\parskip}{10pt}
 \author{Ewen Le Bihan}
 \date{2021-12-20}
-
-\renewcommand{\baselinestretch}{2}
 
 \newcommand\wordcount[1]{
     \immediate\write18{texcount -sub=section \jobname.tex  | grep "Section" | sed -e 's/+.*//' | sed -n \thesection p > 'count.txt'}
@@ -35,13 +35,14 @@
         \end{itemize}
 \end{description}
 
+\setstretch{2}
 \section{Ancrage au thème}
 
 Les fractures osseuses constituent une catégorie de blessure assez commune mais potentiellement grave, avec des
 conséquences parfois permanente sur la suite de la vie du patient.  Plus particulièrement, la détection et
 classification de fractures osseuses constitue une étape essentielle du traitement de tels blessures.
 
-Le sujet s'ancre donc dans le thème de la santé.
+% Le sujet s'ancre donc dans le thème de la santé.
 
 \wordcount{50}
 
@@ -53,9 +54,9 @@ fournissant un premier diagnostic sans intervention professionnelle.
 
 \wordcount{50}
 
-
 \section{Positionnements thématiques}
 
+\setstretch{1}
 \begin{itemize}
     \item \emph{INFORMATIQUE (Traitement d'images)}
     \item \emph{INFORMATIQUE (Aprentissage automatique)}
@@ -73,12 +74,13 @@ fournissant un premier diagnostic sans intervention professionnelle.
     Détection des bords & Edge detection \\
     Apprentissage automatique & Machine learning \\
     Réseau neuronal convolutif & Convolutional neural network  \\
-    Vectorisation & Vectorisation \\
+    Vectorisation & Vectorization \\
     \end{tabular}
 \end{table}
 
 \section{Bibliographie commentée}
 
+\setstretch{2}
 \paragraph{}
 
 La détection automatisée de fractures osseuses et --- plus généralement --- de maladies est devenue envisageable ces
@@ -97,9 +99,9 @@ réseau par rapport à des essais antérieurs
 
 Les deux examples d'utilisation d'apprentissage automatique dans le cadre de la reconaissance de fractures mentionnés
 précédemment partagent un point commun: le nombre d'images radiographiques nécéssaire à l'entraînement de tels réseaux
-est assez conséquente: MURA\cite{mura-competition} est un set de 40~561 images tirées de 14~863 études, et
-\cite{detect-hip} emploie 53~278 images -- l'entièreté des images de bassins capturées par l'Hôpital \emph{Royal
-Adelaide} entre 2005 et 2015.
+est assez conséquente: MURA\cite{mura-paper} est un set de 40~561 images tirées de 14~863 études, et
+ emploie 53~278 images -- l'entièreté des images de bassins capturées par l'Hôpital \emph{Royal
+Adelaide} entre 2005 et 2015\cite{detect-hip}.
 
 
 Chacune de ces images, pour pouvoir être utile à l'apprentissage, doit être étiquettée: << y'a-t-il présence de fracture
@@ -114,8 +116,8 @@ Et, de surcroît, il existe des centaines de classifications différentes -- cer
 précise.  Par exemple, 
 
 \begin{itemize}
-    \item la classification Garden\cite{garden-paper} ne concerne que les fractures du bassin.
-    \item La classification SALTER\cite{salter} catégorise les fractures chez l'enfant en fonction de l'atteinte au
+    \item la classification Garden\cite{garden-paper} ne concerne que les fractures du bassin;
+    \item la classification SALTER\cite{salter} catégorise les fractures chez l'enfant en fonction de l'atteinte au
 cartilage de croissance, ce qui a un effet conséquent: dans le type le plus grave, c'est-à-dire l'effacement du
 cartilage par écrasement, le patient pourrait avoir une différence de longueur entre ses deux jambes.
 \end{itemize}
@@ -128,13 +130,15 @@ d'analyser le (ou les) \emph{trait(s) de fracture}.
 
 La détection de motifs géométriques dans une image en noir et blanc est un problème étudié depuis assez longtemps.  Un
 algorithme populaire est celui de la transformée de Hough, d'abord brevetée en 1962 par Paul
-Hough\cite{hough-transform-patent} en puis généralisée à la détection de lignes et courbes en 1972 par Richard Duda et
+Hough\cite{hough-transform-patent} puis généralisée à la détection de lignes et courbes en 1972 par Richard Duda et
 Peter Hart\cite{hough-transform}.
 
 Cependant, la détection de lignes dans une image est plus simple quand l'image est bien contrastée, et ne présente que
 les bords, et non -- par exemple -- des << lignes >> dues à la porosité du tissu osseux sur des images radiographiques.
 En 1986, John F. Canny met au point un algorithme de détection des bords\cite{canny}, qui permet de passer d'une image
 source à une image noir et blanc, ou les pixels blancs font partie de bords et les pixels noirs non.
+
+
 
 
 \wordcount{650}
@@ -150,6 +154,7 @@ traitement d'images classiques à une approche avec réseaux neuronaux.
 
 \wordcount{50}
 
+\setstretch{1.5}
 \section{Objectifs du TIPE}
 Je me propose:
 \begin{itemize}
@@ -161,5 +166,6 @@ Je me propose:
 
 \wordcount{100}
 
+\setstretch{1}
 \printbibliography
 \end{document}
