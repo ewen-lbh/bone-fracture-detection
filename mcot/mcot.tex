@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage[bookmarks, hidelinks, unicode]{hyperref}
+\usepackage[normalem]{ulem}
 \usepackage{amsmath}
 \usepackage{xfrac}
 \usepackage{biblatex}
@@ -38,8 +39,8 @@
 \setstretch{2}
 \section{Ancrage au thème}
 
-Les fractures osseuses constituent une catégorie de blessure assez commune mais potentiellement grave, avec des
-conséquences parfois permanente sur la suite de la vie du patient.  Plus particulièrement, la détection et
+Les fractures osseuses constituent une catégorie de blessures assez communes mais potentiellement graves, avec des
+conséquences parfois permanentes sur la suite de la vie du patient.  Plus particulièrement, la détection et
 classification de fractures osseuses constitue une étape essentielle du traitement de tels blessures.
 
 % Le sujet s'ancre donc dans le thème de la santé.
@@ -49,8 +50,8 @@ classification de fractures osseuses constitue une étape essentielle du traitem
 \section{Motivation du choix}
 
 Il convient de s'intérésser à l'automatisation du processus de détection et de classification de telles blessures, afin
-de fluidifier l'orientation au service hospitalier, qui sont ces derniers temps souvent en sous-effectif, approprié en
-fournissant un premier diagnostic sans intervention professionnelle. 
+de fluidifier l'orientation dans un service hospitalier. En effet, les hopitaux sont ces derniers temps souvent en sous-effectif, 
+et fournir un premier diagnostic sans intervention professionnelle pourrait améliorer la situation. 
 
 \wordcount{50}
 
@@ -83,49 +84,52 @@ fournissant un premier diagnostic sans intervention professionnelle.
 \setstretch{2}
 \paragraph{}
 
-La détection automatisée de fractures osseuses et --- plus généralement --- de maladies est devenue envisageable ces
-derniers temps. En effet, l'université américaine de Stanford a organisé en 2018 une compétition visant à encourager la
-Ils ont mis à disposition une large base de données d'exemples pour permettre aux réseaux neuronaux programmés par les
-candidats de s'entraîner.  Les résultats de cette compétition montre qu'il est possible de dépasser les capacités d'un
-être humain avec une dizaine d'années d'expérience avec un réseau neuronal\cite{mura-competition}.
+La détection automatisée de maladies et blessures, et, plus particulièrement, de fractures osseuses, est devenue
+envisageable ces derniers temps. En effet, l'université américaine de Stanford a organisé en 2018 une compétition ---
+<<MURA>> --- visant à encourager la création d'algorithmes détectant des fractures.  Ils ont mis à disposition une large
+base de données d'exemples pour permettre aux réseaux neuronaux programmés par les candidats de s'entraîner.  Les
+résultats de cette compétition montre qu'un réseau neuronal peut dépasser les capacités d'un être humain avec une dizaine
+d'années d'expérience\cite{mura-competition}.
 
 Une année plutôt, William Gale et. al. mettent à profit le même principe de réseaux neuronaux afin de détecter des
-fractures du bassin\cite{detect-hip}.  Ils ont utilisés trois réseaux neuronaux convolutifs (\emph{CNN}) consécutifs
-pour réduire le nombre d'image et la taille de celles-ci, en ne sélectionnant que les régions où une fracture est
-possible, puis un dernier réseau pour effectuer la détection. Les résultats montre une amélioration de la précision du
+fractures du bassin\cite{detect-hip}.  Ils utilisent trois réseaux neuronaux convolutifs (\emph{CNN}) consécutifs
+pour réduire le nombre d'images et la taille de celles-ci, en ne sélectionnant que les régions où une fracture est
+possible, puis un dernier réseau pour effectuer la détection. Les résultats montrent une amélioration de la précision du
 réseau par rapport à des essais antérieurs
 
 \paragraph{}
 
 Les deux examples d'utilisation d'apprentissage automatique dans le cadre de la reconaissance de fractures mentionnés
 précédemment partagent un point commun: le nombre d'images radiographiques nécéssaire à l'entraînement de tels réseaux
-est assez conséquente: MURA\cite{mura-paper} est un set de 40~561 images tirées de 14~863 études, et
- emploie 53~278 images -- l'entièreté des images de bassins capturées par l'Hôpital \emph{Royal
+est assez conséquent: MURA\cite{mura-paper} est un set de 40~561 images tirées de 14~863 études, et le réseau de William
+Gale et. al. s'est entraîné sur 53~278 images -- l'entièreté des images de bassins capturées par l'Hôpital \emph{Royal
 Adelaide} entre 2005 et 2015\cite{detect-hip}.
 
 
-Chacune de ces images, pour pouvoir être utile à l'apprentissage, doit être étiquettée: << y'a-t-il présence de fracture
-dans cette image ? >>. De plus, la question de la diversité et de l'inclusivité du set de données collecté (<<
-Représente-t-il correctement et justement la population globale ? >>) peut s'avérer complexe\cite{dataset-bias}.
+Chacune de ces images, pour pouvoir être utile à l'apprentissage, doit être étiquettée au préalable: << y'a-t-il
+présence de fracture dans cette image ? >>. De plus, la question de la diversité et de l'inclusivité du set de données
+collecté (<< Représente-t-il correctement et justement la population globale ? >>) peut s'avérer
+complexe\cite{dataset-bias}.
 
-De plus, ces réseaux, avec autant d'images, ne peuvent avec fiabilité répondre qu'à la question de \emph{présence} d'une
-fracture, la question d'une \emph{classification} quelconque demanderait donc une taille de set d'entraînement bien plus
-grande et difficilement atteignable.
+De plus, ces réseaux ne peuvent répondre avec fiabilité qu'à la question de \emph{présence} d'une fracture, la question
+d'une \emph{classification} quelconque demanderait \uwave{donc} une taille de set d'entraînement bien plus grande et
+difficilement atteignable.
 
-Et, de surcroît, il existe des centaines de classifications différentes -- certaines avec une visée parfois très
-précise.  Par exemple, 
+De surcroît, il existe des centaines de classifications différentes -- certaines avec un champ d'application assez
+réduit.  Par exemple, 
 
 \begin{itemize}
-    \item la classification Garden\cite{garden-paper} ne concerne que les fractures du bassin;
-    \item la classification SALTER\cite{salter} catégorise les fractures chez l'enfant en fonction de l'atteinte au
-cartilage de croissance, ce qui a un effet conséquent: dans le type le plus grave, c'est-à-dire l'effacement du
-cartilage par écrasement, le patient pourrait avoir une différence de longueur entre ses deux jambes.
+    \item la classification Garden\cite{garden-paper} ne concerne que les fractures du bassin; 
+    \item la classification SALTER\cite{salter} catégorise les fractures chez l'enfant en fonction de l'atteinte au 
+        cartilage de croissance, ce qui a un effet conséquent: dans le type le plus grave, c'est-à-dire 
+        l'effacement du cartilage par écrasement, le patient pourrait avoir une différence de longueur 
+        entre ses deux jambes.
 \end{itemize}
 
 \paragraph{}
 
 Mais l'apprentissage automatique n'est pas la seule potentielle solution à ce problème: des techniques d'analyse d'image
-plus classiques pourraient fonctionner.  Il s'agira alors -- du moins dans un premier temps -- d'identifier et
+plus classiques pourraient fonctionner.  Il s'agira alors~--~du moins dans un premier temps~--~d'identifier et
 d'analyser le (ou les) \emph{trait(s) de fracture}.
 
 La détection de motifs géométriques dans une image en noir et blanc est un problème étudié depuis assez longtemps.  Un
@@ -149,7 +153,7 @@ source à une image noir et blanc, ou les pixels blancs font partie de bords et 
 %automatique. 
 
 Il s'agit d'étudier différents moyens de détection de fractures, et en particulier de comparer une approche par
-traitement d'images classiques à une approche avec réseaux neuronaux.
+traitements d'images classiques à une approche avec réseaux neuronaux.
 
 
 \wordcount{50}
@@ -159,7 +163,7 @@ traitement d'images classiques à une approche avec réseaux neuronaux.
 Je me propose:
 \begin{itemize}
     \item D'explorer la détection et classification sans apprentissage automatique, mais avec des techniques d'analyse
-        d'image plus classiques (détection de bords, identification de segments de droites, calcul d'angles),
+        d'image plus classiques (détection de bords, identification de segments \uwave{de droites}, calcul d'angles),
     \item D'utiliser un ou plusieurs réseaux neuronaux afin d'effectuer la même tâche, et
     \item De comparer les deux approches, en mettant en valeurs les avantages et inconvénients de chacune. 
 \end{itemize}
