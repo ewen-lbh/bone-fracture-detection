@@ -37,23 +37,25 @@
 \end{description}
 
 \setstretch{2}
+\section{Motivation du choix}
+
+Il semble important de s'intérésser à l'automatisation du processus de détection et de classification de telles
+blessures, afin de fluidifier l'orientation dans les services hospitaliers. En effet, les hopitaux sont ces derniers
+temps souvent en sous-effectif, et fournir un premier diagnostic sans intervention professionnelle pourrait améliorer la
+situation. 
+
+\wordcount{50}
+
 \section{Ancrage au thème}
 
 Les fractures osseuses constituent une catégorie de blessures assez communes mais potentiellement graves, avec des
-conséquences parfois permanentes sur la suite de la vie du patient.  Plus particulièrement, la détection et
+conséquences parfois permanentes durant la suite de la vie du patient.  Plus particulièrement, la détection et
 classification de fractures osseuses constitue une étape essentielle du traitement de tels blessures.
 
 % Le sujet s'ancre donc dans le thème de la santé.
 
 \wordcount{50}
 
-\section{Motivation du choix}
-
-Il convient de s'intérésser à l'automatisation du processus de détection et de classification de telles blessures, afin
-de fluidifier l'orientation dans un service hospitalier. En effet, les hopitaux sont ces derniers temps souvent en sous-effectif, 
-et fournir un premier diagnostic sans intervention professionnelle pourrait améliorer la situation. 
-
-\wordcount{50}
 
 \section{Positionnements thématiques}
 
@@ -91,15 +93,15 @@ base de données d'exemples pour permettre aux réseaux neuronaux programmés pa
 résultats de cette compétition montre qu'un réseau neuronal peut dépasser les capacités d'un être humain avec une dizaine
 d'années d'expérience\cite{mura-competition}.
 
-Une année plutôt, William Gale et. al. mettent à profit le même principe de réseaux neuronaux afin de détecter des
-fractures du bassin\cite{detect-hip}.  Ils utilisent trois réseaux neuronaux convolutifs (\emph{CNN}) consécutifs
+Une année plutôt, William Gale et. al. mettaient à profit le même principe de réseaux neuronaux afin de détecter des
+fractures du bassin\cite{detect-hip}.  Ils utilisèrent trois réseaux neuronaux convolutifs (\emph{CNN}) consécutifs
 pour réduire le nombre d'images et la taille de celles-ci, en ne sélectionnant que les régions où une fracture est
-possible, puis un dernier réseau pour effectuer la détection. Les résultats montrent une amélioration de la précision du
+possible, puis un dernier réseau pour effectuer la détection. Les résultats montrèrent une amélioration de la précision du
 réseau par rapport à des essais antérieurs
 
 \paragraph{}
 
-Les deux examples d'utilisation d'apprentissage automatique dans le cadre de la reconaissance de fractures mentionnés
+Les deux exemples d'utilisation d'apprentissage automatique dans le cadre de la reconaissance de fractures mentionnés
 précédemment partagent un point commun: le nombre d'images radiographiques nécéssaire à l'entraînement de tels réseaux
 est assez conséquent: MURA\cite{mura-paper} est un set de 40~561 images tirées de 14~863 études, et le réseau de William
 Gale et. al. s'est entraîné sur 53~278 images -- l'entièreté des images de bassins capturées par l'Hôpital \emph{Royal
@@ -112,7 +114,7 @@ collecté (<< Représente-t-il correctement et justement la population globale ?
 complexe\cite{dataset-bias}.
 
 De plus, ces réseaux ne peuvent répondre avec fiabilité qu'à la question de \emph{présence} d'une fracture, la question
-d'une \emph{classification} quelconque demanderait \uwave{donc} une taille de set d'entraînement bien plus grande et
+d'une \emph{classification} quelconque demanderait en effet une taille de set d'entraînement bien plus grande et
 difficilement atteignable.
 
 De surcroît, il existe des centaines de classifications différentes -- certaines avec un champ d'application assez
@@ -137,10 +139,11 @@ algorithme populaire est celui de la transformée de Hough, d'abord brevetée en
 Hough\cite{hough-transform-patent} puis généralisée à la détection de lignes et courbes en 1972 par Richard Duda et
 Peter Hart\cite{hough-transform}.
 
-Cependant, la détection de lignes dans une image est plus simple quand l'image est bien contrastée, et ne présente que
-les bords, et non -- par exemple -- des << lignes >> dues à la porosité du tissu osseux sur des images radiographiques.
-En 1986, John F. Canny met au point un algorithme de détection des bords\cite{canny}, qui permet de passer d'une image
-source à une image noir et blanc, ou les pixels blancs font partie de bords et les pixels noirs non.
+En 1986, John F. Canny met au point un algorithme de détection des bords\cite{canny}, qui permet de passer d’une image source à
+une image noir et blanc, ou les pixels blancs. Cependant, l'os présente une porosité qui se manifeste sur les images
+radiographiques par des irrégularités de contraste. Si l'algorithme de détection de bords est trop sensible aux
+changements de contraste, il détectera des lignes parasites. Cette difficulté rend l'application directe, sans
+pré-traitement ni post-traitement de l'algorithme de Canny à une image radiographique impertinente.
 
 
 
@@ -163,7 +166,7 @@ traitements d'images classiques à une approche avec réseaux neuronaux.
 Je me propose:
 \begin{itemize}
     \item D'explorer la détection et classification sans apprentissage automatique, mais avec des techniques d'analyse
-        d'image plus classiques (détection de bords, identification de segments \uwave{de droites}, calcul d'angles),
+        d'image plus classiques (détection de bords, identification de segments de droites, calcul d'angles),
     \item D'utiliser un ou plusieurs réseaux neuronaux afin d'effectuer la même tâche, et
     \item De comparer les deux approches, en mettant en valeurs les avantages et inconvénients de chacune. 
 \end{itemize}
