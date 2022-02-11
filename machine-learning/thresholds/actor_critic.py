@@ -33,9 +33,11 @@ training_dataset: list[NDArray[Any, Any, 3]] = list(
         lambda filename: cv2.resize(
             cv2.imread(str(filename)), (images_height, images_width)
         ),
-        Path("datasets/radiopaedia").glob("*.png"),
+        Path("datasets/encyclopaedia").glob("*.png"),
     )
 )
+
+print(f"Running with {len(training_dataset)} images")
 
 
 class ThresholdsEnvironment:
