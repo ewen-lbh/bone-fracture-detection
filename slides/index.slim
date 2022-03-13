@@ -1,0 +1,67 @@
+doctype html
+doctype html
+html lang="en" 
+  head
+    meta charset="UTF-8" /
+    title My talk
+    css:
+      | section {
+        | width: 100vw;
+        | height: 100vh;
+        | position: absolute;
+        | top: 0;
+        | left: 0;
+        | opacity: 0;
+        | visibility: hidden;
+        | transition: opacity .66s;
+      | }
+
+      | section.focused {
+        | opacity: 1;
+        | visibility: visible;
+      | }
+  body
+    section
+      h1 The Title
+      h2 Just a Subtitle.
+    section
+      h1 One slide
+      h2 Just a Subtitle.
+    section
+      h1 Another slide
+      h2 Just a Subtitle.
+    section
+      h1 Last slide
+      h2 Just a Subtitle.
+    javascript:
+      | const first = document.querySelector('section:first-of-type')
+      | const last = document.querySelector('section:last-of-type')
+
+      | show(first)
+
+      | document.addEventListener('keyup', e => {
+        | const focused = document.querySelector('.focused')
+
+        | switch (e.key) {
+          | case 'ArrowUp':
+          | case 'ArrowLeft': // back / previous
+            | const prev = focused.previousElementSibling
+            | hide(focused)
+            | prev ? show(prev) : show(last)
+            | break
+
+          | case 'ArrowDown':
+          | case 'ArrowRight': // forward / next
+            | const next = focused.nextElementSibling
+            | hide(focused)
+            | next && next.tagName == 'SECTION' ? show(next) : show(first)
+        | }
+      | })
+
+      | function show(el) {
+        | el.classList.add('focused')
+      | }
+
+      | function hide(el) {
+        | el.classList.remove('focused')
+      | }
