@@ -7,9 +7,11 @@ car la réponse donnée par le réseau n'a pas de relation simple au critère d'
 On utilise donc une fonction de coût qui compare le contraste et la luminosité idéale à celle atteinte en utilisant les seuils proposés par le réseau.
 Une réponse est considérée comme juste (ou acceptable) si cet écart est inférieur à un seuil de tolérance fixé ε.
 """
+from pathlib import Path
 from math import sqrt
 from typing import *
 import numpy as np
+from PIL import Image
 from nptyping import NDArray
 
 from detect import brightness_of, detect_edges
@@ -48,10 +50,11 @@ class Convolution(Layer):
 
 class Pooling(Layer):
     def regions(self, image: NDArray):
-        h, w = image.shape
+        h, w, _ = image.shape
 
-        for i, j in zip(range(h - 2), range(w - 2)):
-            yield image[(i * 2) : (i * 2 + 2), (j * 2) : (j * 2 + 2)], i, j
+        for i in range(w // 2):
+            for j in range(h // 2):
+                yield image[(i * 2) : (i * 2 + 2), (j * 2) : (j * 2 + 2)], i, j
 
     def forward(self, input: NDArray):
         h, w, num_filters = input.shape
@@ -59,7 +62,10 @@ class Pooling(Layer):
 
         for region, i, j in self.regions(input):
             # Maximize over pixels (first 2 dimensions), not the filter number
-            output[i, j] = np.amax(region, axis=(0, 1))
+            if 0 not in region.shape:
+                output[i, j] = np.amax(region, axis=(0, 1))
+
+        return output
 
 
 class Softmax(Layer):
@@ -67,13 +73,18 @@ class Softmax(Layer):
     biases: NDArray
     max_value: float
 
-    def __init__(self, input_length, nodes, max_value: float = 1) -> None:
-        self.weights = np.random.randn(input_length, nodes) / input_length
+    def __init__(self, nodes, max_value: float = 1) -> None:
+        self.nodes = nodes
         self.biases = np.zeros(nodes)
         self.max_value = max_value
 
+    def weights(self, input) -> NDArray:
+        w, h, num_filters = input.shape
+        input_length = w * h * num_filters
+        return np.random.randn(input_length, self.nodes) / input_length
+
     def forward(self, input):
-        totals = np.dot(input.flatten(), self.weights) + self.biases
+        totals = np.dot(input.flatten(), self.weights(input)) + self.biases
         exponentiateds = np.exp(totals)
 
         return (exponentiateds / np.sum(exponentiateds, axis=0)) * self.max_value
@@ -98,9 +109,11 @@ class Network:
         self.is_valid = is_valid
 
     def forward(self, input):
-        output = self.layers[0].forward(input)
-        for layer in self.layers[1:]:
+        output = input
+        for layer in self.layers:
+            print(f"Doing layer {layer}")
             output = layer.forward(output)
+            print(f"Output shape: {output.shape}")
         loss = self.loss(output, input)
         return input, loss, self.is_valid(loss)
 
@@ -109,17 +122,18 @@ class Network:
 
 ε = 5
 
+
 def Features(**args) -> dict:
     base = {
         "luminosity": 0,
     }
 
-    for key, value in  args.items():
+    for key, value in args.items():
         if key in base:
             base[key] = value
         else:
             raise KeyError(f"{key} is not a valid Features key")
-        
+
     return base
 
 
@@ -128,6 +142,7 @@ def loss(output: NDArray, input: NDArray) -> float:
     want = Features(luminosity=15)
 
     high_treshold, low_treshold = output.tolist()[:2]
+    print(input.shape)
     edges, _ = detect_edges(image=input, low=low_treshold, high=high_treshold)
 
     got["luminosity"] = brightness_of(edges)
@@ -144,7 +159,15 @@ network = Network(
     layers=[
         Convolution(8),
         Pooling(),
-        Softmax(8 * 8 * 8, 2),
+        Softmax(2),
     ],
 )
+
+for i, image_path in enumerate(Path("datasets/radiopaedia").glob("*.png")):
+    image = np.array(Image.open(image_path))
+    _, loss, accuracy = network(image)
+
+    print(f"{image.stem}: {loss:.2f}, {accuracy}")
+
+
 # https://victorzhou.com/blog/intro-to-cnns-part-1/
