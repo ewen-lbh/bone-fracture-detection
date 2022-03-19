@@ -1,15 +1,15 @@
-from pathlib import Path
 import json
+from pathlib import Path
 from typing import Any, Optional, TypeVar
 
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+from nptyping import NDArray
 from rich.progress import Progress
 
 from angles import display_lines, get_lines_probabilistic
 from detect_tilt import image_tilt
-from nptyping import NDArray
 from utils import *
 
 
@@ -57,21 +57,26 @@ def brightness_of(image: Union[NDArray[Any, Any, 3], NDArray[Any, Any]]) -> floa
     return mean(flatten_2D(image))
 
 
+def detect_edges_otsu(
+    image: NDArray[Any, Any, 3]
+) -> tuple[NDArray[Any, Any, 3], NDArray[Any, Any]]:
+    otsu_threshold, _ = cv2.threshold(
+        grayscale_of(image), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
+    )
+    return detect_edges(image, low=otsu_threshold / 2, high=otsu_threshold, blur=0)
+
+
 def detect_edges(
-    image: NDArray[Any, Any, 3], low: int, high: int, σ: int = 3, blur: int = 0, boost_contrast: bool = False
+    image: Union[NDArray[Any, Any, 3], NDArray[Any, Any]],
+    low: int,
+    high: int,
+    σ: int = 3,
+    blur: int = 0,
 ) -> tuple[NDArray[Any, Any, 3], NDArray[Any, Any]]:
     σ, low, high = map(int, (σ, low, high))
-    contrast_was_boosted = False
 
-    if contrast_of(image) < 20 and boost_contrast:
-        image *= 4
-        contrast_was_boosted = True
-    # elif contrast_of(image) < 25:
-    #     image *= 2
-    #     contrast_was_boosted = True
-
-    if contrast_was_boosted:
-        print(f"boosted contrast is {contrast_of(image)}")
+    if len(image.shape) == 2:
+        image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
     if blur:
         image = cv2.blur(image, (blur, blur))
@@ -110,10 +115,10 @@ def save_figure(image_path: Path, save: Optional[Path] = None):
     )
 
 
-if __name__ == "__main__":
-    with Progress() as bar:
-        files = list(Path("datasets/various").glob("*.png"))
-        task = bar.add_task("[blue]Processing", total=len(files))
-        for testfile in files:
-            save_figure(testfile, save=Path("line-detection") / testfile.name)
-            bar.advance(task)
+# if __name__ == "__main__":
+#     with Progress() as bar:
+#         files = list(Path("datasets/various").glob("*.png"))
+#         task = bar.add_task("[blue]Processing", total=len(files))
+#         for testfile in files:
+#             save_figure(testfile, save=Path("line-detection") / testfile.name)
+#             bar.advance(task)

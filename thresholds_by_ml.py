@@ -7,22 +7,33 @@ car la réponse donnée par le réseau n'a pas de relation simple au critère d'
 On utilise donc une fonction de coût qui compare le contraste et la luminosité idéale à celle atteinte en utilisant les seuils proposés par le réseau.
 Une réponse est considérée comme juste (ou acceptable) si cet écart est inférieur à un seuil de tolérance fixé ε.
 """
-from pathlib import Path
+from dataclasses import dataclass
 from math import sqrt
+from pathlib import Path
 from typing import *
+
 import cv2
 import numpy as np
-from PIL import Image
 from nptyping import NDArray
+from numpy import ndarray
+from PIL import Image
 from rich import print
-from rich.table import Table
-from utils import checkmark, norm
 from rich.live import Live
+from rich.table import Table
 
 from detect import brightness_of, detect_edges
+from utils import checkmark, flatten_2D, norm
 
 ε = 5
 CURRENT_IMAGE_STEM = ""
+
+
+@dataclass
+class LayerCache:
+    shape: Tuple[int, ...] = ()
+    flat: NDArray[Any, Any] = ndarray((1, 1))
+    totals: NDArray[Any, Any] = ndarray((1, 1))
+
 
 class Layer:
     """Abstract base class for layers, used for typing"""
@@ -53,7 +64,7 @@ class Convolution(Layer):
             output[i, j] = np.sum(region * self.filters, axis=(1, 2))
 
         return output
-    
+
     def __str__(self):
         return f"Convolution({self.num_filters})"
 
@@ -79,24 +90,27 @@ class Pooling(Layer):
                     # print(f"warning: {e}")
                     pass
                 except Exception as e:
-                    print(f"Tried pooling on region of shape {region.shape} into [{i}, {j}]")
+                    print(
+                        f"Tried pooling on region of shape {region.shape} into [{i}, {j}]"
+                    )
                     raise e
 
         return output
-    
+
     def __str__(self):
         return f"Pooling()"
 
 
 class Softmax(Layer):
-    weights: NDArray
     biases: NDArray
     max_value: float
+    cache: LayerCache
 
     def __init__(self, nodes, max_value: float = 1) -> None:
         self.nodes = nodes
         self.biases = np.zeros(nodes)
         self.max_value = max_value
+        self.cache = LayerCache()
 
     def weights(self, input) -> NDArray:
         w, h, num_filters = input.shape
@@ -104,11 +118,20 @@ class Softmax(Layer):
         return np.random.randn(input_length, self.nodes) / input_length
 
     def forward(self, input):
-        totals = np.dot(input.flatten(), self.weights(input)) + self.biases
+        self.cache.shape = input.shape
+        flat = input.flatten()
+        self.cache.flat = flat
+        totals = np.dot(flat, self.weights(input)) + self.biases
+        self.cache.totals = totals
         exponentiateds = np.exp(totals)
 
         return (exponentiateds / np.sum(exponentiateds, axis=0)) * self.max_value
-    
+
+    def backpropagate(self, loss_gradient):
+        for i, gradient in enumerate(loss_gradient):
+            if gradient == 0:
+                continue
+
     def __str__(self):
         return f"Softmax({self.nodes})"
 
@@ -142,8 +165,6 @@ class Network:
     __call__ = forward
 
 
-
-
 class Features(NamedTuple):
     luminosity: float = 0
 
@@ -160,7 +181,14 @@ def loss(output: NDArray[2], input: NDArray[Any, Any]) -> float:
         low=low_treshold,
         high=high_treshold,
     )
-    cv2.imwrite(str(Path(__file__).parent / "thresholds_by_ml_output" /  (CURRENT_IMAGE_STEM+".png")) , edges)
+    cv2.imwrite(
+        str(
+            Path(__file__).parent
+            / "thresholds_by_ml_output"
+            / (CURRENT_IMAGE_STEM + ".png")
+        ),
+        edges,
+    )
 
     got = Features(luminosity=brightness_of(edges))
 
@@ -191,7 +219,9 @@ with Live(results):
         image = cv2.imread(str(image_path), cv2.IMREAD_GRAYSCALE)
         _, loss, accurate = network(image)
 
-        results.add_row(image_path.stem.replace('-', ' '), f"{loss:.2f}", checkmark(accurate))
+        results.add_row(
+            image_path.stem.replace("-", " "), f"{loss:.2f}", checkmark(accurate)
+        )
 
 
 # https://victorzhou.com/blog/intro-to-cnns-part-1/
