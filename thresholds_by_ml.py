@@ -10,12 +10,19 @@ Une réponse est considérée comme juste (ou acceptable) si cet écart est inf�
 from pathlib import Path
 from math import sqrt
 from typing import *
+import cv2
 import numpy as np
 from PIL import Image
 from nptyping import NDArray
+from rich import print
+from rich.table import Table
+from utils import checkmark, norm
+from rich.live import Live
 
 from detect import brightness_of, detect_edges
 
+ε = 5
+CURRENT_IMAGE_STEM = ""
 
 class Layer:
     """Abstract base class for layers, used for typing"""
@@ -33,19 +40,22 @@ class Convolution(Layer):
         self.filters = np.random.randn(num_filters, 3, 3) / 9
 
     def regions(self, image: NDArray):
-        h, w = image.shape
+        h, w = image.shape[:2]
 
         for i, j in zip(range(h - 2), range(w - 2)):
             yield image[i : i + 3, j : j + 3], i, j
 
     def forward(self, input: NDArray):
-        h, w = input.shape
+        h, w = input.shape[:2]
         output = np.zeros((h - 2, w - 2, self.num_filters))
 
         for region, i, j in self.regions(input):
             output[i, j] = np.sum(region * self.filters, axis=(1, 2))
 
         return output
+    
+    def __str__(self):
+        return f"Convolution({self.num_filters})"
 
 
 class Pooling(Layer):
@@ -63,9 +73,19 @@ class Pooling(Layer):
         for region, i, j in self.regions(input):
             # Maximize over pixels (first 2 dimensions), not the filter number
             if 0 not in region.shape:
-                output[i, j] = np.amax(region, axis=(0, 1))
+                try:
+                    output[i, j] = np.amax(region, axis=(0, 1))
+                except IndexError as e:
+                    # print(f"warning: {e}")
+                    pass
+                except Exception as e:
+                    print(f"Tried pooling on region of shape {region.shape} into [{i}, {j}]")
+                    raise e
 
         return output
+    
+    def __str__(self):
+        return f"Pooling()"
 
 
 class Softmax(Layer):
@@ -88,6 +108,9 @@ class Softmax(Layer):
         exponentiateds = np.exp(totals)
 
         return (exponentiateds / np.sum(exponentiateds, axis=0)) * self.max_value
+    
+    def __str__(self):
+        return f"Softmax({self.nodes})"
 
 
 class Network:
@@ -101,9 +124,7 @@ class Network:
     loss: Callable[[NDArray, NDArray], float]
     is_valid: Callable[[float], bool]
 
-    def __init__(
-        self, layers: list[Layer], loss=lambda x: 0, is_valid=lambda loss: False
-    ) -> None:
+    def __init__(self, layers: list[Layer], loss, is_valid) -> None:
         self.layers = layers
         self.loss = loss
         self.is_valid = is_valid
@@ -111,44 +132,40 @@ class Network:
     def forward(self, input):
         output = input
         for layer in self.layers:
-            print(f"Doing layer {layer}")
+            # print(f"Doing layer {layer}")
+            # print(f"Shapes: {output.shape} ->", end=" ")
             output = layer.forward(output)
-            print(f"Output shape: {output.shape}")
+            # print(f"{output.shape}")
         loss = self.loss(output, input)
         return input, loss, self.is_valid(loss)
 
     __call__ = forward
 
 
-ε = 5
 
 
-def Features(**args) -> dict:
-    base = {
-        "luminosity": 0,
-    }
+class Features(NamedTuple):
+    luminosity: float = 0
 
-    for key, value in args.items():
-        if key in base:
-            base[key] = value
-        else:
-            raise KeyError(f"{key} is not a valid Features key")
-
-    return base
+    def __getitem__(self, key):
+        return getattr(self, key)
 
 
-def loss(output: NDArray, input: NDArray) -> float:
-    got = Features()
+def loss(output: NDArray[2], input: NDArray[Any, Any]) -> float:
     want = Features(luminosity=15)
 
     high_treshold, low_treshold = output.tolist()[:2]
-    print(input.shape)
-    edges, _ = detect_edges(image=input, low=low_treshold, high=high_treshold)
+    _, edges = detect_edges(
+        image=cv2.cvtColor(input, cv2.COLOR_GRAY2RGB),
+        low=low_treshold,
+        high=high_treshold,
+    )
+    cv2.imwrite(str(Path(__file__).parent / "thresholds_by_ml_output" /  (CURRENT_IMAGE_STEM+".png")) , edges)
 
-    got["luminosity"] = brightness_of(edges)
+    got = Features(luminosity=brightness_of(edges))
 
     deviations = [abs(got[feature] - want[feature]) for feature in Features._fields]
-    return sqrt(sum(map(lambda x: x**2, deviations)))
+    return norm(deviations)
 
 
 lessthan = lambda ε: lambda x: x <= ε
@@ -163,11 +180,18 @@ network = Network(
     ],
 )
 
-for i, image_path in enumerate(Path("datasets/radiopaedia").glob("*.png")):
-    image = np.array(Image.open(image_path))
-    _, loss, accuracy = network(image)
+results = Table(title="Results")
+results.add_column("Image name")
+results.add_column("Loss", justify="right")
+results.add_column("Accurate?", justify="right")
 
-    print(f"{image.stem}: {loss:.2f}, {accuracy}")
+with Live(results):
+    for i, image_path in enumerate(Path("datasets/radiopaedia").glob("*.png")):
+        CURRENT_IMAGE_STEM = image_path.stem
+        image = cv2.imread(str(image_path), cv2.IMREAD_GRAYSCALE)
+        _, loss, accurate = network(image)
+
+        results.add_row(image_path.stem.replace('-', ' '), f"{loss:.2f}", checkmark(accurate))
 
 
 # https://victorzhou.com/blog/intro-to-cnns-part-1/
