@@ -19,3 +19,7 @@ Ordre: du plus ancien au plus récent.
 - premier essai en suivant https://keras.io/examples/rl/actor_critic_cartpole/, mais avec
 ma propre classe d'environnement pour répondre à mon besoin. Le problème est que je ne sais pas trop ce que "state" est sensé représenter, je donne le tensor de l'image des bords mais 
 ça n'a pas l'air d'être ce qui est attendu (problème de dimensions lors de l'appel dans lequel j'appelle `np.squeeze`.)
+
+
+- [fonctionnement Canny](https://docs.opencv.org/3.4/da/d22/tutorial_py_canny.html) on pourrait avoir des bords moins déconnectés en autorisant les pixels adjaçents à rester blanc (4. Non-maximum suppression)
+    je pense pas que Hough est besoin de bords de 1 pixel
