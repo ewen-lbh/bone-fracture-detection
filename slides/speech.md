@@ -1,160 +1,129 @@
 ## Titre
 
-- détection fracture osseuse à partir d'imagerie médicale
-
-pk?
-
-- aider pompiers/secours lors d'événements à savoir rapidement si fracture
-- type de fracture
-- => fluidifier procédé d'hospitalisation, réduire attente car on envoie dans le bon service d'urgence direct
-
-## Radio portative
-
-- ## Deux approches
-
-- sans ML
+- fluidifier traffic dans services hospitaliers
   
-  - ML a des desavantages
-    - bcp de données 
-    - biais
+  - evenements
 
-- avec ML
+- classifiant fractures
+
+## portative
+
+- avec des appareils embarques
+
+## principe général
+
+- cibler zone de douleur
+
+- detecter bords
+
+- lignes de fractures
+
+- angles
+
+- critère, classification
+
+## Canny
+
+- algo à double seuil:
   
-  - si nécéssaire
-
-## Sets de données
-
-- sur internet, car plus d'imperfections => convient mieux pour conditions & qualité de scans non idéales
-
-## Détection des bords
-
-- avec cv2.Canny
+  - en dessous du min: pas un bord
   
-  <!-- - _TODO? principe de fonctionnement de Canny?_ -->
-
-## Détection des bords: pb de texture
-
-- os poreux => artéfacts si trop sensible
-
-## Et avec du flou?
-
-- on peut manquer des traits de fracture
-
-## 
-
-- faut trouver les bons seuils
-
-## seuils(image)
-
-- selon image, seuil optimal différent
-
-## seuils(lumi, cont)?
-
-- est-ce que on peut déduire seuils depuis prop de l'image?
-
-## slide avec les graphes décorrelés
-
-- sur quelques images testées, pas _encore_ de correl. évidente
-
-## autres approches
-
-- statistique: une solution serait d'utiliser différents seuils sur même image, et de prendre le résultat majoritaire
-- heuristique:
-  - par ex, nombre segments détectés / proportion de pixels blancs
-    - artéfacts donne segments trops petits pour être considéré comme tel
-
-            <!-- - (autres auxquelles j'ai pas encore pensé) -->
-
-## détection segments
-
-## vectorisation
-
-- avec potrace
-- donne fichiers SVG => stocke image comme instructions de dessins vectoriel
-
-## pb de la vectorisation
-
-- en modifiant la balise contenant le chemin de tracé pour voir les contours
-- on se rend compte que ce ne sont pas des lignes
-- => difficile pour en déduire des angles
-
-## trasnformée de hough
-
-<!-- - _TODO: principe des transformées de hough?_ -->
-
-- deux approches
+  - au dessus: forcément un bord
   
-  - classique:
-    - droites
-    - difficile de gérer les courbes car pas de taille de segment
-    - on obtient point de départ & pente
-  - probabiliste:
-    - segments
-    - on lui donne une taille de segment maximum
-    - on obtient coords point de départ et d'arrivée
+  - entre: dépend des pixels adjacents
 
-- j'ai préféré la probabiliste
+## Hough
 
-## calcul d'angles
+## Calcul angles
 
-- ensuite angles
+## Critère décision
 
-## calcul d'angles: avec de la trigonométrie
+## Identification type
 
-- rapports trigonométriques dans un triangle rectangle
+## Problème de texture
 
-## crit décision
+## En floutant?
 
-- vient le moment d'utiliser données pour déterminer état de l'os
+## recherche seuils optimaux
 
-- on choisit un seuil ε, si le segment le plus horizontal est trop horiz => c'est cassé
+- on peut pas contourner pb
 
-## inclinaison: pb
+- il faut trouver les bons seuils pour chaque image
 
-- certaines penchées
-  - il pensera que c'est cassé à cause de l'inclinaison
+## seuil(lum, cont) ?
 
-## inclinaison: fixed
+## ...non
 
-## id typ fracture
+## machine learning
 
-## lignes de fractures
+- requiert beaucoup de données
 
-- diff noms pour diff fractures
+## sets de données
 
-## nom fracture (θ, ...)
+- 300 sur radiopædia.org
 
-- lignes fractures <=> angle & point de départ
+- trop de choses à traiter manuellement
 
-## machine learning pour les seuils
+- pas assez pour le pb direct
 
-- correlation pas concluant
+- traiter un sous-problème plus simple
 
-- reseau neuronaux
+## machine learning #2
 
-- principe de base
+- reseau neuronal ≡ couches de neurones interconnectées
   
-  - deux phases
-  - feed-forward
-    - pour chaque couche du réseau: sorties = calcul avec constantes initialement aléatoires(entrées)
-    - première couche: neurones = données à analyser
-    - dernière couche: neurones = résultats
-  - calcul de l'erreur: fonction de coût -> objectif clair
-    - classification: proba de chaque classe, erreur: écart à proba 1 pour correcte et 0 pour les autres
-  - optimiser le coût: descente de gradient
-    - dérivée de la fonction coût selon les constantes du réseau => savoir comment modifier les constantes pour réduire l'erreur
-    - mettre à jour les constantes: retirer η * dérivée de la fonction coût (η: vitesse d'apprentissage)
-  - faire ça sur chaque donnée du réseau
-
-- ici
+  - neurone ≡ nombre calculé avec paramètres
   
-  - particulier car on ne connaît pas les bon seuils (il faudrait les faires à la main pour chaque image, trop long)
-  - la fonction coût: besoin d'heuristiques
-    - luminosité de l'image des bords detectés?
-      - dépend du nombre de bords réels
-  - fonction coût: il faut un lien clair la sortie et la fonction
-    - luminosité: moyenne des pixels: nombre de bords / (nombre de pixels totaux): nombre de bords: il faut les formules de Canny
+  - connexion ≡ accède à valeur du neurone précédent
 
-- autre approche: catégoriser en groupes d'images selon les seuils optimaux
+## premiere couche
+
+- entrée, on rentre les valeurs utile au problème
+
+## feed forward
+
+- on calcule les valeurs de toutes les neurones
+
+## derniere couche
+
+- valeur des dernières neurones ≡ résultats
+
+## erreur
+
+- écart aux valeurs attendues
+
+## l'objectif
+
+- on a traduit le pb en pb de minimisation d'une fonction
+
+- se fait en changeant les params de calcul des neurones
+
+- comment les changer pour réduire le coût?
+
+## rétropropagation
+
+- derivée de ce paramètre selon le coût => comment le coût change si on change ce paramètre
+
+- difficile voire impossible à calculer
+
+## retropropag regle chaine
+
+- regle de la chaine
+
+## retropropag recurrence
+
+- regle de la chaine jusquà arriver au poids que l'on veut changer
+
+## retropropag update poids
+
+- p ≡ poids à calculer
+
+- η ≡ vitesse d'entraînement
   
-  - demande recherche sur des données manuelles pour voir quels sont les groupes
+  - si trop rapide on peut passer à côter du min et osciller
+  
+  - si trop lent temps d'entraînement prohib
+
+## le problème
+
+- ici coût ≡ luminosité 
