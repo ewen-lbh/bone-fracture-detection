@@ -1,18 +1,10 @@
 import random
-from numpy import array
-import numpy as np
 from collections import deque
 
-from tensorflow.keras.layers import (
-    BatchNormalization,
-    Conv2D,
-    Conv3D,
-    Dense,
-    Dropout,
-    Flatten,
-    Input,
-    MaxPooling2D,
-)
+import numpy as np
+from numpy import array
+from tensorflow.keras.layers import (BatchNormalization, Conv2D, Conv3D, Dense,
+                                     Dropout, Flatten, Input, MaxPooling2D)
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
@@ -37,6 +29,7 @@ class NeuralNetwork:
         return _
 
     def __init__(self, conv_list, dense_list, input_shape, dense_shape):
+        print(f"neural: init: conv: {conv_list}; dense: {dense_list}; in: {input_shape}; out: {dense_shape}")
         # Defines the input layer with shape = ENVIRONMENT_SHAPE
         input_layer = Input(shape=(*input_shape, 1))
         print(input_shape, input_layer.shape)
@@ -54,7 +47,7 @@ class NeuralNetwork:
         # Creating the dense layers:
         for d in dense_list:
             _ = Dense(units=d, activation="relu")(_)
-        # The output layer has 5 nodes (one node per action)
+        # The output layer has 4 nodes (one node per action)
         output = Dense(units=dense_shape, activation="linear", name="output")(_)
 
         # Put it all together:
@@ -93,13 +86,13 @@ class EdgeDetectionAgent:
             conv_list,
             dense_list,
             input_shape=env.observation_space_shape,
-            dense_shape=env.action_space_size,
+            dense_shape=env.action_space_shape,
         ).model
         self.target_model = NeuralNetwork(
             conv_list,
             dense_list,
             input_shape=env.observation_space_shape,
-            dense_shape=env.action_space_size,
+            dense_shape=env.action_space_shape,
         ).model
         self.target_model.set_weights(self.model.get_weights())
         self.replay_memory = deque(maxlen=REPLAY_MEMORY_SIZE)
@@ -160,3 +153,12 @@ class EdgeDetectionAgent:
     
     def get_q_values(self, state):
         return self.model.predict(state.reshape(-1, *self.env.observation_space_shape))
+
+    def what_do_you_want_to_do(self, state):
+        q_values = self.get_q_values(state).flatten()
+        return {
+            "high_threshold": np.argmax(q_values[:2*self.env.max_increment]) - self.env.max_increment,
+            "low_threshold": np.argmax(q_values[2*self.env.max_increment:4*self.env.max_increment]) - self.env.max_increment,
+            "contrast": np.argmax(q_values[4*self.env.max_increment:4*self.env.max_increment+self.env.max_contrast_increment]),
+            "brightness": np.argmax(q_values[4*self.env.max_increment+self.env.max_contrast_increment:])  - self.env.max_increment,
+        }
