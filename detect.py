@@ -39,6 +39,8 @@ def center_of(image: np.ndarray) -> np.ndarray:
 
 
 def contrast_of(image: np.ndarray) -> float:
+    if len(image.shape) == 2:
+        return image.std()
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY).std()
 
 

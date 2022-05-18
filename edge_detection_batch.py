@@ -108,7 +108,7 @@ def do_batch(
     σ: int = 3,
 ):
     """
-    Does a batch of edge detection on image image with all combinations of provided low & high tresholds.
+    Does a batch of edge detection on image image with all combinations of provided low & high thresholds.
     - image: A tuple of paths (broken bone image, baseline or "healed" image) or a single path (broken bone only)
     - use_blur: whether to preprocess the image with blur
     - σ: sets aperture size.
