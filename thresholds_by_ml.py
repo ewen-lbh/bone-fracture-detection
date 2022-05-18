@@ -166,20 +166,20 @@ class Network:
 
 
 class Features(NamedTuple):
-    luminosity: float = 0
+    brightness: float = 0
 
     def __getitem__(self, key):
         return getattr(self, key)
 
 
 def loss(output: NDArray[2], input: NDArray[Any, Any]) -> float:
-    want = Features(luminosity=15)
+    want = Features(brightness=15)
 
-    high_treshold, low_treshold = output.tolist()[:2]
+    high_threshold, low_threshold = output.tolist()[:2]
     _, edges = detect_edges(
         image=cv2.cvtColor(input, cv2.COLOR_GRAY2RGB),
-        low=low_treshold,
-        high=high_treshold,
+        low=low_threshold,
+        high=high_threshold,
     )
     cv2.imwrite(
         str(
@@ -190,7 +190,7 @@ def loss(output: NDArray[2], input: NDArray[Any, Any]) -> float:
         edges,
     )
 
-    got = Features(luminosity=brightness_of(edges))
+    got = Features(brightness=brightness_of(edges))
 
     deviations = [abs(got[feature] - want[feature]) for feature in Features._fields]
     return norm(deviations)
