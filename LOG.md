@@ -64,3 +64,22 @@ https://en.wikipedia.org/wiki/Reinforcement_learning
 - Monte Carlo: admet que le problème est "épisodique": il y a un certain nombre d'états maximum. mon problème l'est peut-être (on met arbitrairement une limite), mais juste pour une limite, pas un nombre fixe (imagine il tombe sur la bonne solution après _k_ états mais j'ai donné _k + 8_ états et dans les 8 derniers il diverge (je sais pas si c'est possible)) ([machine learning - Monte Carlo for non-episodic tasks - Data Science Stack Exchange](https://datascience.stackexchange.com/questions/77787/monte-carlo-for-non-episodic-tasks))
 
 - temporal difference: m'a l'air pas mal, une bonne explication de la différence avec Monte Carlo: https://towardsdatascience.com/introduction-to-reinforcement-learning-rl-part-6-temporal-difference-td-learning-2a12f0aba9f9#153e
+
+- Q-learning: ma Q-table serait énorme (map **chaque state possible** et **chaque action possible** à une proba de choisir l'action)
+    - https://towardsdatascience.com/reinforcement-learning-with-openai-d445c2c687d2
+    - https://en.wikipedia.org/wiki/Q-learning#/media/File:Q-Learning_Matrix_Initialized_and_After_Training.png
+    - 3200 actions × 2 · (pixel: [0, 1] samplé à 0.05 => 20) ^ (200 × 200) = ∞ (d'après la commande math de fish) ≈ 10⁵²⁰⁴⁵ (d'après wolfram)
+
+- Donc on part sur du Deep Q Learning (DQN)
+    - https://towardsdatascience.com/deep-reinforcement-learning-with-python-part-2-creating-training-the-rl-agent-using-deep-q-d8216e59cf31
+
+
+- pb: ma fonction reward est sûrement trop laxiste (il change le contraste et la luminosité quand ça l'arrange et on a la proportion de bords, mais pas les bons)
+  solutions:
+  - réduire le champ d'actions possibles pour contraste et luminosité
+  - rajouter une action sur le flou
+  - préférrer (ou même ne détecter que) les bords horizontalement (réduit un peu le scope mais il faut là) (voir rl_reports/verticalonly pour des resultats symptomatiques)
+  - si les conditions de proportions de bords sont bonnes, on compte le nombre de segments. Là encore, il faut trouver un intervalle de comptes raisonnables
+
+- pb: au final je fais pas des incréments (parce qu'il se foire sur le début et c'est impossible de rattraper après) mais des actions qui set.
+  mais dcp ya pas de lien avec les essais précédents, est-ce que le modele du RL est vraiment pertinent ?
