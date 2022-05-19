@@ -3,15 +3,24 @@ from collections import deque
 
 import numpy as np
 from numpy import array
-from tensorflow.keras.layers import (BatchNormalization, Conv2D, Conv3D, Dense,
-                                     Dropout, Flatten, Input, MaxPooling2D)
+from tensorflow.keras.layers import (
+    BatchNormalization,
+    Conv2D,
+    Conv3D,
+    Dense,
+    Dropout,
+    Flatten,
+    Input,
+    MaxPooling2D,
+)
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
-
+from rich import print
 from rl_environment import EdgeDetectionEnv
+from utils import partition
 
 REPLAY_MEMORY_SIZE = 3_000
-MIN_REPLAY_MEMORY_SIZE = 1_000
+MIN_REPLAY_MEMORY_SIZE = 50
 
 
 class NeuralNetwork:
@@ -60,6 +69,9 @@ class NeuralNetwork:
 
 
 class EdgeDetectionAgent:
+
+    ACTION_NAMES = ["high_threshold", "low_threshold", "contrast", "brightness", "blur"]
+
     def __init__(
         self,
         name,
@@ -68,17 +80,15 @@ class EdgeDetectionAgent:
         dense_list,
         memory_sample_size,
         discount_rate,
+        update_target_model_every,
     ) -> None:
         self.env = env
         self.conv_list = conv_list
         self.dense_list = dense_list
         self.memory_sample_size = memory_sample_size
         self.discount_rate = discount_rate
-        self.name = (
-            f"{name}: "
-            + ", ".join(f"conv {c}" for c in conv_list)
-            + ", ".join(f"dense {d}" for d in dense_list)
-        )
+        self.update_target_model_every = update_target_model_every
+        self.name = f"{name}_conv:{'+'.join(map(str, conv_list))}_dense:{'+'.join(map(str, dense_list))}_mem:{memory_sample_size}_γ:{discount_rate}"
 
         print(env.observation_space_shape)
 
@@ -98,43 +108,36 @@ class EdgeDetectionAgent:
         self.replay_memory = deque(maxlen=REPLAY_MEMORY_SIZE)
         self.current_step_count = 0
 
+        print(f"agent {self.name} initialized")
+
     def remember(self, transition):
         self.replay_memory.append(transition)
 
     def train(self, terminal_state, step):
-        if len(self.replay_memory) < MIN_REPLAY_MEMORY_SIZE:
+        if len(self.replay_memory) < max(self.memory_sample_size, MIN_REPLAY_MEMORY_SIZE):
             return
 
-        fourth = lambda t: t[3]
-        first = lambda t: t[0]
-
         memory_sample = random.sample(self.replay_memory, self.memory_sample_size)
-        current_states = array(list(map(first, memory_sample)))
-        new_states = array(list(map(fourth, memory_sample)))
-        current_q_values = self.model.predict(
-            current_states.reshape(-1, *self.env.observation_space_shape)
-        )
-        future_q_values = self.target_model.predict(
-            new_states.reshape(-1, *self.env.observation_space_shape)
-        )
+        current_states = array([end for _, _, _, end, _ in memory_sample])
+        future_states = array([start for start, _, _, _, _ in memory_sample])
+        current_q_values = self.model.predict(current_states.reshape(-1, *self.env.observation_space_shape))
+        future_q_values = self.target_model.predict(future_states.reshape(-1, *self.env.observation_space_shape))
 
         training_states = []
         training_q_values = []
 
-        for index, (starting_state, action, reward, ending_state, done) in enumerate(
-            memory_sample
-        ):
-            new_q_value = (
-                reward + self.discount_rate * np.max(future_q_values[index])
-                if not done
-                else reward
-            )
+        for index, (current_state, action, reward, future_state, done) in enumerate(memory_sample):
+            print(f"updating model with knownledge of {action, reward, done}")
+            for action_name, action_idx in self.neural_indices_of(action, verbose=True).items():
+                new_q = reward + (
+                    self.discount_rate * np.max(self.q_values_of_action(future_q_values[index], action_name))
+                    if not done
+                    else 0
+                )
+                current_q_values[index, action_idx] = new_q
 
-            starting_state_q_values = current_q_values[index]
-            starting_state_q_values[action] = new_q_value
-
-            training_states.append(starting_state)
-            training_q_values.append(starting_state_q_values)
+            training_states.append(current_state)
+            training_q_values.append(current_q_values[index])
 
         self.model.fit(
             x=array(training_states).reshape(-1, *self.env.observation_space_shape),
@@ -147,18 +150,54 @@ class EdgeDetectionAgent:
 
         if terminal_state:
             self.current_step_count += 1
-        
+
         if self.current_step_count % self.update_target_model_every == 0:
             self.target_model.set_weights(self.model.get_weights())
-    
+
     def get_q_values(self, state):
         return self.model.predict(state.reshape(-1, *self.env.observation_space_shape))
 
     def what_do_you_want_to_do(self, state):
         q_values = self.get_q_values(state).flatten()
+        keys = self.ACTION_NAMES
+        sizes = [self.env.action_space_layout[k][0] for k in keys]
+        offsets = [self.env.action_space_layout[k][1] for k in keys]
+        print(
+            f"choosing from model: {[(len(p), np.argmax(p) - offsets[i]) for i, p in enumerate(partition(q_values, sizes))]}"
+        )
         return {
-            "high_threshold": np.argmax(q_values[:2*self.env.max_increment]) - self.env.max_increment,
-            "low_threshold": np.argmax(q_values[2*self.env.max_increment:4*self.env.max_increment]) - self.env.max_increment,
-            "contrast": np.argmax(q_values[4*self.env.max_increment:4*self.env.max_increment+self.env.max_contrast_increment]),
-            "brightness": np.argmax(q_values[4*self.env.max_increment+self.env.max_contrast_increment:])  - self.env.max_increment,
+            keys[i]: np.argmax(q_values_for_key) - offsets[i]
+            for i, q_values_for_key in enumerate(partition(q_values, sizes))
         }
+
+    def neural_indices_of(self, action: dict, verbose=False) -> dict[str, int]:
+        """
+        Returns a map of action names to the index of their values in the neural network's output layer.
+        """
+        return {name: self.neural_index_of(name, nudge, verbose=verbose) for name, nudge in action.items()}
+
+    def neural_index_of(self, name: str, nudge: int, verbose=False) -> int:
+        """
+        Returns the index of the value of the action named `name` in the neural network's output layer.
+        """
+        cursor = 0
+        if verbose:
+            print(f"computing neural index of action {name}+={nudge}")
+        for action_name in self.ACTION_NAMES:
+            size, offset = self.env.action_space_layout[action_name]
+            if action_name == name:
+                if verbose:
+                    print(f"this action is {action_name}, adding offsetted nudge {nudge-offset} to {cursor=}")
+                return cursor + (nudge - offset)
+            if verbose:
+                print(f"action {action_name} is layed out before {name}, moving cursor {size} neurons.")
+            cursor += size
+
+    def q_values_of_action(self, q_values, action_name: str) -> list[float]:
+        size, offset = self.env.action_space_layout[action_name]
+        max_nudge = size + offset
+        start = self.neural_index_of(action_name, 0)
+        end = self.neural_index_of(action_name, max_nudge)
+        print(f"getting q_values of {action_name}: dim(q_values) = {q_values.shape}")
+        print(f"they are between {start} and {end}")
+        return q_values[start : end + 1]

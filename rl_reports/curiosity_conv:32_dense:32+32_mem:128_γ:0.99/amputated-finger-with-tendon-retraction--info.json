@@ -1,0 +1,22 @@
+{
+  "source": {
+    "brightness": 47.883030826851055,
+    "contrast": 40.075843217558145,
+    "name": "datasets/radiopaedia/cropped/amputated-finger-with-tendon-retraction.jpg"
+  },
+  "edges": {
+    "brightness": 11.232929991356958,
+    "contrast": 52.327988988736195
+  },
+  "segments": {
+    "count": 134,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 38,
+    "low_threshold": -38,
+    "contrast_multiplier": 1.1,
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 138
+  }
+}

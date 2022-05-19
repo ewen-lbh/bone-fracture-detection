@@ -1,0 +1,22 @@
+{
+  "source": {
+    "brightness": 179.23370786516853,
+    "contrast": 23.804411756363287,
+    "name": "datasets/radiopaedia/cropped/distal-tibia-and-fibula-fracture.jpg"
+  },
+  "edges": {
+    "brightness": 8.845289541918756,
+    "contrast": 46.661651129261436
+  },
+  "segments": {
+    "count": 98,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 35,
+    "low_threshold": 19,
+    "contrast_multiplier": 1.1,
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 144
+  }
+}

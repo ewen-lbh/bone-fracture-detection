@@ -1,0 +1,22 @@
+{
+  "source": {
+    "brightness": 150.36917314894842,
+    "contrast": 41.292320133008396,
+    "name": "datasets/radiopaedia/cropped/calcaneal-fracture-17.jpg"
+  },
+  "edges": {
+    "brightness": 12.731633535004322,
+    "contrast": 55.53802354204239
+  },
+  "segments": {
+    "count": 146,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 96,
+    "low_threshold": -65,
+    "contrast_multiplier": 1.2,
+    "brightness_boost": -2,
+    "bilateral_blur_sigmas": 142
+  }
+}

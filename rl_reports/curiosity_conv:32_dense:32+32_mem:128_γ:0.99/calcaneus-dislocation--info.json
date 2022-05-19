@@ -1,0 +1,22 @@
+{
+  "source": {
+    "brightness": 179.14822817631807,
+    "contrast": 15.600855754100078,
+    "name": "datasets/radiopaedia/cropped/calcaneus-dislocation.jpg"
+  },
+  "edges": {
+    "brightness": 13.069576490924806,
+    "contrast": 56.23102502652509
+  },
+  "segments": {
+    "count": 154,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 23,
+    "low_threshold": -3,
+    "contrast_multiplier": 1.3,
+    "brightness_boost": -2,
+    "bilateral_blur_sigmas": 122
+  }
+}

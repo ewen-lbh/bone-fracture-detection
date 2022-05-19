@@ -1,0 +1,22 @@
+{
+  "source": {
+    "brightness": 165.37677902621724,
+    "contrast": 14.255283011753155,
+    "name": "datasets/radiopaedia/cropped/acl-bony-avulsion-with-segond-fracture-3.jpg"
+  },
+  "edges": {
+    "brightness": 14.920916162489196,
+    "contrast": 59.85148187227042
+  },
+  "segments": {
+    "count": 198,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 52,
+    "low_threshold": -93,
+    "contrast_multiplier": 1.3,
+    "brightness_boost": 1,
+    "bilateral_blur_sigmas": 127
+  }
+}

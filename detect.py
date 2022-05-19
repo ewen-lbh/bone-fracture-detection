@@ -73,15 +73,20 @@ def detect_edges(
     low: int,
     high: int,
     σ: int = 3,
-    blur: int = 0,
+    blur: float = 0,
 ) -> tuple[NDArray[Any, Any, 3], NDArray[Any, Any]]:
+    """
+    Détecte les bords d'une image, en utilisant—si blur ≠ 0—un filtre bilatéral avec un σ_color = σ_space = blur.
+    """
     σ, low, high = map(int, (σ, low, high))
 
     if len(image.shape) == 2:
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
     if blur:
-        image = cv2.blur(image, (blur, blur))
+        image = cv2.bilateralFilter(image, d=5, sigmaColor=blur, sigmaSpace=blur)
+        # image = cv2.blur(image, (blur, blur))
+
     edges = cv2.Canny(image, low, high, apertureSize=σ, L2gradient=True)
     return image, edges
 

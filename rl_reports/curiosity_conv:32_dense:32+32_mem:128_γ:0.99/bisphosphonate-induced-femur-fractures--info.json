@@ -1,0 +1,22 @@
+{
+  "source": {
+    "brightness": 118.5439066551426,
+    "contrast": 30.352416069054048,
+    "name": "datasets/radiopaedia/cropped/bisphosphonate-induced-femur-fractures.JPG"
+  },
+  "edges": {
+    "brightness": 7.677182368193604,
+    "contrast": 43.57456109675536
+  },
+  "segments": {
+    "count": 105,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": -52,
+    "low_threshold": 19,
+    "contrast_multiplier": 1.3,
+    "brightness_boost": -2,
+    "bilateral_blur_sigmas": 130
+  }
+}

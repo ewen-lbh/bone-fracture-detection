@@ -1,4 +1,5 @@
 import random
+import inspect
 import json
 from pathlib import Path
 from typing import *
@@ -10,6 +11,7 @@ from gym import spaces
 from nptyping import NDArray
 from numpy import array
 from rich import print
+from angles import get_lines_probabilistic, unique_angles
 
 from detect import brightness_of, contrast_of, detect_edges, grayscale_of
 
@@ -19,8 +21,14 @@ class EdgeDetectionEnv(gym.Env):
 
     def pick_from_dataset(self) -> NDArray:
         self.current_image_name = random.choice(self.dataset)
+        print(f"picking {self.current_image_name}")
+        self.seen_images.add(self.current_image_name)
         return self.preprocess(cv2.imread(self.current_image_name))
-    
+
+    @property
+    def saw_everything(self) -> bool:
+        return len(self.seen_images) == len(self.dataset)
+
     @property
     def dataset_size(self) -> int:
         return len(self.dataset)
@@ -47,62 +55,82 @@ class EdgeDetectionEnv(gym.Env):
         return biggest_width, biggest_height
 
     def done(self) -> bool:
-        return int(brightness_of(self.edges)) in range(
-            *self.acceptable_brightness_range
-        )
-    
+        return int(brightness_of(self.edges)) in range(*self.acceptable_brightness_range)
+
     def save_settings(self, agent_name: str, into: Path):
         # Used to encode int64 and other numpy number types
         def numpy_encoder(object):
             if isinstance(object, np.generic):
                 return object.item()
+
         assert self.current_image_name is not None
         save_as = into / agent_name / Path(self.current_image_name).stem
         save_as.parent.mkdir(parents=True, exist_ok=True)
-        Path(f"{save_as}--info.json").write_text(json.dumps(self.info, default=numpy_encoder))
+        Path(f"{save_as}--info.json").write_text(json.dumps(self.info, default=numpy_encoder, indent=2))
         cv2.imwrite(f"{save_as}--source.png", self.source)
         cv2.imwrite(f"{save_as}--edges.png", self.edges)
         cv2.imwrite(f"{save_as}--original-source.png", self.original_source)
+
+    @property
+    def action_space_shape(self) -> int:
+        return sum(v[0] for v in self.action_space_layout.values())
 
     def __init__(
         self,
         render_mode: Union[str, None],
         acceptable_brightness_range: Tuple[int, int],
+        acceptable_segments_count_range: Tuple[int, int],
         dataset: Path,
-        max_increment: int = 5,
+        max_thresholds_increment: int = 5,
+        max_brightness_increment: int = 3,
+        max_blur_increment: int = 30,
     ):
         assert render_mode is None or render_mode in self.metadata["render_modes"]
 
         self.dataset = [str(f) for f in dataset.iterdir() if f.is_file()]
+        self.seen_images = set()
+        self.unique_segment_angles = set()
         self.current_image_name = None
         self.thresholds = [100, 100]
         self.brightness_boost = 0
+        self.blur = 0
+        self.segments_count = None
         self.contrast_multiplier = 1
         self.acceptable_brightness_range = acceptable_brightness_range
+        self.acceptable_segments_count_range = acceptable_segments_count_range
         self.image_dimensions = self.biggest_dimensions(self.dataset)
-        self.max_increment = max_increment
+        self.max_increment = max_thresholds_increment
         self.max_contrast_increment = 3
+        self.max_brightness_increment = max_brightness_increment
+        self.max_blur_increment = max_blur_increment
 
-        increment_space = lambda: spaces.Discrete(
-            max_increment * 2, start=-max_increment
-        )
-        pixels_space = lambda width, height: spaces.Box(
-            low=array([0, 0]), high=array([width, height]), dtype=np.int16
-        )
+        pixels_space = lambda width, height: spaces.Box(low=array([0, 0]), high=array([width, height]), dtype=np.int16)
 
-        self.observation_space_shape = (2*self.image_dimensions[0], self.image_dimensions[1])
-        # self.observation_space_shape gives (2,) instead of (width, height)
+        # we stick the two images horizontally instead of adding a third dimension (2*width, height) instead of (2, width, height)
+        self.observation_space_shape = (
+            2 * self.image_dimensions[0],
+            self.image_dimensions[1],
+        )
+        # self.observation_space.shape gives (2,) instead of (width, height)
         self.observation_space = pixels_space(*self.observation_space_shape)
 
+        # key: [size, offset]
+        self.action_space_layout = {
+            "high_threshold": [2 * max_thresholds_increment, -max_thresholds_increment],
+            "low_threshold": [2 * max_thresholds_increment, -max_thresholds_increment],
+            "contrast": [self.max_contrast_increment, 1],
+            "brightness": [
+                2 * self.max_brightness_increment,
+                -self.max_brightness_increment,
+            ],
+            "blur": [self.max_blur_increment, 120],
+        }
+
         self.action_space = spaces.Dict(
-            {
-                "high_threshold": increment_space(),
-                "low_threshold": increment_space(),
-                 "contrast": spaces.Discrete(self.max_contrast_increment, start=1),
-                 "brightness": increment_space(),
-            }
+            {k: spaces.Discrete(size, start=offset) for k, (size, offset) in self.action_space_layout.items()}
         )
-        self.action_space_shape = 2 * max_increment + 2 * max_increment + self.max_contrast_increment + 2 * max_increment
+
+        print(f"Initialzed action space with layout {self.action_space_layout}")
 
         if render_mode == "human":
             import pygame
@@ -124,9 +152,7 @@ class EdgeDetectionEnv(gym.Env):
         if brightness in self.acceptable_brightness_range:
             return 1
 
-        offset = abs(
-            brightness - self.acceptable_brightness_range[0 if brightness < low else 1]
-        )
+        offset = abs(brightness - self.acceptable_brightness_range[0 if brightness < low else 1])
         width = abs(0 - low if brightness < low else 255 - hi)
 
         # print(f"computing reward: {offset} / {width}", end=" ")
@@ -146,49 +172,58 @@ class EdgeDetectionEnv(gym.Env):
                 "brightness": brightness_of(self.edges),
                 "contrast": contrast_of(self.edges),
             },
+            "segments": {
+                "count": self.segments_count,
+                "angles": self.unique_segment_angles,
+            },
             "settings": {
                 "high_threshold": self.thresholds[0],
                 "low_threshold": self.thresholds[1],
                 "contrast_multiplier": self.contrast_multiplier,
                 "brightness_boost": self.brightness_boost,
-            }
+                "bilateral_blur_sigmas": self.blur,
+            },
         }
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, return_info=False):
         super().reset(seed=seed)
         # Pick a random bone radio image from the set
-        self.source, self.edges = detect_edges(
-            self.pick_from_dataset(), low=seed or 50, high=seed or 50
-        )
+        self.source, self.edges = detect_edges(self.pick_from_dataset(), low=seed or 50, high=seed or 50)
         self.source = grayscale_of(self.source)
         self.original_source = self.source.copy()
 
         return (self.observation, self.info) if return_info else self.observation
 
-    def step(self, action: OrderedDict):
+    def step(self, action: OrderedDict, ε):
         print(f"with {dict(**action)}", end=" ")
-        nudge = lambda param_name: np.clip(
-            action[param_name], -self.max_increment, self.max_increment
-        )
 
         self.thresholds[0] = action["high_threshold"]
         self.thresholds[1] = action["low_threshold"]
-        self.contrast_multiplier = 1 + action["contrast"]/10
+        self.blur = action["blur"]
+        self.ε = ε
+        self.contrast_multiplier = 1 + action["contrast"] / 10
         self.brightness_boost = action["brightness"]
         self.source = np.clip(
             self.original_source.astype("int16") * self.contrast_multiplier + self.brightness_boost,
             # self.source.astype("int16") + action["brightness"],
-            0, 255
+            0,
+            255,
         ).astype("uint8")
 
         # if brightness_of(self.edges) == 0:
         #     print("restarting with original source")
         #     self.source = self.original_source.copy()
 
-        _, self.edges = detect_edges(self.source, *self.thresholds)
+        blurred_source, self.edges = detect_edges(self.source, *self.thresholds, blur=self.blur)
+        self.source = grayscale_of(blurred_source)
         edges_brightness = brightness_of(self.edges)
 
-        print(f"edges brightness is {edges_brightness}", end=" => ")
+        segments = list(get_lines_probabilistic(self.edges))
+        self.segments_count = len(segments)
+        # 50 mrad ≈ 3°
+        self.unique_segment_angles = unique_angles(50e-3, segments)
+
+        print(f"bright {edges_brightness}, #seg {self.segments_count}", end=" => ")
 
         return (
             self.observation,
@@ -200,23 +235,36 @@ class EdgeDetectionEnv(gym.Env):
     def render(self, window):
         import pygame
 
-        window.fill((255,255,255))
+        window.fill((255, 255, 255))
         self._draw_image(self.edges, window, (0, 0))
         self._draw_image(self.source, window, (self.image_dimensions[0], 0))
         self._draw_image(self.original_source, window, (0, self.image_dimensions[1]))
-        self._draw_text(f"edges brightness: {brightness_of(self.edges)} in {self.acceptable_brightness_range} ? {self.done()}", window, (20, self.image_dimensions[1] * 2 + 20))
+        self._draw_text(
+            f"""
+            edges brightness {brightness_of(self.edges)} needs in {self.acceptable_brightness_range}
+            segments count {self.segments_count} needs in {self.acceptable_segments_count_range}
+            source = original * {self.contrast_multiplier} + {self.brightness_boost} | bilateral_blur({self.blur})
+            {(1-self.ε)*100:.2f}% Exploitation, {self.ε*100:.2f}% eXploration
+            """,
+            window,
+            20,
+            self.image_dimensions[1] * 2 + 20,
+        )
         pygame.display.update()
-    
-    def _draw_text(self, text, window, *at):
+
+    def _draw_text(self, text, window, x, y):
         import pygame
 
+        text = inspect.cleandoc(text)
         pygame.init()
         font = pygame.font.SysFont("monospace", 12)
-        text = font.render(text, True, (0,0,0))
-        window.blit(text, at)
-    
+        for i, line in enumerate(text.splitlines()):
+            text_surface = font.render(line, True, (0, 0, 0))
+            window.blit(text_surface, (x, y + i * 12))
+
     def _draw_image(self, image, window, *at):
         import pygame
+
         size = image.shape[1::-1]
         cv2_image = np.repeat(image.reshape(size[1], size[0], 1), 3, axis=2)
         surface = pygame.image.frombuffer(cv2_image.flatten(), size, "RGB")

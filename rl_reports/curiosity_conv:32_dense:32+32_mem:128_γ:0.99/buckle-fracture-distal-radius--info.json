@@ -1,0 +1,22 @@
+{
+  "source": {
+    "brightness": 213.74491501008356,
+    "contrast": 23.254256759419246,
+    "name": "datasets/radiopaedia/cropped/buckle-fracture-distal-radius.jpg"
+  },
+  "edges": {
+    "brightness": 10.410112359550562,
+    "contrast": 50.45996643228101
+  },
+  "segments": {
+    "count": 121,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": -25,
+    "low_threshold": 36,
+    "contrast_multiplier": 1.3,
+    "brightness_boost": -2,
+    "bilateral_blur_sigmas": 120
+  }
+}

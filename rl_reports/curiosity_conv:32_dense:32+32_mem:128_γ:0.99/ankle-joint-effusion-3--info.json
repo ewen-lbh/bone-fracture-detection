@@ -1,0 +1,22 @@
+{
+  "source": {
+    "brightness": 161.9514261019879,
+    "contrast": 12.522792937986063,
+    "name": "datasets/radiopaedia/cropped/ankle-joint-effusion-3.jpg"
+  },
+  "edges": {
+    "brightness": 10.72601555747623,
+    "contrast": 51.186781080833924
+  },
+  "segments": {
+    "count": 74,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 23,
+    "low_threshold": 8,
+    "contrast_multiplier": 1.1,
+    "brightness_boost": -1,
+    "bilateral_blur_sigmas": 126
+  }
+}
