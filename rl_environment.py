@@ -33,7 +33,7 @@ class EdgeDetectionEnv(gym.Env):
         if width == self.image_dimensions[0] and height == self.image_dimensions[1]:
             return image
 
-        print(f"preprocess: resizing: {width}x{height} -> {self.image_dimensions}")
+        print(f"preprocess: resizing: {width}×{height} -> {self.image_dimensions}")
         return cv2.resize(image, self.image_dimensions)
 
     def biggest_dimensions(self, dataset: list[str]) -> Tuple[int, int]:
@@ -51,15 +51,18 @@ class EdgeDetectionEnv(gym.Env):
             *self.acceptable_brightness_range
         )
     
-    def save_settings(self, into: Path):
+    def save_settings(self, agent_name: str, into: Path):
+        # Used to encode int64 and other numpy number types
         def numpy_encoder(object):
             if isinstance(object, np.generic):
                 return object.item()
-        into.mkdir(exist_ok=True, parents=True)
-        Path(str(into) + "info.json").write_text(json.dumps(self.info, default=numpy_encoder))
-        cv2.imwrite(str(into) + "source.png", self.source)
-        cv2.imwrite(str(into) + "edges.png", self.edges)
-        cv2.imwrite(str(into) + "original_source.png", self.original_source)
+        assert self.current_image_name is not None
+        save_as = into / agent_name / Path(self.current_image_name).stem
+        save_as.parent.mkdir(parents=True, exist_ok=True)
+        Path(f"{save_as}--info.json").write_text(json.dumps(self.info, default=numpy_encoder))
+        cv2.imwrite(f"{save_as}--source.png", self.source)
+        cv2.imwrite(f"{save_as}--edges.png", self.edges)
+        cv2.imwrite(f"{save_as}--original-source.png", self.original_source)
 
     def __init__(
         self,

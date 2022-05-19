@@ -71,7 +71,7 @@ def run(env: EdgeDetectionEnv, agent: EdgeDetectionAgent, params: Params):
             print(f"flucuating {ε = }")
             ε = params.ε_bounds[1]
         
-        env.save_settings(Path(__file__).parent / "rl_reports" / (Path(env.current_image_name).stem + "--"))
+        env.save_settings(agent.name, Path(__file__).parent / "rl_reports") 
         
         print("=======================")
         
