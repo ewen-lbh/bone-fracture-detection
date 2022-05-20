@@ -17,12 +17,14 @@ env = EdgeDetectionEnv(
     acceptable_brightness_range=(7, 15),
     acceptable_segments_count_range=(10, 25),
     dataset=Path("datasets/radiopaedia/cropped"),
-    max_thresholds_increment=10,
+    max_thresholds_increment=5,
+    max_blur_value=50,
+    step_blur_value=10,
     max_brightness_increment=3,
 )
 
-WINDOW = pygame.display.set_mode((1000, 300))
-clock = pygame.time.Clock()
+# WINDOW = pygame.display.set_mode((1000, 300))
+# clock = pygame.time.Clock()
 
 
 class Params(NamedTuple):
@@ -53,24 +55,32 @@ def run(env: EdgeDetectionEnv, agent: EdgeDetectionAgent, params: Params):
 
         while not env.done():
             print(f"{datetime.now():%H:%M:%S}", end=" ")
+            print("choose", end=" ")
             if random.random() > ε:
                 print(f"[bold][magenta]E[/bold][/magenta] {ε*100:.1f}%", end=" ")
+                print("network", end=" ")
                 action = agent.what_do_you_want_to_do(current_state)
             else:
                 print(f"[bold][cyan]X[/bold][/cyan] {ε*100:.1f}%", end=" ")
+                print("random", end=" ")
                 action = env.action_space.sample()
 
+            print("step", end=" ")
             new_state, reward, done, info = env.step(action, ε)
-            print(f"rewarded with {reward}")
+            print(f"rewarded with {reward}", end=" ")
             episode_reward += reward
 
+            print("remember", end=" ")
             agent.remember((current_state, action, reward, new_state, done))
+            print("train", end=" ")
             agent.train(done, step)
 
             current_state = new_state
             step += 1
 
-            env.render(WINDOW)
+            # print("render", end=" ")
+            # env.render(WINDOW)
+            print("")
 
         print("==== episode done! ====")
 
@@ -98,7 +108,7 @@ def run(env: EdgeDetectionEnv, agent: EdgeDetectionAgent, params: Params):
 
 params = Params(memory_sample_size=128, ε_fluctuations=2)
 agent = EdgeDetectionAgent(
-    "curiosity",
+    "perseverance",
     env,
     conv_list=[32],
     dense_list=[32, 32],

@@ -1,3 +1,4 @@
+from datetime import datetime
 import random
 import inspect
 import json
@@ -84,7 +85,8 @@ class EdgeDetectionEnv(gym.Env):
         dataset: Path,
         max_thresholds_increment: int = 5,
         max_brightness_increment: int = 3,
-        max_blur_increment: int = 30,
+        max_blur_value: int = 30,
+        step_blur_value: int =1,
     ):
         assert render_mode is None or render_mode in self.metadata["render_modes"]
 
@@ -103,7 +105,8 @@ class EdgeDetectionEnv(gym.Env):
         self.max_increment = max_thresholds_increment
         self.max_contrast_increment = 1
         self.max_brightness_increment = max_brightness_increment
-        self.max_blur_value = max_blur_increment
+        self.max_blur_value = max_blur_value // step_blur_value
+        self.step_blur_value = step_blur_value
         self.last_winning_edges = array([])
         self.last_winning_thresholds = [None, None]
 
@@ -126,7 +129,7 @@ class EdgeDetectionEnv(gym.Env):
                 2 * self.max_brightness_increment,
                 -self.max_brightness_increment,
             ],
-            "blur": [self.max_blur_value, 120],
+            "blur": [self.max_blur_value, 0],
         }
 
         self.action_space = spaces.Dict(
@@ -172,6 +175,7 @@ class EdgeDetectionEnv(gym.Env):
     @property
     def info(self) -> Dict[str, Any]:
         return {
+            "at": f"{datetime.now():%Y-%m-%dT%H:%M:%S}",
             "source": {
                 "brightness": brightness_of(self.source),
                 "contrast": contrast_of(self.source),
@@ -224,15 +228,16 @@ class EdgeDetectionEnv(gym.Env):
         #     print("restarting with original source")
         #     self.source = self.original_source.copy()
 
-        blurred_source, self.edges = detect_edges(self.source, *self.thresholds, blur=self.blur)
+        blurred_source, self.edges = detect_edges(self.source, *self.thresholds, blur=self.blur * self.step_blur_value)
         self.source = grayscale_of(blurred_source)
         edges_brightness = brightness_of(self.edges)
 
         if roughly_equals(0.1)(edges_brightness, 0, 255):
-            print("poor lil neural net needs a pullup", end=" ")
+            print("pullup", end=" ")
             self.source = self.original_source.copy()
             self.contrast_multiplier = 1
             self.brightness_boost = 0
+            return (self.observation, -1, False, self.info)
 
         segments = list(get_lines_probabilistic(self.edges, minimum_length=20))
         self.segments_count = len(segments)
@@ -259,7 +264,7 @@ class EdgeDetectionEnv(gym.Env):
         self._draw_image(self.original_source, window, (0, 0))
         self._draw_text("original", window, 0, self.image_dimensions[1] + 20)
         self._draw_image(self.source, window, (self.image_dimensions[0], 0))
-        self._draw_text(f"original * {self.contrast_multiplier} + {self.brightness_boost}\nblur {self.blur}", window, self.image_dimensions[0], self.image_dimensions[1] + 20)
+        self._draw_text(f"original * {self.contrast_multiplier} + {self.brightness_boost}\nblur {self.blur * self.step_blur_value}", window, self.image_dimensions[0], self.image_dimensions[1] + 20)
         self._draw_image(self.edges, window, (self.image_dimensions[0]*2, 0))
         self._draw_text(
             f"""

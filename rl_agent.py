@@ -117,15 +117,18 @@ class EdgeDetectionAgent:
         if len(self.replay_memory) < max(self.memory_sample_size, MIN_REPLAY_MEMORY_SIZE):
             return
 
+        print("sample", end=" ")
         memory_sample = random.sample(self.replay_memory, self.memory_sample_size)
         current_states = array([end for _, _, _, end, _ in memory_sample])
         future_states = array([start for start, _, _, _, _ in memory_sample])
+        print("predict", end=" ")
         current_q_values = self.model.predict(current_states.reshape(-1, *self.env.observation_space_shape))
         future_q_values = self.target_model.predict(future_states.reshape(-1, *self.env.observation_space_shape))
 
         training_states = []
         training_q_values = []
 
+        print(f"apply memory", end=" ")
         for index, (current_state, action, reward, future_state, done) in enumerate(memory_sample):
             for action_name, action_idx in self.neural_indices_of(action).items():
                 new_q = reward + (
@@ -142,6 +145,7 @@ class EdgeDetectionAgent:
             training_states.append(current_state)
             training_q_values.append(current_q_values[index])
 
+        print(f"fit", end=" ")
         self.model.fit(
             x=array(training_states).reshape(-1, *self.env.observation_space_shape),
             y=array(training_q_values),
@@ -154,6 +158,7 @@ class EdgeDetectionAgent:
         if terminal_state:
             self.current_step_count += 1
 
+        print("set weights")
         if self.current_step_count % self.update_target_model_every == 0:
             self.target_model.set_weights(self.model.get_weights())
 

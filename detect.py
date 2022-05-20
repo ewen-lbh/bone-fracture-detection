@@ -84,8 +84,8 @@ def detect_edges(
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
     if blur:
-        image = cv2.bilateralFilter(image, d=5, sigmaColor=blur, sigmaSpace=blur)
-        # image = cv2.blur(image, (blur, blur))
+        # image = cv2.bilateralFilter(image, d=5, sigmaColor=blur, sigmaSpace=blur)
+        image = cv2.blur(image, (blur, blur))
 
     edges = cv2.Canny(image, low, high, apertureSize=σ, L2gradient=True)
     return image, edges
