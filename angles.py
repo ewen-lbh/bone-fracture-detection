@@ -6,7 +6,8 @@ import numpy as np
 tau = 2 * np.pi
 
 import matplotlib.pyplot as plt
-from skimage.transform import hough_line, hough_line_peaks, probabilistic_hough_line
+from skimage.transform import (hough_line, hough_line_peaks,
+                               probabilistic_hough_line)
 
 
 def get_lines(edges: np.ndarray) -> Iterable[tuple[int, int, float]]:
@@ -37,7 +38,19 @@ def get_lines_probabilistic(
         angle = np.arccos(abs(y1 - y0) / np.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2))
 
         yield beginning, end, angle
+    
+def unique_angles(ε: float, lines: Iterable[tuple[tuple[int, int], tuple[int, int], float]]) -> set[float]:
+    """
+    Return list of unique angles. Two angles are considered equal if they are less than ε appart from each other.
+    """
+    angles = set()
+    for _, _, angle in lines:
+        for angle in angles:
+            if abs(angle - angle) < ε:
+                continue
+        angles.add(angle)
 
+    return angles
 
 def display_lines(
     ax,

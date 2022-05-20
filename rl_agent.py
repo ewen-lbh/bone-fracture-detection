@@ -127,14 +127,17 @@ class EdgeDetectionAgent:
         training_q_values = []
 
         for index, (current_state, action, reward, future_state, done) in enumerate(memory_sample):
-            print(f"updating model with knownledge of {action, reward, done}")
-            for action_name, action_idx in self.neural_indices_of(action, verbose=True).items():
+            for action_name, action_idx in self.neural_indices_of(action).items():
                 new_q = reward + (
                     self.discount_rate * np.max(self.q_values_of_action(future_q_values[index], action_name))
                     if not done
                     else 0
                 )
-                current_q_values[index, action_idx] = new_q
+                try:
+                    current_q_values[index, action_idx] = new_q
+                except IndexError as e:
+                    print(f"Tried indexing {index, action_idx} ({action_name}+={action[action_name]}) in {current_q_values.shape} Q-values")
+                    raise e
 
             training_states.append(current_state)
             training_q_values.append(current_q_values[index])
@@ -162,35 +165,26 @@ class EdgeDetectionAgent:
         keys = self.ACTION_NAMES
         sizes = [self.env.action_space_layout[k][0] for k in keys]
         offsets = [self.env.action_space_layout[k][1] for k in keys]
-        print(
-            f"choosing from model: {[(len(p), np.argmax(p) - offsets[i]) for i, p in enumerate(partition(q_values, sizes))]}"
-        )
         return {
             keys[i]: np.argmax(q_values_for_key) + offsets[i]
             for i, q_values_for_key in enumerate(partition(q_values, sizes))
         }
 
-    def neural_indices_of(self, action: dict, verbose=False) -> dict[str, int]:
+    def neural_indices_of(self, action: dict) -> dict[str, int]:
         """
         Returns a map of action names to the index of their values in the neural network's output layer.
         """
-        return {name: self.neural_index_of(name, nudge, verbose=verbose) for name, nudge in action.items()}
+        return {name: self.neural_index_of(name, nudge) for name, nudge in action.items()}
 
-    def neural_index_of(self, name: str, nudge: int, verbose=False) -> int:
+    def neural_index_of(self, name: str, nudge: int) -> int:
         """
         Returns the index of the value of the action named `name` in the neural network's output layer.
         """
         cursor = 0
-        if verbose:
-            print(f"computing neural index of action {name}+={nudge}")
         for action_name in self.ACTION_NAMES:
             size, offset = self.env.action_space_layout[action_name]
             if action_name == name:
-                if verbose:
-                    print(f"this action is {action_name}, adding offsetted nudge {nudge-offset} to {cursor=}")
                 return cursor + (nudge - offset)
-            if verbose:
-                print(f"action {action_name} is layed out before {name}, moving cursor {size} neurons.")
             cursor += size
 
     def q_values_of_action(self, q_values, action_name: str) -> list[float]:
@@ -198,6 +192,4 @@ class EdgeDetectionAgent:
         max_nudge = size + offset
         start = self.neural_index_of(action_name, 0)
         end = self.neural_index_of(action_name, max_nudge)
-        print(f"getting q_values of {action_name}: dim(q_values) = {q_values.shape}")
-        print(f"they are between {start} and {end}")
         return q_values[start : end + 1]
