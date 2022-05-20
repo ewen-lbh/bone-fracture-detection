@@ -1,6 +1,6 @@
 import pathlib
 from typing import Iterable, Optional
-
+from math import sqrt
 import numpy as np
 
 tau = 2 * np.pi
@@ -21,9 +21,11 @@ def get_lines(edges: np.ndarray) -> Iterable[tuple[int, int, float]]:
         (x0, y0) = dist * np.array([np.cos(angle), np.sin(angle)])
         yield (x0, y0, np.tan(angle + np.pi / 2))
 
+def norm(a: tuple[int, int], b: tuple[int, int]) -> float:
+    return sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
 
 def get_lines_probabilistic(
-    edges: np.ndarray, length: int = 5, gap: int = 3
+    edges: np.ndarray, length: int = 5, gap: int = 3, minimum_length: float = 0
 ) -> Iterable[tuple[tuple[int, int], tuple[int, int], float]]:
     """
     Return value:
@@ -37,7 +39,8 @@ def get_lines_probabilistic(
         # CAH
         angle = np.arccos(abs(y1 - y0) / np.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2))
 
-        yield beginning, end, angle
+        if norm(beginning, end) >= minimum_length:
+            yield beginning, end, angle
     
 def unique_angles(ε: float, lines: Iterable[tuple[tuple[int, int], tuple[int, int], float]]) -> set[float]:
     """

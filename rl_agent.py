@@ -19,8 +19,8 @@ from rich import print
 from rl_environment import EdgeDetectionEnv
 from utils import partition
 
-REPLAY_MEMORY_SIZE = 3_000
-MIN_REPLAY_MEMORY_SIZE = 50
+REPLAY_MEMORY_SIZE = 1_000
+MIN_REPLAY_MEMORY_SIZE = 333
 
 
 class NeuralNetwork:

@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 import numpy as np
 from typing import NamedTuple, Tuple, Union
 import gym
@@ -14,13 +15,13 @@ traceback.install()
 env = EdgeDetectionEnv(
     render_mode=None,
     acceptable_brightness_range=(7, 15),
-    acceptable_segments_count_range=(30, 90),
+    acceptable_segments_count_range=(10, 25),
     dataset=Path("datasets/radiopaedia/cropped"),
-    max_thresholds_increment=100,
+    max_thresholds_increment=10,
     max_brightness_increment=3,
 )
 
-WINDOW = pygame.display.set_mode((500, 500))
+WINDOW = pygame.display.set_mode((1000, 300))
 clock = pygame.time.Clock()
 
 
@@ -49,7 +50,9 @@ def run(env: EdgeDetectionEnv, agent: EdgeDetectionAgent, params: Params):
 
         current_state = env.reset()
 
+
         while not env.done():
+            print(f"{datetime.now():%H:%M:%S}", end=" ")
             if random.random() > ε:
                 print(f"[bold][magenta]E[/bold][/magenta] {ε*100:.1f}%", end=" ")
                 action = agent.what_do_you_want_to_do(current_state)

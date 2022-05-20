@@ -1,6 +1,6 @@
 from math import sqrt
-from typing import Iterable, Union, TypeVar
-
+from abc import ABCMeta, abstractmethod
+from typing import Iterable, Union, TypeVar, Callable, Any
 
 def mean(o: Iterable[Union[float, int]]) -> float:
     values = list(o)
@@ -58,3 +58,13 @@ def partition(o: Iterable[T], layout: Union[list[int], tuple[int]]) -> list[list
             index_in_partition += 1
     
     return partitions
+
+def roughly_equals(ε=0.01) -> Callable[..., bool]:
+    def _(a, *b):
+        return any(abs(a - b_) < ε for b_ in b)
+    
+    return _
+
+T = TypeVar("T", bound=Union[float, int])
+def clip(minimum: T, maximum: T, o: T) -> T:
+    return max(minimum, min(maximum, o))

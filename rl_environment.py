@@ -3,6 +3,7 @@ import inspect
 import json
 from pathlib import Path
 from typing import *
+import textwrap
 
 import cv2
 import gym
@@ -14,6 +15,7 @@ from rich import print
 from angles import get_lines_probabilistic, unique_angles
 
 from detect import brightness_of, contrast_of, detect_edges, grayscale_of
+from utils import roughly_equals, clip
 
 
 class EdgeDetectionEnv(gym.Env):
@@ -22,7 +24,6 @@ class EdgeDetectionEnv(gym.Env):
     def pick_from_dataset(self) -> NDArray:
         self.current_image_name = random.choice(self.dataset)
         print(f"picking {self.current_image_name}")
-        self.seen_images.add(self.current_image_name)
         return self.preprocess(cv2.imread(self.current_image_name))
 
     @property
@@ -55,7 +56,7 @@ class EdgeDetectionEnv(gym.Env):
         return biggest_width, biggest_height
 
     def done(self) -> bool:
-        return int(brightness_of(self.edges)) in range(*self.acceptable_brightness_range)
+        return int(brightness_of(self.edges)) in range(*self.acceptable_brightness_range) and self.segments_count in range(*self.acceptable_segments_count_range)
 
     def save_settings(self, agent_name: str, into: Path):
         # Used to encode int64 and other numpy number types
@@ -100,9 +101,11 @@ class EdgeDetectionEnv(gym.Env):
         self.acceptable_segments_count_range = acceptable_segments_count_range
         self.image_dimensions = self.biggest_dimensions(self.dataset)
         self.max_increment = max_thresholds_increment
-        self.max_contrast_increment = 3
+        self.max_contrast_increment = 1
         self.max_brightness_increment = max_brightness_increment
-        self.max_blur_increment = max_blur_increment
+        self.max_blur_value = max_blur_increment
+        self.last_winning_edges = array([])
+        self.last_winning_thresholds = [None, None]
 
         pixels_space = lambda width, height: spaces.Box(low=array([0, 0]), high=array([width, height]), dtype=np.int16)
 
@@ -118,12 +121,12 @@ class EdgeDetectionEnv(gym.Env):
         self.action_space_layout = {
             "high_threshold": [2 * max_thresholds_increment, -max_thresholds_increment],
             "low_threshold": [2 * max_thresholds_increment, -max_thresholds_increment],
-            "contrast": [self.max_contrast_increment, 1],
+            "contrast": [2*self.max_contrast_increment, -self.max_contrast_increment],
             "brightness": [
                 2 * self.max_brightness_increment,
                 -self.max_brightness_increment,
             ],
-            "blur": [self.max_blur_increment, 120],
+            "blur": [self.max_blur_value, 120],
         }
 
         self.action_space = spaces.Dict(
@@ -147,17 +150,24 @@ class EdgeDetectionEnv(gym.Env):
         return array([self.source, self.edges]).reshape(*self.observation_space_shape)
 
     def reward(self, brightness: float) -> float:
-        low, hi = self.acceptable_brightness_range
+        lo, hi = self.acceptable_brightness_range
 
         if brightness in self.acceptable_brightness_range:
             return 1
 
-        offset = abs(brightness - self.acceptable_brightness_range[0 if brightness < low else 1])
-        width = abs(0 - low if brightness < low else 255 - hi)
+        offset = abs(brightness - (lo if brightness < lo else hi))
+        width = abs((0 - lo) if brightness < lo else (255 - hi))
 
-        # print(f"computing reward: {offset} / {width}", end=" ")
+        reward = 1 - (offset / width)
 
-        return 1 - (offset / width)
+        if reward == 1 and self.segments_count is not None:
+            lo, hi = self.acceptable_segments_count_range
+            offset = abs(self.segments_count - (lo if self.segments_count < lo else hi))
+            # en supposant segments count ∈ [0, 10_000[
+            width = abs((0 - lo) if self.segments_count < lo else (10_000 - hi))
+            return clip(0, 1, 0.25 + (1 - offset / width))
+        
+        return reward
 
     @property
     def info(self) -> Dict[str, Any]:
@@ -197,12 +207,12 @@ class EdgeDetectionEnv(gym.Env):
     def step(self, action: OrderedDict, ε):
         print(f"with {dict(**action)}", end=" ")
 
-        self.thresholds[0] = action["high_threshold"]
-        self.thresholds[1] = action["low_threshold"]
+        self.thresholds[0] = clip(20, 150, self.thresholds[0] + action["high_threshold"])
+        self.thresholds[1] = clip(20, 150, self.thresholds[1] + action["low_threshold"])
         self.blur = action["blur"]
         self.ε = ε
-        self.contrast_multiplier = 1 + action["contrast"] / 10
-        self.brightness_boost = action["brightness"]
+        self.contrast_multiplier = 1 + clip(0, 5, self.contrast_multiplier*10 - 1 + action["contrast"]) / 10
+        self.brightness_boost = clip(0, 30, self.brightness_boost + action["brightness"])
         self.source = np.clip(
             self.original_source.astype("int16") * self.contrast_multiplier + self.brightness_boost,
             # self.source.astype("int16") + action["brightness"],
@@ -218,17 +228,27 @@ class EdgeDetectionEnv(gym.Env):
         self.source = grayscale_of(blurred_source)
         edges_brightness = brightness_of(self.edges)
 
-        segments = list(get_lines_probabilistic(self.edges))
+        if roughly_equals(0.1)(edges_brightness, 0, 255):
+            print("poor lil neural net needs a pullup", end=" ")
+            self.source = self.original_source.copy()
+            self.contrast_multiplier = 1
+            self.brightness_boost = 0
+
+        segments = list(get_lines_probabilistic(self.edges, minimum_length=20))
         self.segments_count = len(segments)
         # 50 mrad ≈ 3°
         self.unique_segment_angles = unique_angles(50e-3, segments)
 
         print(f"bright {edges_brightness}, #seg {self.segments_count}", end=" => ")
 
+        if (done := self.done()):
+            self.last_winning_edges = self.edges.copy()
+            self.last_winning_thresholds = self.thresholds.copy()
+
         return (
             self.observation,
             self.reward(edges_brightness),
-            self.done(),
+            done,
             self.info,
         )
 
@@ -236,26 +256,46 @@ class EdgeDetectionEnv(gym.Env):
         import pygame
 
         window.fill((255, 255, 255))
-        self._draw_image(self.edges, window, (0, 0))
+        self._draw_image(self.original_source, window, (0, 0))
+        self._draw_text("original", window, 0, self.image_dimensions[1] + 20)
         self._draw_image(self.source, window, (self.image_dimensions[0], 0))
-        self._draw_image(self.original_source, window, (0, self.image_dimensions[1]))
+        self._draw_text(f"original * {self.contrast_multiplier} + {self.brightness_boost}\nblur {self.blur}", window, self.image_dimensions[0], self.image_dimensions[1] + 20)
+        self._draw_image(self.edges, window, (self.image_dimensions[0]*2, 0))
         self._draw_text(
             f"""
-            edges brightness {brightness_of(self.edges)} needs in {self.acceptable_brightness_range}
-            segments count {self.segments_count} needs in {self.acceptable_segments_count_range}
-            source = original * {self.contrast_multiplier} + {self.brightness_boost} | bilateral_blur({self.blur})
-            {(1-self.ε)*100:.2f}% Exploitation, {self.ε*100:.2f}% eXploration
+            thresh lo {self.thresholds[0]} hi {self.thresholds[1]}
+            bright {brightness_of(self.edges):.2f} 
+            segments count {self.segments_count}
+            """, window, self.image_dimensions[0]*2, self.image_dimensions[1] + 20)
+        self._draw_image(self.last_winning_edges, window, (self.image_dimensions[0]*3, 0))
+        self._draw_text(
+            f"""
+            tresh were lo {self.last_winning_thresholds[0]} hi {self.last_winning_thresholds[1]}
+            in {self.acceptable_brightness_range}
+            in {self.acceptable_segments_count_range}
             """,
             window,
-            20,
-            self.image_dimensions[1] * 2 + 20,
+            self.image_dimensions[0]*3,
+            self.image_dimensions[1] + 20,
+        )
+
+        self._draw_text(
+            f"""
+            {self.current_image_name}
+            {self.ε*100:.1f}% eXploration {(1-self.ε)*100:.1f}% Exploitation
+            """,
+            window,
+            int(self.image_dimensions[0]*1.5),
+            self.image_dimensions[1] + 75,
         )
         pygame.display.update()
 
-    def _draw_text(self, text, window, x, y):
+    def _draw_text(self, text, window, x, y, width=None):
         import pygame
 
         text = inspect.cleandoc(text)
+        if width is not None:
+            text = textwrap.fill(text, width=width)
         pygame.init()
         font = pygame.font.SysFont("monospace", 12)
         for i, line in enumerate(text.splitlines()):
@@ -265,6 +305,8 @@ class EdgeDetectionEnv(gym.Env):
     def _draw_image(self, image, window, *at):
         import pygame
 
+        if len(image.shape) < 2:
+            return 
         size = image.shape[1::-1]
         cv2_image = np.repeat(image.reshape(size[1], size[0], 1), 3, axis=2)
         surface = pygame.image.frombuffer(cv2_image.flatten(), size, "RGB")
