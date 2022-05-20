@@ -166,7 +166,7 @@ class EdgeDetectionAgent:
             f"choosing from model: {[(len(p), np.argmax(p) - offsets[i]) for i, p in enumerate(partition(q_values, sizes))]}"
         )
         return {
-            keys[i]: np.argmax(q_values_for_key) - offsets[i]
+            keys[i]: np.argmax(q_values_for_key) + offsets[i]
             for i, q_values_for_key in enumerate(partition(q_values, sizes))
         }
 
