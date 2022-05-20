@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 174.06793431287812,
-    "contrast": 16.818414174383946,
+    "brightness": 255.0,
+    "contrast": 0.0,
     "name": "datasets/radiopaedia/cropped/accidental-or-innocent-toddler-fracture.jpg"
   },
   "edges": {
-    "brightness": 10.696629213483146,
-    "contrast": 51.1196887011987
+    "brightness": 0.0,
+    "contrast": 0.0
   },
   "segments": {
-    "count": 130,
+    "count": 0,
     "angles": null
   },
   "settings": {
-    "high_threshold": 24,
-    "low_threshold": -65,
-    "contrast_multiplier": 1.2,
-    "brightness_boost": -2,
-    "bilateral_blur_sigmas": 128
+    "high_threshold": -128,
+    "low_threshold": 394,
+    "contrast_multiplier": 105.1,
+    "brightness_boost": -36,
+    "bilateral_blur_sigmas": 138
   }
 }

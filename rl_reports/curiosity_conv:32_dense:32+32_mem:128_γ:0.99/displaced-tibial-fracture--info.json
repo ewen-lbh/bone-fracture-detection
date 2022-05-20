@@ -1,22 +1,23 @@
 {
+  "at": "2022-05-20T13:38:18",
   "source": {
-    "brightness": 202.52152117545376,
-    "contrast": 27.231926108659568,
+    "brightness": 241.48256986459234,
+    "contrast": 21.78188209576408,
     "name": "datasets/radiopaedia/cropped/displaced-tibial-fracture.jpg"
   },
   "edges": {
-    "brightness": 7.265773552290407,
-    "contrast": 42.42618048470649
+    "brightness": 8.595505617977528,
+    "contrast": 46.02142127048649
   },
   "segments": {
-    "count": 80,
+    "count": 12,
     "angles": null
   },
   "settings": {
-    "high_threshold": 46,
-    "low_threshold": 26,
-    "contrast_multiplier": 1.2,
-    "brightness_boost": -1,
-    "bilateral_blur_sigmas": 148
+    "high_threshold": 23,
+    "low_threshold": 20,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 1,
+    "bilateral_blur_sigmas": 145
   }
 }

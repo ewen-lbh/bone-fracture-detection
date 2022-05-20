@@ -1,0 +1,23 @@
+{
+  "at": "2022-05-20T13:51:55",
+  "source": {
+    "brightness": 213.19740708729472,
+    "contrast": 31.498209086311515,
+    "name": "datasets/radiopaedia/cropped/distal-radius-torus-fracture.jpg"
+  },
+  "edges": {
+    "brightness": 10.211754537597233,
+    "contrast": 49.99717468368744
+  },
+  "segments": {
+    "count": 11,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 42,
+    "low_threshold": 35,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 0
+  }
+}

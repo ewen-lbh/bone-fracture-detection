@@ -1,0 +1,23 @@
+{
+  "at": "2022-05-20T14:00:05",
+  "source": {
+    "brightness": 204.55955056179775,
+    "contrast": 38.31008391780632,
+    "name": "datasets/radiopaedia/cropped/combined-monteggia-and-galeazzi-fractures.jpg"
+  },
+  "edges": {
+    "brightness": 7.3833189282627485,
+    "contrast": 42.757840547793776
+  },
+  "segments": {
+    "count": 10,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 59,
+    "low_threshold": 58,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 0
+  }
+}

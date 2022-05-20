@@ -1,0 +1,23 @@
+{
+  "at": "2022-05-20T17:32:04",
+  "source": {
+    "brightness": 227.857044079516,
+    "contrast": 31.232719406584955,
+    "name": "datasets/radiopaedia/cropped/ankle-fracture-weber-c-and-deltoid-ligament-injury.png"
+  },
+  "edges": {
+    "brightness": 12.290838375108038,
+    "contrast": 54.61775423513422
+  },
+  "segments": {
+    "count": 10,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 20,
+    "low_threshold": 20,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 0
+  }
+}

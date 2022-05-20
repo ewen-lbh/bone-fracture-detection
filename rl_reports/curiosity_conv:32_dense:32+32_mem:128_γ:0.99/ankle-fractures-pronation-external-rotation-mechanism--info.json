@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 100.2260443676174,
-    "contrast": 23.387438888824448,
+    "brightness": 180.8604724863152,
+    "contrast": 41.455911563033744,
     "name": "datasets/radiopaedia/cropped/ankle-fractures-pronation-external-rotation-mechanism.png"
   },
   "edges": {
-    "brightness": 13.172428694900605,
-    "contrast": 56.4398479753216
+    "brightness": 12.650821089023337,
+    "contrast": 55.37071521548618
   },
   "segments": {
-    "count": 156,
+    "count": 151,
     "angles": null
   },
   "settings": {
-    "high_threshold": 25,
-    "low_threshold": -69,
-    "contrast_multiplier": 1.1,
+    "high_threshold": 43,
+    "low_threshold": 20,
+    "contrast_multiplier": 2.0,
     "brightness_boost": 2,
-    "bilateral_blur_sigmas": 130
+    "bilateral_blur_sigmas": 125
   }
 }

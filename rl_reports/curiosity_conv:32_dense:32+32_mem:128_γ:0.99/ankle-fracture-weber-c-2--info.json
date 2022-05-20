@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 122.62731201382887,
-    "contrast": 37.52110206547439,
+    "brightness": 255.0,
+    "contrast": 0.0,
     "name": "datasets/radiopaedia/cropped/ankle-fracture-weber-c-2.jpg"
   },
   "edges": {
-    "brightness": 11.152117545375972,
-    "contrast": 52.14806082995791
+    "brightness": 0.0,
+    "contrast": 0.0
   },
   "segments": {
-    "count": 115,
+    "count": 0,
     "angles": null
   },
   "settings": {
-    "high_threshold": 96,
-    "low_threshold": -26,
-    "contrast_multiplier": 1.2,
-    "brightness_boost": 2,
-    "bilateral_blur_sigmas": 130
+    "high_threshold": -113,
+    "low_threshold": 375,
+    "contrast_multiplier": 100.7,
+    "brightness_boost": -36,
+    "bilateral_blur_sigmas": 122
   }
 }

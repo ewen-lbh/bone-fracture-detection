@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 118.5439066551426,
-    "contrast": 30.352416069054048,
+    "brightness": 186.13025064822818,
+    "contrast": 46.6830273837986,
     "name": "datasets/radiopaedia/cropped/bisphosphonate-induced-femur-fractures.JPG"
   },
   "edges": {
-    "brightness": 7.677182368193604,
-    "contrast": 43.57456109675536
+    "brightness": 8.154710458081244,
+    "contrast": 44.86593211062908
   },
   "segments": {
-    "count": 105,
+    "count": 100,
     "angles": null
   },
   "settings": {
-    "high_threshold": -52,
-    "low_threshold": 19,
-    "contrast_multiplier": 1.3,
-    "brightness_boost": -2,
-    "bilateral_blur_sigmas": 130
+    "high_threshold": 3,
+    "low_threshold": 27,
+    "contrast_multiplier": 2.0,
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 124
   }
 }

@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 157.58305963699223,
-    "contrast": 30.89037691160303,
+    "brightness": 218.65620858542206,
+    "contrast": 26.65540125253124,
     "name": "datasets/radiopaedia/cropped/carpometacarpal-fracture-dislocation-1.jpg"
   },
   "edges": {
-    "brightness": 7.4788245462402765,
-    "contrast": 43.02519544055349
+    "brightness": 8.962834917891097,
+    "contrast": 46.9594558560559
   },
   "segments": {
-    "count": 82,
+    "count": 38,
     "angles": null
   },
   "settings": {
-    "high_threshold": 90,
-    "low_threshold": -45,
-    "contrast_multiplier": 1.1,
-    "brightness_boost": 0,
-    "bilateral_blur_sigmas": 136
+    "high_threshold": 37,
+    "low_threshold": 79,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 11,
+    "bilateral_blur_sigmas": 133
   }
 }

@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 87.73921060213195,
-    "contrast": 32.34516797779357,
+    "brightness": 114.66865456640737,
+    "contrast": 40.43781579183825,
     "name": "datasets/radiopaedia/cropped/comminuted-humeral-shaft-fracture.jpg"
   },
   "edges": {
-    "brightness": 10.395419187554019,
-    "contrast": 50.42585797724525
+    "brightness": 7.184961106309421,
+    "contrast": 42.19646212669639
   },
   "segments": {
-    "count": 132,
+    "count": 36,
     "angles": null
   },
   "settings": {
-    "high_threshold": 17,
-    "low_threshold": 35,
-    "contrast_multiplier": 1.2,
-    "brightness_boost": -3,
-    "bilateral_blur_sigmas": 142
+    "high_threshold": 40,
+    "low_threshold": 45,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 1,
+    "bilateral_blur_sigmas": 123
   }
 }

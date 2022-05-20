@@ -9,14 +9,14 @@
     "contrast": 51.186781080833924
   },
   "segments": {
-    "count": 74,
+    "count": 33,
     "angles": null
   },
   "settings": {
-    "high_threshold": 23,
-    "low_threshold": 8,
-    "contrast_multiplier": 1.1,
-    "brightness_boost": -1,
-    "bilateral_blur_sigmas": 126
+    "high_threshold": 24,
+    "low_threshold": 21,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 3,
+    "bilateral_blur_sigmas": 135
   }
 }

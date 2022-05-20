@@ -1,4 +1,5 @@
 {
+  "at": "2022-05-20T13:38:18",
   "source": {
     "brightness": 98.98441371362719,
     "contrast": 29.4093759941402,
@@ -9,14 +10,14 @@
     "contrast": 54.46251738749887
   },
   "segments": {
-    "count": 105,
+    "count": 12,
     "angles": null
   },
   "settings": {
     "high_threshold": 23,
-    "low_threshold": -32,
-    "contrast_multiplier": 1.2,
+    "low_threshold": 20,
+    "contrast_multiplier": 1.5,
     "brightness_boost": 1,
-    "bilateral_blur_sigmas": 124
+    "bilateral_blur_sigmas": 145
   }
 }

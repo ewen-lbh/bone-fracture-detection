@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 172.7643618553731,
-    "contrast": 38.89546884726556,
+    "brightness": 241.84413713627197,
+    "contrast": 27.98639562384934,
     "name": "datasets/radiopaedia/cropped/chauffeur-fracture-3.jpg"
   },
   "edges": {
-    "brightness": 14.700518582541054,
-    "contrast": 59.4350653398508
+    "brightness": 7.0012964563526365,
+    "contrast": 41.66908259489506
   },
   "segments": {
-    "count": 172,
+    "count": 88,
     "angles": null
   },
   "settings": {
-    "high_threshold": 36,
-    "low_threshold": 18,
-    "contrast_multiplier": 1.2,
-    "brightness_boost": 0,
-    "bilateral_blur_sigmas": 140
+    "high_threshold": 17,
+    "low_threshold": 47,
+    "contrast_multiplier": 2.0,
+    "brightness_boost": 2,
+    "bilateral_blur_sigmas": 122
   }
 }

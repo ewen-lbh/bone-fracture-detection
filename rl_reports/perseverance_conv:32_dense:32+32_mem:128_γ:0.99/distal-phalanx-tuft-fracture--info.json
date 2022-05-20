@@ -1,0 +1,23 @@
+{
+  "at": "2022-05-20T18:12:41",
+  "source": {
+    "brightness": 98.98441371362719,
+    "contrast": 29.4093759941402,
+    "name": "datasets/radiopaedia/cropped/distal-phalanx-tuft-fracture.jpg"
+  },
+  "edges": {
+    "brightness": 12.217372515125325,
+    "contrast": 54.46251738749887
+  },
+  "segments": {
+    "count": 10,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 32,
+    "low_threshold": 27,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 2,
+    "bilateral_blur_sigmas": 0
+  }
+}

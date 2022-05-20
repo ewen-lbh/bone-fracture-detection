@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 181.03693460097955,
-    "contrast": 16.287485540888213,
+    "brightness": 255.0,
+    "contrast": 0.0,
     "name": "datasets/radiopaedia/cropped/absent-distal-humeral-shaft-post-trauma.png"
   },
   "edges": {
-    "brightness": 7.956352636127917,
-    "contrast": 44.33470846799603
+    "brightness": 0.0,
+    "contrast": 0.0
   },
   "segments": {
-    "count": 92,
+    "count": 0,
     "angles": null
   },
   "settings": {
-    "high_threshold": -13,
-    "low_threshold": 29,
-    "contrast_multiplier": 1.3,
-    "brightness_boost": -2,
-    "bilateral_blur_sigmas": 131
+    "high_threshold": -108,
+    "low_threshold": 379,
+    "contrast_multiplier": 98.0,
+    "brightness_boost": -38,
+    "bilateral_blur_sigmas": 138
   }
 }

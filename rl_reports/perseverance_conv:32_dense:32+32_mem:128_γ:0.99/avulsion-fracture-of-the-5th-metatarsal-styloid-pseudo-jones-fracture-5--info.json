@@ -1,0 +1,23 @@
+{
+  "at": "2022-05-20T13:46:12",
+  "source": {
+    "brightness": 193.78210890233362,
+    "contrast": 29.74191836688687,
+    "name": "datasets/radiopaedia/cropped/avulsion-fracture-of-the-5th-metatarsal-styloid-pseudo-jones-fracture-5.JPG"
+  },
+  "edges": {
+    "brightness": 7.412705272255834,
+    "contrast": 42.84030397851897
+  },
+  "segments": {
+    "count": 11,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 92,
+    "low_threshold": 36,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 743
+  }
+}

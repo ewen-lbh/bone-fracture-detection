@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 171.83566695476807,
-    "contrast": 27.345246529495014,
+    "brightness": 213.1961106309421,
+    "contrast": 31.356672536469077,
     "name": "datasets/radiopaedia/cropped/distal-radius-torus-fracture.jpg"
   },
   "edges": {
-    "brightness": 13.583837510803804,
-    "contrast": 57.265678409803634
+    "brightness": 7.589023336214347,
+    "contrast": 43.331370570719926
   },
   "segments": {
-    "count": 152,
+    "count": 82,
     "angles": null
   },
   "settings": {
-    "high_threshold": -88,
-    "low_threshold": 33,
-    "contrast_multiplier": 1.2,
+    "high_threshold": 42,
+    "low_threshold": 27,
+    "contrast_multiplier": 1.5,
     "brightness_boost": 0,
-    "bilateral_blur_sigmas": 126
+    "bilateral_blur_sigmas": 137
   }
 }

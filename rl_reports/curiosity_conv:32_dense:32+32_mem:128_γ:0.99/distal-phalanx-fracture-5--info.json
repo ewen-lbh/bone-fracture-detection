@@ -1,22 +1,22 @@
 {
   "source": {
-    "brightness": 87.48429847306252,
-    "contrast": 26.085289349471093,
+    "brightness": 114.60178622875252,
+    "contrast": 32.61320681401279,
     "name": "datasets/radiopaedia/cropped/distal-phalanx-fracture-5.jpg"
   },
   "edges": {
-    "brightness": 12.599394987035437,
-    "contrast": 55.26392103040376
+    "brightness": 8.426534140017287,
+    "contrast": 45.582449781593915
   },
   "segments": {
-    "count": 159,
+    "count": 39,
     "angles": null
   },
   "settings": {
-    "high_threshold": -26,
-    "low_threshold": 33,
-    "contrast_multiplier": 1.2,
-    "brightness_boost": 0,
-    "bilateral_blur_sigmas": 141
+    "high_threshold": 27,
+    "low_threshold": 54,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 5,
+    "bilateral_blur_sigmas": 133
   }
 }
