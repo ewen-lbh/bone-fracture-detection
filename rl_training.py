@@ -1,5 +1,5 @@
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
 import numpy as np
 from typing import NamedTuple, Tuple, Union
 import gym
@@ -77,6 +77,9 @@ def run(env: EdgeDetectionEnv, agent: EdgeDetectionAgent, params: Params):
 
             current_state = new_state
             step += 1
+
+            if agent.last_save is None or abs(agent.last_save - datetime.now()) > timedelta(minutes=15):
+                agent.save_model(Path(__file__).parent / "rl_models" / agent.name)
 
             # print("render", end=" ")
             # env.render(WINDOW)

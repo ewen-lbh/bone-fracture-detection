@@ -60,6 +60,7 @@ def display_lines(
     image: np.ndarray,
     lines: list[tuple[tuple[int, int], tuple[int, int], float]],
     probabilistic: bool = True,
+    save: Optional[str] = None,
 ):
     """
     Display lines on top of image with matplotlib
@@ -83,3 +84,5 @@ def display_lines(
 
     ax.set_xlim(0, image.shape[1])
     ax.set_ylim(image.shape[0], 0)
+    if save:
+        plt.savefig(save)

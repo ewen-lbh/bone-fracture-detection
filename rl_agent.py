@@ -1,6 +1,7 @@
 import random
 from collections import deque
-
+from pathlib import Path
+from datetime import datetime
 import numpy as np
 from numpy import array
 from tensorflow.keras.layers import (
@@ -86,6 +87,7 @@ class EdgeDetectionAgent:
         self.conv_list = conv_list
         self.dense_list = dense_list
         self.memory_sample_size = memory_sample_size
+        self.last_save = None
         self.discount_rate = discount_rate
         self.update_target_model_every = update_target_model_every
         self.name = f"{name}_conv:{'+'.join(map(str, conv_list))}_dense:{'+'.join(map(str, dense_list))}_mem:{memory_sample_size}_γ:{discount_rate}"
@@ -109,6 +111,13 @@ class EdgeDetectionAgent:
         self.current_step_count = 0
 
         print(f"agent {self.name} initialized")
+    
+    def save_model(self, inside: Path):
+        now = datetime.now()
+        self.last_save = now
+        timestamp = now.strftime("%Y-%m-%dT%H_%M_%S")
+        self.model.save(inside / timestamp / "model.h5")
+        self.target_model.save(inside / timestamp/ "target_model.h5")
 
     def remember(self, transition):
         self.replay_memory.append(transition)

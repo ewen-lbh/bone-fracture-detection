@@ -83,3 +83,6 @@ https://en.wikipedia.org/wiki/Reinforcement_learning
 
 - pb: au final je fais pas des incréments (parce qu'il se foire sur le début et c'est impossible de rattraper après) mais des actions qui set.
   mais dcp ya pas de lien avec les essais précédents, est-ce que le modele du RL est vraiment pertinent ?
+
+
+- blur l'image des bords!!! exemple de pertinence: anke-fracture-weber-c-and-deltoid-ligament-injury--edges.png (and rl_reports/perseverance*)

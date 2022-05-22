@@ -1,4 +1,5 @@
 from datetime import datetime
+import matplotlib.pyplot as plt
 import random
 import inspect
 import json
@@ -13,7 +14,7 @@ from gym import spaces
 from nptyping import NDArray
 from numpy import array
 from rich import print
-from angles import get_lines_probabilistic, unique_angles
+from angles import get_lines_probabilistic, unique_angles, display_lines
 
 from detect import brightness_of, contrast_of, detect_edges, grayscale_of
 from utils import roughly_equals, clip
@@ -57,7 +58,7 @@ class EdgeDetectionEnv(gym.Env):
         return biggest_width, biggest_height
 
     def done(self) -> bool:
-        return int(brightness_of(self.edges)) in range(*self.acceptable_brightness_range) and self.segments_count in range(*self.acceptable_segments_count_range)
+        return self.steps_count_for_current_image > self.max_steps_for_single_image or (int(brightness_of(self.edges)) in range(*self.acceptable_brightness_range) and self.segments_count in range(*self.acceptable_segments_count_range))
 
     def save_settings(self, agent_name: str, into: Path):
         # Used to encode int64 and other numpy number types
@@ -72,6 +73,8 @@ class EdgeDetectionEnv(gym.Env):
         cv2.imwrite(f"{save_as}--source.png", self.source)
         cv2.imwrite(f"{save_as}--edges.png", self.edges)
         cv2.imwrite(f"{save_as}--original-source.png", self.original_source)
+        _, ax = plt.subplots()
+        display_lines(ax, self.edges, self.segments, probabilistic=True, save=f"{save_as}--lines.png")
 
     @property
     def action_space_shape(self) -> int:
@@ -87,6 +90,7 @@ class EdgeDetectionEnv(gym.Env):
         max_brightness_increment: int = 3,
         max_blur_value: int = 30,
         step_blur_value: int =1,
+        max_steps_for_single_image: int = 10_000,
     ):
         assert render_mode is None or render_mode in self.metadata["render_modes"]
 
@@ -96,7 +100,9 @@ class EdgeDetectionEnv(gym.Env):
         self.current_image_name = None
         self.thresholds = [100, 100]
         self.brightness_boost = 0
+        self.segments = []
         self.blur = 0
+        self.max_steps_for_single_image = max_steps_for_single_image
         self.segments_count = None
         self.contrast_multiplier = 1
         self.acceptable_brightness_range = acceptable_brightness_range
@@ -107,6 +113,7 @@ class EdgeDetectionEnv(gym.Env):
         self.max_brightness_increment = max_brightness_increment
         self.max_blur_value = max_blur_value // step_blur_value
         self.step_blur_value = step_blur_value
+        self.steps_count_for_current_image = 0
         self.last_winning_edges = array([])
         self.last_winning_thresholds = [None, None]
 
@@ -188,7 +195,7 @@ class EdgeDetectionEnv(gym.Env):
             },
             "segments": {
                 "count": self.segments_count,
-                "angles": self.unique_segment_angles,
+                "angles": list(self.unique_segment_angles), 
             },
             "settings": {
                 "high_threshold": self.thresholds[0],
@@ -205,6 +212,9 @@ class EdgeDetectionEnv(gym.Env):
         self.source, self.edges = detect_edges(self.pick_from_dataset(), low=seed or 50, high=seed or 50)
         self.source = grayscale_of(self.source)
         self.original_source = self.source.copy()
+        if self.steps_count_for_current_image <= self.max_steps_for_single_image:
+            self.seen_images.add(self.current_image_name)
+        self.steps_count_for_current_image = 0
 
         return (self.observation, self.info) if return_info else self.observation
 
@@ -212,6 +222,7 @@ class EdgeDetectionEnv(gym.Env):
         print(f"with {dict(**action)}", end=" ")
 
         self.thresholds[0] = clip(20, 150, self.thresholds[0] + action["high_threshold"])
+        self.steps_count_for_current_image += 1
         self.thresholds[1] = clip(20, 150, self.thresholds[1] + action["low_threshold"])
         self.blur = action["blur"]
         self.ε = ε
@@ -232,17 +243,17 @@ class EdgeDetectionEnv(gym.Env):
         self.source = grayscale_of(blurred_source)
         edges_brightness = brightness_of(self.edges)
 
-        if roughly_equals(0.1)(edges_brightness, 0, 255):
+        if roughly_equals(0.001)(edges_brightness, 0, 255):
             print("pullup", end=" ")
             self.source = self.original_source.copy()
             self.contrast_multiplier = 1
             self.brightness_boost = 0
             return (self.observation, -1, False, self.info)
 
-        segments = list(get_lines_probabilistic(self.edges, minimum_length=20))
-        self.segments_count = len(segments)
+        self.segments = list(get_lines_probabilistic(self.edges, minimum_length=20))
+        self.segments_count = len(self.segments)
         # 50 mrad ≈ 3°
-        self.unique_segment_angles = unique_angles(50e-3, segments)
+        self.unique_segment_angles = unique_angles(50e-3, self.segments)
 
         print(f"bright {edges_brightness}, #seg {self.segments_count}", end=" => ")
 
