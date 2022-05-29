@@ -1,21 +1,23 @@
 {
-  "at": "2022-05-20T17:37:14",
+  "at": "2022-05-20T19:26:40",
   "source": {
     "brightness": 65.33765485450878,
     "contrast": 52.50652747422432,
     "name": "datasets/radiopaedia/cropped/amputated-finger-with-tendon-retraction.jpg"
   },
   "edges": {
-    "brightness": 11.262316335350043,
-    "contrast": 52.39323330618915
+    "brightness": 10.07951598962835,
+    "contrast": 49.68581220801423
   },
   "segments": {
     "count": 10,
-    "angles": null
+    "angles": [
+      1.3156139361740782
+    ]
   },
   "settings": {
-    "high_threshold": 22,
-    "low_threshold": 20,
+    "high_threshold": 23,
+    "low_threshold": 23,
     "contrast_multiplier": 1.5,
     "brightness_boost": 0,
     "bilateral_blur_sigmas": 2

@@ -1,0 +1,25 @@
+{
+  "at": "2022-05-20T19:52:18",
+  "source": {
+    "brightness": 166.41060213195044,
+    "contrast": 42.02861864633189,
+    "name": "datasets/radiopaedia/cropped/distal-fibular-and-posterior-malleolus-fractures.png"
+  },
+  "edges": {
+    "brightness": 8.904062229904927,
+    "contrast": 46.810827213709196
+  },
+  "segments": {
+    "count": 11,
+    "angles": [
+      0.1586552621864019
+    ]
+  },
+  "settings": {
+    "high_threshold": 20,
+    "low_threshold": 21,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 1
+  }
+}

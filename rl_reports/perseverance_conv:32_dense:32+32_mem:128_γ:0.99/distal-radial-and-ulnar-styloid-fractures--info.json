@@ -1,0 +1,23 @@
+{
+  "at": "2022-05-20T19:01:39",
+  "source": {
+    "brightness": 196.9689138576779,
+    "contrast": 29.414333891172483,
+    "name": "datasets/radiopaedia/cropped/distal-radial-and-ulnar-styloid-fractures.png"
+  },
+  "edges": {
+    "brightness": 11.952895419187554,
+    "contrast": 53.89913378701732
+  },
+  "segments": {
+    "count": 10,
+    "angles": null
+  },
+  "settings": {
+    "high_threshold": 20,
+    "low_threshold": 21,
+    "contrast_multiplier": 1.5,
+    "brightness_boost": 1,
+    "bilateral_blur_sigmas": 1
+  }
+}
