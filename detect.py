@@ -122,10 +122,10 @@ def save_figure(image_path: Path, save: Optional[Path] = None):
     )
 
 
-# if __name__ == "__main__":
-#     with Progress() as bar:
-#         files = list(Path("datasets/various").glob("*.png"))
-#         task = bar.add_task("[blue]Processing", total=len(files))
-#         for testfile in files:
-#             save_figure(testfile, save=Path("line-detection") / testfile.name)
-#             bar.advance(task)
+if __name__ == "__main__":
+    with Progress() as bar:
+        files = list(Path("datasets/various").glob("*.png"))
+        task = bar.add_task("[blue]Processing", total=len(files))
+        for testfile in files:
+            save_figure(testfile, save=Path("line-detection") / testfile.name)
+            bar.advance(task)
