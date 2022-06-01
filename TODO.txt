@@ -1,0 +1,6 @@
+- add pyproject.toml?
+- remove unused imports from python code
+- REMOVE ALL TODO TEXT!!
+- slides # for code
+- les courbes de la slide 24 sont toutes ternes :(
+

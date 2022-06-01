@@ -14,7 +14,7 @@
 
 - cibler zone de douleur
 
-- detecter bords
+- detecter contours
 
 - lignes de fractures
 
