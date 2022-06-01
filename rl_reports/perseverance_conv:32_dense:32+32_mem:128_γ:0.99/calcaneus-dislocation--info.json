@@ -1,23 +1,25 @@
 {
-  "at": "2022-05-20T14:04:08",
+  "at": "2022-05-20T19:35:47",
   "source": {
-    "brightness": 210.75658311725726,
-    "contrast": 16.513249851252503,
+    "brightness": 208.84393546528378,
+    "contrast": 16.750642602959573,
     "name": "datasets/radiopaedia/cropped/calcaneus-dislocation.jpg"
   },
   "edges": {
-    "brightness": 14.186257562662057,
-    "contrast": 58.44865930750369
+    "brightness": 11.703111495246327,
+    "contrast": 53.36038429975601
   },
   "segments": {
-    "count": 10,
-    "angles": null
+    "count": 11,
+    "angles": [
+      0.0
+    ]
   },
   "settings": {
-    "high_threshold": 20,
-    "low_threshold": 24,
+    "high_threshold": 27,
+    "low_threshold": 20,
     "contrast_multiplier": 1.5,
-    "brightness_boost": 2,
+    "brightness_boost": 0,
     "bilateral_blur_sigmas": 0
   }
 }

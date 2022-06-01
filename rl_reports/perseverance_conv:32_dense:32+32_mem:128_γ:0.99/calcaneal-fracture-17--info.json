@@ -1,23 +1,25 @@
 {
-  "at": "2022-05-20T13:51:37",
+  "at": "2022-05-20T19:35:48",
   "source": {
-    "brightness": 189.85767790262173,
-    "contrast": 47.76383698533919,
+    "brightness": 187.73777009507347,
+    "contrast": 45.264591435047485,
     "name": "datasets/radiopaedia/cropped/calcaneal-fracture-17.jpg"
   },
   "edges": {
-    "brightness": 9.601987899740708,
-    "contrast": 48.541824675295366
+    "brightness": 13.877700950734658,
+    "contrast": 57.84654837377348
   },
   "segments": {
-    "count": 20,
-    "angles": null
+    "count": 23,
+    "angles": [
+      0.6202494859828214
+    ]
   },
   "settings": {
-    "high_threshold": 95,
-    "low_threshold": 103,
+    "high_threshold": 20,
+    "low_threshold": 24,
     "contrast_multiplier": 1.5,
-    "brightness_boost": 2,
-    "bilateral_blur_sigmas": 2
+    "brightness_boost": 0,
+    "bilateral_blur_sigmas": 1
   }
 }

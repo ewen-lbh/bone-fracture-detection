@@ -1,23 +1,25 @@
 {
-  "at": "2022-05-20T13:49:28",
+  "at": "2022-05-20T19:26:39",
   "source": {
-    "brightness": 236.4830020167099,
-    "contrast": 25.11403061808669,
+    "brightness": 236.99029098242582,
+    "contrast": 24.874621778929665,
     "name": "datasets/radiopaedia/cropped/distal-tibia-and-fibula-fracture.jpg"
   },
   "edges": {
-    "brightness": 8.91875540190147,
-    "contrast": 46.84803549313384
+    "brightness": 12.555315471045809,
+    "contrast": 55.17218047656988
   },
   "segments": {
     "count": 11,
-    "angles": null
+    "angles": [
+      0.4136892132788633
+    ]
   },
   "settings": {
-    "high_threshold": 21,
-    "low_threshold": 46,
+    "high_threshold": 20,
+    "low_threshold": 56,
     "contrast_multiplier": 1.5,
-    "brightness_boost": 0,
-    "bilateral_blur_sigmas": 3
+    "brightness_boost": 1,
+    "bilateral_blur_sigmas": 0
   }
 }
