@@ -12,6 +12,8 @@ from rich import print, traceback
 
 traceback.install()
 
+here = Path(__file__).parent
+
 env = EdgeDetectionEnv(
     render_mode=None,
     acceptable_brightness_range=(7, 15),
@@ -23,8 +25,8 @@ env = EdgeDetectionEnv(
     max_brightness_increment=3,
 )
 
-# WINDOW = pygame.display.set_mode((1000, 300))
-# clock = pygame.time.Clock()
+WINDOW = pygame.display.set_mode((1000, 300))
+clock = pygame.time.Clock()
 
 
 class Params(NamedTuple):
@@ -79,10 +81,10 @@ def run(env: EdgeDetectionEnv, agent: EdgeDetectionAgent, params: Params):
             step += 1
 
             if agent.last_save is None or abs(agent.last_save - datetime.now()) > timedelta(minutes=15):
-                agent.save_model(Path(__file__).parent / "rl_models" / agent.name)
+                agent.save_model(here / "rl_models" / agent.name)
 
-            # print("render", end=" ")
-            # env.render(WINDOW)
+            print("render", end=" ")
+            env.render(WINDOW)
             print("")
 
         print("==== episode done! ====")
@@ -95,7 +97,7 @@ def run(env: EdgeDetectionEnv, agent: EdgeDetectionAgent, params: Params):
             print(f"flucuating {ε = }")
             ε = params.ε_bounds[1]
 
-        env.save_settings(agent.name, Path(__file__).parent / "rl_reports")
+        env.save_settings(agent.name, here / "rl_reports")
 
         print("=======================")
         episode += 1

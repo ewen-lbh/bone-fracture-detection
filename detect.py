@@ -12,6 +12,7 @@ from angles import display_lines, get_lines_probabilistic
 from detect_tilt import image_tilt
 from utils import *
 
+here = Path(__file__).parent
 
 def vectorize(image):
     # convert cells of 3-valued lists (RGB) to a single value (greyscale)
@@ -126,6 +127,8 @@ if __name__ == "__main__":
     with Progress() as bar:
         files = list(Path("datasets/various").glob("*.png"))
         task = bar.add_task("[blue]Processing", total=len(files))
+        (here / "line-detection").mkdir()
+
         for testfile in files:
-            save_figure(testfile, save=Path("line-detection") / testfile.name)
+            save_figure(testfile, save=here / "line-detection" / testfile.name)
             bar.advance(task)
